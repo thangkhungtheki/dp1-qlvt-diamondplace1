@@ -20,6 +20,9 @@ $('document').ready(()=>{
           window.location.href = "/thietbidp2"
         });
     })
+    $('#btnxem').click(()=>{
+      window.location.href = "/viewcreatethietbi"
+    })
     // $("#btnsua").click(() => {
     //   $.ajax({
     //     method: "POST",

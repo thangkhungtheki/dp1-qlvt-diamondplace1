@@ -2,8 +2,21 @@ var express = require("express")
 var router =  express.Router()
 var passport = require("../config/passport")
 var xulydb = require("../CRUD/xulydb")
+var moment = require('moment')
+
+const sendmail = require('../sendmail/sendmail')
+
+//sendmail.sendmail()
+
+router.get('/cronjobsendmail',async(req, res) => {
+    var data =  await xulydb.doc_createthietbi()
+    var newdata = await tinhngayconlai(data)
+    sendmail.sendmail(newdata)
+    res.status(200).send('ok');
+})
+
 router.get("/", (req, res, next) => {
-    res.render("index")
+    res.redirect("/signin")
 })
 
 router.get("/signin", (req, res , next) => {
@@ -14,6 +27,192 @@ router.get("/signin", (req, res , next) => {
         hasErrors: messages.length > 0
     })
 })
+//-------------------TEST------------------------------------
+
+// const originalDate = moment('2020-04-10');
+// console.log('Ngày tháng năm ban đầu:', originalDate.format('YYYY-MM-DD'));
+// const monthsToAdd = 14;
+
+// const newDate = originalDate.add(monthsToAdd, 'months');
+
+
+// console.log('Số tháng được cộng thêm:', monthsToAdd);
+// console.log('Ngày tháng năm mới:', newDate.format('YYYY-MM-DD'));
+
+// const startDate = moment('2023-01-10');
+// const endDate = moment('2023-12-31');
+
+// const daysDifference = endDate.diff(startDate, 'days');
+
+// console.log('Ngày tháng năm bắt đầu:', startDate.format('YYYY-MM-DD'));
+// console.log('Ngày tháng năm kết thúc:', endDate.format('YYYY-MM-DD'));
+// console.log('Số ngày giữa hai ngày:', daysDifference);
+
+// const daynow = moment().format('YYYY-MM-DD')
+// console.log('Ngày hiện tại của local máy tính: ', daynow)
+
+//-------------------TEST------------------------------------
+
+router
+    .get('/createthietbi',(req, res) => {
+        if(req.isAuthenticated()){        
+            res.render('mainSbAdmin/createthietbi',{
+                    _username: req.user.username,
+                    data: 'data',
+                    activeuser: 'active',
+                    activetb: '',
+                    activetbdp2: '',
+                    
+                    
+            })
+        }else{
+            res.redirect("/signin")
+        }
+})
+
+    .post('/themcreatethietbi',(req, res) => {
+        if(req.isAuthenticated()){ 
+            var nnhap = moment(req.body.ngaynhap) 
+            var sothang = req.body.timehethan
+            const nhethan = nnhap.add(sothang, 'months')
+            var data = {          
+                    username: req.user.username,
+                    tentb: req.body.tentb,
+                    dvt: req.body.dvt,
+                    soluong: req.body.soluong,
+                    ngaynhap: req.body.ngaynhap,
+                    timehethan: req.body.timehethan,
+                    ngayhethan: nhethan.format('YYYY-MM-DD'),
+                    tenncc: req.body.tenncc,
+                    sdtncc: req.body.sdtncc,
+                    tinhtrang: req.body.tinhtrang,
+                    ghichu: req.body.ghichu,    
+            }
+            try{
+                xulydb.them_createthietbi(data)
+                res.redirect('/createthietbi')
+            }catch{e=>{
+                res.send(e)
+            }} 
+        }else{
+            res.redirect("/signin")
+        }  
+})
+
+router.post('/xoathietbi', async(req, res) => {
+    if(req.isAuthenticated()){
+        let tentb = req.body.tentb
+        await xulydb.xoa_createthietbi(tentb)
+        res.end()
+    }else{
+        res.redirect("/signin")
+    }    
+})
+
+router
+.get('/suacreatethietbi', async(req, res) => {
+    let tentb = req.query.tentb
+    //console.log(tentb)
+    if(req.isAuthenticated()){
+        var data = await xulydb.tim_createthietbi(tentb)
+        
+        //var _adata = JSON.stringify(data)
+        //console.log(_adata)
+        //console.log(data)
+        //console.log(newdata)
+            res.render("mainSbAdmin/createthietbi-sua",{
+            _username: req.user.username,
+            data: data,
+            activeuser: '',
+            activetb: '',
+            activetbdp2: 'active',
+            
+        })
+        
+    }else{
+        res.redirect("/signin")
+    }
+})
+.post('/suacreatethietbi', async(req, res) => {
+    if(req.isAuthenticated()){ 
+        var nnhap = moment(req.body.ngaynhap)
+        var sothang = req.body.timehethan
+        const nhethan = nnhap.add(sothang, 'months')
+        
+        var data = {          
+                username: req.user.username,
+                tentb: req.body.tentb,
+                dvt: req.body.dvt,
+                soluong: req.body.soluong,
+                ngaynhap: req.body.ngaynhap,
+                timehethan: req.body.timehethan,
+                tenncc: req.body.tenncc,
+                sdtncc: req.body.sdtncc,
+                tinhtrang: req.body.tinhtrang,
+                ghichu: req.body.ghichu,    
+                ngayhethan: nhethan.format('YYYY-MM-DD'),
+        }
+        try{
+            // console.log(data)
+            await xulydb.sua_createthietbi(data.tentb, data)
+            res.redirect('/viewcreatethietbi')
+        }catch{e=>{
+            res.send(e)
+        }} 
+    }else{
+        res.redirect("/signin")
+    }  
+})
+
+router.get('/viewcreatethietbi', async(req, res) => {
+    if(req.isAuthenticated()){
+        var data = await xulydb.doc_createthietbi()
+        var newdata = await tinhngayconlai(data)
+        const daynow = moment().format('DD-MM-YYYY');
+        //console.log(newdata)
+            res.render("mainSbAdmin/createthietbiview",{
+            _username: req.user.username,
+            data: newdata,
+            activeuser: '',
+            activetb: '',
+            activetbdp2: 'active',
+            daynow: daynow
+        })
+    }else{
+        res.redirect("/signin")
+    }
+})
+
+async function tinhngayconlai(data){
+    var newdata = []
+    
+    // data.forEach(element => {
+    //     const daynow = moment().format('YYYY-MM-DD')
+    //     const songay = moment(element.ngayhethan).diff(daynow, 'days');
+    //     console.log('Data số ngày: ',songay)
+    //     element['soooooooo'] = 'ccacccaaaccacaccac'
+    //     newdata.push(element)
+    //     console.log(element)
+    // });
+
+    // const newArray = await data.map((e,i)=>{
+    //     const daynow = moment().format('YYYY-MM-DD')
+    //     const songay = moment(e.ngayhethan).diff(daynow, 'days');
+    //     console.log('Data số ngày: ',songay)
+    //     const update_e = {...e, ['songayconlai']: songay, i }
+    //     return update_e
+    // })
+
+    for (let i = 0; i < data.length; i++) {
+        let daynow = moment().format('YYYY-MM-DD');
+        let songay = moment(data[i].ngayhethan).diff(daynow, 'days');
+        //console.log('Data số ngày: ',songay);
+        data[i].songayhethan = songay - 1;
+        newdata.push(data[i])
+       }
+
+    return newdata
+}
 
 router.post("/signin",
     passport.authenticate('local.signin', { successRedirect: '/vattutest',
@@ -49,7 +248,7 @@ router.get('/dashboard', async(req, res) => {
             activetb: '',
             activetbdp2: '',
             })
-        }else res.redirect("/mavattutest")
+        }else res.redirect("/thietbi")
         
     }else{
         res.redirect("/signin")
@@ -361,6 +560,7 @@ router.get('/vattutest', (req, res) => {
         res.render("mainSbAdmin/vattu.ejs", {
             
             user: req.user,
+            _username: req.user.username,
             activeuser: '',
             activetb: '',
             activetbdp2: '',
@@ -401,6 +601,7 @@ router.get('/xuatvattutest', (req, res) => {
     if(req.isAuthenticated()){
         res.render("mainSbAdmin/xuatvattu.ejs", {
             user: req.user, //tạm mở user
+            _username: req.user.username,
             activeuser: '',
             activetb: '',
             activetbdp2: '',
@@ -422,13 +623,9 @@ router.post('/luuxuatvattu', async(req, res) => {
         lydoxuat: req.body.lidoxuat,
         loai: req.body.loai,
     }
-    // console.log(doc)
-    if(doc.lydoxuat !== ""){
-        await xulydb.luuxuatvattu(doc)
-        console.log(doc)
-    }else{
-    }
+    console.log(doc)
     
+    await xulydb.luuxuatvattu(doc)
     res.redirect('/xuatvattutest')
 })
 
@@ -437,6 +634,7 @@ router.get('/mavattutest', (req, res) => {
         res.render("mainSbAdmin/themmavattu.ejs", {
         
             user: req.user, //tạm mở user
+            _username: req.user.username,
             activeuser: '',
             activetb: '',
             activetbdp2: '',
@@ -489,6 +687,7 @@ router.get('/baocaovattu', async (req, res) => {
         res.render("mainSbAdmin/baocaovattu.ejs", {
 
             user: req.user, //tạm mở user
+            
             activeuser: '',
             activetb: '',
             activetbdp2: '',
@@ -506,7 +705,8 @@ router.get('/baocaovattu', async (req, res) => {
 
 router.get('/chart', (req, res) => {
     res.render("mainSbAdmin/main-chart.ejs",{
-        user: "req.user", //tạm mở user
+        user: req.user, //tạm mở user
+        
         activeuser: '',
         activetb: '',
         activetbdp2: '',
@@ -522,6 +722,7 @@ router.get('/chitiettheoma', async(req, res) => {
         //console.log(data)
         res.render("mainSbAdmin/chitiettheoma_tenuser",{
             user: req.user, //tạm mở user
+            
             activeuser: '',
             activetb: '',
             activetbdp2: '',

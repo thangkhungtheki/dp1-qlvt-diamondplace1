@@ -6,10 +6,60 @@ const _thietbidp2 = require("../model/tb.model.dp2")
 const _vattu = require("../model/vattu.model")
 const _nhapvattu = require("../model/nhapvattu.model")
 const _xuatvattu = require("../model/xuatvattu.model")
+const _createthietbi = require("../model/createthietbi.model")
 //mongoose.connect("mongodb+srv://tkbot:Iqzg8qpVDNMUxTLm@cluster0.zl0wy.mongodb.net/test",{useNewUrlParser:true, useUnifiedTopology: true })
 async function docUser(){
     let docs = await _user.find()
     return docs
+}
+
+async function doc_createthietbi(){
+    let docs = await _createthietbi.find()
+    return docs
+}
+
+async function them_createthietbi(doc){
+    //console.log(doc)
+    try{
+        await _createthietbi.create(doc)
+        return true
+    }catch(e){
+        return false
+    }
+}
+
+async function xoa_createthietbi(tentb){
+    try {
+        await _createthietbi.deleteOne({tentb: tentb})
+        return true
+    } catch (error) {
+        return error
+    }
+    
+    
+}
+
+async function sua_createthietbi(tentbb, doc){
+    try{
+        await _createthietbi.updateOne({tentb: tentbb}, doc)
+        
+        return true
+    }catch(e){
+        console.log(false)
+        return false
+    }
+}
+
+async function tim_createthietbi(tentbb){
+    let doc = await _createthietbi.findOne({tentb: tentbb})
+    //console.log(doc)
+    if(doc){
+        //console.log(doc)
+        return doc
+    } 
+    else {
+        return false
+    }
 }
 
 async function find(users){
@@ -250,4 +300,10 @@ module.exports = {
     timton,
     baocaovattu,
     timxuatvattu,
+    doc_createthietbi,
+    them_createthietbi,
+    sua_createthietbi,
+    xoa_createthietbi,
+    tim_createthietbi,
+    sua_createthietbi,
 }
