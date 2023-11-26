@@ -45,7 +45,7 @@ function sendmail(data){
       ];
       
       
-    content = text + _html;
+    content = text ;
     if(content != ''){
         var mainOptions = { // thiết lập đối tượng, nội dung gửi mail
             from: process.env.emailFrom,
