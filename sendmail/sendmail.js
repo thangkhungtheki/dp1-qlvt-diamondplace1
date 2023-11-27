@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer')
+var moment = require('moment')
 
 
 function sendmail(data){
@@ -66,7 +67,9 @@ function sendmail(data){
             }
         });
     }else{
-        console.log('Ko có hết hạn')
+        
+        let daynow = moment().format('YYYY-MM-DD')
+        console.log('Date: ' + daynow +'Ko có hết hạn')
     }
 
     
