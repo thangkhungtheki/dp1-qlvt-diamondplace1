@@ -73,6 +73,11 @@ async function find(users){
         return false
     }
 }
+async function timUser(users){
+    let doc = await _user.findOne({username: users})
+    
+    return doc
+}
 
 
 
@@ -306,4 +311,5 @@ module.exports = {
     xoa_createthietbi,
     tim_createthietbi,
     sua_createthietbi,
+    timUser
 }

@@ -70,6 +70,24 @@ function sendmail(data){
         
         let daynow = moment().format('YYYY-MM-DD')
         console.log('Date: ' + daynow +'Ko có hết hạn')
+        // content = 'test mail'
+        // var mainOptions = { // thiết lập đối tượng, nội dung gửi mail
+        //     from: process.env.emailFrom,
+        //     to: process.env.mailList,
+        //     //bcc: 'it@diamondplace.com.vn',
+        //     subject: process.env.subject,
+        //     //text: 'Your text is here',//Thường thi mình không dùng cái này thay vào đó mình sử dụng html để dễ edit hơn
+        //     html: content ,//Nội dung html mình đã tạo trên kia :)),
+            
+        // }
+        // transporter.sendMail(mainOptions, function(err, info){
+        //     if (err) {
+        //         console.log(err);
+                
+        //     } else {
+        //         console.log('Message sent: ' +  info.response);
+        //     }
+        // });
     }
 
     

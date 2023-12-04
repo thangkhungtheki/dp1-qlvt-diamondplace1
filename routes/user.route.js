@@ -192,22 +192,6 @@ router.get('/viewcreatethietbi', async(req, res) => {
 async function tinhngayconlai(data){
     var newdata = []
     
-    // data.forEach(element => {
-    //     const daynow = moment().format('YYYY-MM-DD')
-    //     const songay = moment(element.ngayhethan).diff(daynow, 'days');
-    //     console.log('Data số ngày: ',songay)
-    //     element['soooooooo'] = 'ccacccaaaccacaccac'
-    //     newdata.push(element)
-    //     console.log(element)
-    // });
-
-    // const newArray = await data.map((e,i)=>{
-    //     const daynow = moment().format('YYYY-MM-DD')
-    //     const songay = moment(e.ngayhethan).diff(daynow, 'days');
-    //     console.log('Data số ngày: ',songay)
-    //     const update_e = {...e, ['songayconlai']: songay, i }
-    //     return update_e
-    // })
 
     for (let i = 0; i < data.length; i++) {
         let daynow = moment().format('YYYY-MM-DD');
@@ -221,7 +205,7 @@ async function tinhngayconlai(data){
 }
 
 router.post("/signin",
-    passport.authenticate('local.signin', { successRedirect: '/vattutest',
+    passport.authenticate('local.signin', { successRedirect: '/qlkt',
                                   failureRedirect: '/signin',
                                   failureFlash: true })
 );
@@ -299,19 +283,7 @@ router.get('/editthietbi', async(req, res) => {
         activetbdp2: 'active',
         data: dat,
     })
-    // if(req.isAuthenticated()){
-        
-    //         res.render("mainSbAdmin/dbthietbi-edit",{
-    //         _username: req.user.username,
-    //         activeuser: '',
-    //         activetb: '',
-    //         activeedittb: 'active',
-    //         Ma: req.params.id,
-            
-    //     })
-    // }else{
-    //     res.redirect("/signin")
-    // }
+
 })
 
 router.get('/thietbidp2', async(req, res) => {
@@ -555,12 +527,7 @@ router.post('/logout',(req, res) => {
     req.session.destroy()
     res.redirect('/signin')
 })
-var activedata = {
-    activeuser: '',
-    activetb: '',
-    activetbdp2: '',
-    activethem: 'active',
-}
+
 router.get('/vattutest', (req, res) => {
     if(req.isAuthenticated()){
         res.render("mainSbAdmin/vattu.ejs", {
