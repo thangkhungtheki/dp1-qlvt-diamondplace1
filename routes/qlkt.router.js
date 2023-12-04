@@ -14,8 +14,11 @@ router.get('/', async (req, res) => {
             case "tp":
                 res.render('layoutkythuat/main/dashboard')
               break;
-            default:
+            case "nv":
                 res.render('layoutkythuat/user/dashboard')
+              break;
+            default:
+                res.send('bạn đã Đăng ký thành công!!! <br\> Chào bạn: <b>' + user.username + ' </b>, vui lòng liên hệ admin và báo tên user, để được cấp quyền')
           }
         
     }else{
