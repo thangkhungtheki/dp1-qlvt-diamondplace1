@@ -6,7 +6,7 @@ const schema = new Schema({
     bophan: {type: String, required: false},
     dienthoai: {type: String, required: false},
     vitri: {type: String, required: false},
-    khancap: {type: String, require: false},
+    khancap: {type: String, required: false},
     mota: {type: String, required: false},
     trangthai: {type: String, required: false},
     motacongviec: {type: String, required: false},
