@@ -1,0 +1,74 @@
+<div class='contentpyc'>
+    <h3> <center> PHIẾU YÊU CẦU HỖ TRỢ KỸ THUẬT </center></h3>
+    <form action='/qlkt/taoyc' method='post'>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Người yêu cầu</label>
+                <input type="text" class="form-control" id="txtnguoiyc" placeholder="Người yêu cầu" name="nguoiyc" value="">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Ngày</label>
+                <input type="date" class="form-control" id="txtngay" placeholder="Ngày" name="ngay" >
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Bộ Phận</label>
+                <input type="text" class="form-control" id="txtbophan" placeholder="Bộ phận" name="bophan" value="<%= data.bp %>" readonly>
+            </div>
+            <div class="form-group col-md-6">
+                <label>Điện thoại</label>
+                <input type="text" class="form-control" id="txtdt" placeholder="Điện thoại" name="dienthoai" >
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Vị trí</label>
+                <input type="text" class="form-control" id="txtvitri" placeholder="Vị trí" name="vitri" value="">
+            </div>
+            <div class="form-group col-md-6"> 
+            <b> Khẩn Cấp : </b>
+           
+               
+                <div>        
+                    <div class="input-group-text">
+                        <label class="radio-container">
+                            <input type="radio" name="option" value="yes">
+                            <span class="checkmark">Có</span>
+                        </label>
+
+                        <label class="radio-container">
+                            <input type="radio" name="option" value="no" checked >
+                            <span>Không</span>
+                        </label>
+                    </div>
+                </div>  
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="exampleFormControlTextarea1">Mô tả:</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" name='areamota'></textarea>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary" id="btnsuatb">GỬI YÊU CẦU</button>
+        
+        </div>
+    </form>
+</div>
+<style>
+.contentpyc {
+    padding: 20px;
+    background: #f2f2f2;
+}
+.checkmark {
+    margin-right: 20px;
+}
+</style>
+<script>
+    // Lấy thẻ input
+    const dateInput = document.getElementById('txtngay');
+
+    // Thiết lập giá trị mặc định là ngày hiện tại
+    const currentDate = new Date().toISOString().split('T')[0];
+    dateInput.value = currentDate;
+</script>
