@@ -2,7 +2,7 @@ var express = require("express")
 var router = express.Router()
 var xulydb = require('../CRUD/xulydb')
 const ycsc = require('../CRUD/xulyyeucau')
-var mess = ""
+const multer = require('../multer-upload/multer')
 
 router.get('/', async (req, res) => {
   if (req.isAuthenticated()) {
@@ -33,7 +33,7 @@ router.get('/', async (req, res) => {
 
 })
 
-router.post('/taoyc', async (req, res) => {
+router.post('/taoyc', multer.upload.single('image'), async (req, res) => {
   if (req.isAuthenticated()) {
     let doc = {
       nguoiyeucau: req.body.nguoiyc,
@@ -44,13 +44,18 @@ router.post('/taoyc', async (req, res) => {
       khancap: req.body.option,
       mota: req.body.areamota,
       trangthai: 'chờ duyệt',
-
+      
     }
-    await ycsc.taoyc(doc)
+    let result = await ycsc.taoyc(doc)
     // Lấy thông báo từ req.flash và truyền nó cho template
+    if (result == true) {
+      req.flash('success', 'Dữ liệu đã được lưu thành công!');
+      res.redirect('/qlkt')
+    } else {
+      req.flash('success', 'Chưa lưu, cần nhập đầy đủ thông tin vào !');
+      res.redirect('/qlkt')
+    }
 
-    req.flash('success', 'Dữ liệu đã được lưu thành công!');
-    res.redirect('/qlkt')
 
   }
 })

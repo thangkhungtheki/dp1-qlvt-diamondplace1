@@ -1,16 +1,21 @@
-
-
 <div class='contentpyc'>
-  
+
   <h3>
     <center> PHIẾU YÊU CẦU HỖ TRỢ KỸ THUẬT </center>
   </h3>
   <% if (successMessage) { %>
-    <div style="color: green; align-items: center;">
-      <%= successMessage %>
-    </div>
+  <% if (successMessage == 'Dữ liệu đã được lưu thành công!') {%>
+  <div style="color: green; align-items: center;">
+    <%= successMessage %>
+  </div>
+
+  <% } else { %>
+  <div style="color: rgb(209, 7, 24); align-items: center;">
+    <%= successMessage %>
+  </div>
   <% } %>
-  <form action='/qlkt/taoyc' method='post'>
+  <% } %>
+  <form action='/qlkt/taoyc' method='post' enctype="multipart/form-data">
     <div class="form-row">
       <div class="form-group col-md-6">
         <label>Người yêu cầu</label>
@@ -60,6 +65,10 @@
       <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" name='areamota'></textarea>
     </div>
     <div class="form-group">
+      <input type="file" id="imageInput" name="image" accept="image/*" capture="camera">
+    </div>
+    
+    <div class="form-group">
       <button type="submit" class="btn btn-primary" id="btnsuatb">GỬI YÊU CẦU</button>
 
     </div>
@@ -89,8 +98,6 @@
   // Thiết lập giá trị mặc định là ngày hiện tại
   const currentDate = new Date().toISOString().split('T')[0];
   dateInput.value = currentDate;
-
- 
 </script>
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="phieuyc.js"></script>
