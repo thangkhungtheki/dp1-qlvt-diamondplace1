@@ -15,7 +15,8 @@ router.get('/', async (req, res) => {
         res.redirect('/vattutest')
         break;
       case "tp":
-        res.render('layoutkythuat/main/dashboard')
+        let doc = await ycsc.docyeucautheotrangthai('choduyet')
+        res.render('layoutkythuat/main/dashboard', { data: doc})
         break;
       case "nv":
         const successMessage = req.flash('success')[0];
@@ -35,7 +36,16 @@ router.get('/', async (req, res) => {
 
 router.post('/taoyc', multer.upload.single('image'), async (req, res) => {
   if (req.isAuthenticated()) {
+    try {
+      var fileName = req.file.filename
+    } catch (error) {
+      var fileName = ''
+    }
+    
+    
+    //console.log(fileName)
     let doc = {
+      mayeucau: req.body.code,
       nguoiyeucau: req.body.nguoiyc,
       ngayyeucau: req.body.ngay,
       bophan: req.body.bophan,
@@ -43,13 +53,14 @@ router.post('/taoyc', multer.upload.single('image'), async (req, res) => {
       vitri: req.body.vitri,
       khancap: req.body.option,
       mota: req.body.areamota,
-      trangthai: 'chờ duyệt',
-      
+      trangthai: 'choduyet',
+      filename: fileName
     }
+    console.log(doc)
     let result = await ycsc.taoyc(doc)
     // Lấy thông báo từ req.flash và truyền nó cho template
     if (result == true) {
-      req.flash('success', 'Dữ liệu đã được lưu thành công!');
+      req.flash('success', 'Dữ liệu đã được lưu và gửi thành công!');
       res.redirect('/qlkt')
     } else {
       req.flash('success', 'Chưa lưu, cần nhập đầy đủ thông tin vào !');
@@ -60,5 +71,12 @@ router.post('/taoyc', multer.upload.single('image'), async (req, res) => {
   }
 })
 
+router.get('/trangthai', async(req, res) => {
+  let doc = await ycsc.docyeucautheotrangthai('choduyet')
+  res.render('layoutkythuat/main/dashboard',{
+    data: doc,
+    _username: '',
+  })
+})
 
 module.exports = router

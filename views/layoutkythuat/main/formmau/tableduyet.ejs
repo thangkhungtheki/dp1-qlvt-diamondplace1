@@ -1,0 +1,165 @@
+<!-- Page Heading -->
+
+    <div class="container-fluid">
+        <h1 class="h3 mb-2 text-gray-800">Bảng Yêu Cầu</h1>
+        
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr class="table-success">
+                        <th>Control</th>
+                        <th>NgườiYC</th>
+                        <th>NgàyYC</th>
+                        <th>BP</th>
+                        <th>Đt</th>
+                        <th>Vịtri</th>
+                        <th>khan</th>
+                        <th>Mô tả</th>
+                        <th>Trạng thái</th>
+                        <th>XemChiTiet</th>
+
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr class="table-success">
+                      <th>Control</th>
+                      <th>NgườiYC</th>
+                      <th>NgàyYC</th>
+                      <th>BP</th>
+                      <th>Đt</th>
+                      <th>Vịtri</th>
+                      <th>khan</th>
+                      <th>Mô tả</th>
+                      <th>Trạng thái</th>
+                      <th>XemChiTiet</th>
+                    </tr>
+                </tfoot>
+
+                <tbody>
+                    <% data.forEach((data)=>{ %>
+                        <% var bien=data.mayeucau %>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <div class="btn btn-info btn-circle btn-sm" 
+                                            data-toggle="modal" data-target="#idsua">
+                                            <i class="fas fa-info-circle"></i>
+                                        </div>
+                                        <div class="btn btn-danger btn-circle btn-sm" data-toggle="modal"
+                                            data-target="#idxoa">
+                                            <i class="fas fa-trash">
+                                            </i>
+                                        </div>
+                                    </div>
+
+                                </td>
+                                <td>
+                                    <%= data.nguoiyeucau %>
+                                </td>
+                                <td>
+                                    <%= data.ngayyeucau %>
+                                </td>
+                                <td>
+                                    <%= data.bophan %>
+                                </td>
+                                <td>
+                                    <%= data.dienthoai %>
+                                </td>
+                                <td>
+                                    <%= data.vitri %>
+                                </td>
+                                <td>
+                                    <%= data.khancap %>
+                                </td>
+                                <td>
+                                    <%= data.mota %>
+                                </td>
+                                <td>
+                                    <%= data.trangthai %>
+                                </td>
+                                <td>
+                                  <button type="button" class="btn btn-info" onclick="btnclick('<%= data.mayeucau %>')" id="<%= data.mayeucau %>">Info</button>
+                              </td>
+                            </tr>
+
+
+                            <% }) %>
+
+
+                </tbody>
+            </table>
+        </div>
+        <!-- </div>
+    </div> -->
+    </div>
+
+    <!-- Logout Modal-->
+    <!-- Logout Modal-->
+  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel1">Bạn chắc chắn muốn thoát?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Lựa chọn "Logout" chúng tôi sẽ xóa session.</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <button class="btn btn-primary" type="button" id="btnlogout">Logout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Xoa User Modal-->
+<div class="modal fade" id="idsua" tabindex="0" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Nút sửa ở đây</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body" >#.</div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        <button class="btn btn-primary" type="button" id="btnlogout">nút sửa ở đây</button>
+      </div>
+    </div>
+  </div>
+</div>
+        <!-- xxxxxxxxxxx -->
+
+        <div class="modal fade" id="idxoa" tabindex="2" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ModalLabel2">Nút xoá ở đây</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="sualabel2">#####</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <form action="searcheditdp2" method="post">
+                            <input type="text" id="txtid" name="txtsearch" value="" hidden="true"/>
+                            <button class="btn btn-primary" type="submit" id="btnsua">Nút xoá ở đây</button>
+                            
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+<script src="vendor/jquery/jquery.min.js"></script>
+<script>
+  function btnclick(ma){
+    
+    alert('Click ' + ma )
+  }
+</script>
+        

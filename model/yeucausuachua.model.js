@@ -1,6 +1,7 @@
 const mongooge = require("mongoose")
 const Schema = mongooge.Schema
 const schema = new Schema({
+    mayeucau: {type: String, required: true},
     nguoiyeucau: {type: String, required: true},
     ngayyeucau: {type: String, required: true},
     bophan: {type: String, required: false},
@@ -11,6 +12,7 @@ const schema = new Schema({
     trangthai: {type: String, required: false},
     motacongviec: {type: String, required: false},
     note: {type: String, required: false},
+    filename: {type: String, required: false},
 })
 
 

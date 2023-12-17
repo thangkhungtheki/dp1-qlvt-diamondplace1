@@ -9,6 +9,15 @@ async function taoyc(doc){
     }
 }
 
+async function docyeucautheotrangthai(trangthai){
+    try{
+        let doc = await _ycsc.find({trangthai: trangthai})
+        return doc
+    }catch(e){
+        return false
+    }
+}
 module.exports = {
     taoyc,
+    docyeucautheotrangthai,
 }

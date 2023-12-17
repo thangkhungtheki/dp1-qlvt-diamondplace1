@@ -4,7 +4,7 @@
     <center> PHIẾU YÊU CẦU HỖ TRỢ KỸ THUẬT </center>
   </h3>
   <% if (successMessage) { %>
-  <% if (successMessage == 'Dữ liệu đã được lưu thành công!') {%>
+  <% if (successMessage == 'Dữ liệu đã được lưu và gửi thành công!') {%>
   <div style="color: green; align-items: center;">
     <%= successMessage %>
   </div>
@@ -16,6 +16,13 @@
   <% } %>
   <% } %>
   <form action='/qlkt/taoyc' method='post' enctype="multipart/form-data">
+    <!-- <div class="form-row">
+      <div class="form-group col-md-6">
+        
+        <input type="text" class="form-control" id="txtmayeucau" name="mayc" value="122122003" disabled>
+      </div>
+    </div> -->
+    <input id="idcode" name="code" value="" hidden="true">
     <div class="form-row">
       <div class="form-group col-md-6">
         <label>Người yêu cầu</label>
@@ -97,6 +104,25 @@
 
   // Thiết lập giá trị mặc định là ngày hiện tại
   const currentDate = new Date().toISOString().split('T')[0];
+  const currentTimeUTC = new Date();
+
+// Chuyển đổi sang múi giờ Việt Nam (GMT+7)
+const formatter = new Intl.DateTimeFormat('en-US', {
+  timeZone: 'Asia/Ho_Chi_Minh',
+  year: 'numeric',
+  month: 'numeric',
+  day: 'numeric',
+  hour: 'numeric',
+  minute: 'numeric',
+  second: 'numeric',
+  timeZoneName: 'short',
+});
+
+const formattedTime = formatter.format(currentTimeUTC);
+
+
+  const code = document .getElementById('idcode')
+  code.value = formattedTime
   dateInput.value = currentDate;
 </script>
 <script src="vendor/jquery/jquery.min.js"></script>
