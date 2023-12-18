@@ -9,6 +9,7 @@ const schema = new Schema({
     vitri: {type: String, required: true},
     khancap: {type: String, required: false},
     mota: {type: String, required: true},
+    ttbp: {type: String, required: false},
     trangthai: {type: String, required: false},
     motacongviec: {type: String, required: false},
     note: {type: String, required: false},

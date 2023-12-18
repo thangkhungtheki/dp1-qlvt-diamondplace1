@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
         res.redirect('/vattutest')
         break;
       case "tp":
-        let doc = await ycsc.docyeucautheotrangthai('choduyet')
+        let doc = await ycsc.docyeucautheotrangthai('dangxuly')
         res.render('layoutkythuat/main/dashboard', { data: doc})
         break;
       case "nv":
@@ -53,6 +53,7 @@ router.post('/taoyc', multer.upload.single('image'), async (req, res) => {
       vitri: req.body.vitri,
       khancap: req.body.option,
       mota: req.body.areamota,
+      ttbp: 'dangxuly',
       trangthai: 'choduyet',
       filename: fileName
     }
@@ -71,12 +72,25 @@ router.post('/taoyc', multer.upload.single('image'), async (req, res) => {
   }
 })
 
-router.get('/trangthai', async(req, res) => {
-  let doc = await ycsc.docyeucautheotrangthai('choduyet')
-  res.render('layoutkythuat/main/dashboard',{
-    data: doc,
-    _username: '',
-  })
+router.post('/updatettbp', async(req, res) => {
+  //let doc = await ycsc.timyctheoma(req.body.mayeucau)
+  let ma = req.body.mayeucau
+  console.log(ma)
+  await ycsc.updatetttbp(ma,'duyet')
+  res.end()
+})
+
+router.post('/deletettbp', async (req, res) => {
+  let ma = req.body.mayeucau
+  console.log('đã xoá: ' + ma)
+  await ycsc.deletettbp(ma)
+  res.end()
+})
+
+router.get('/xemlichsu', async (req, res) => {
+  let doc = await ycsc.docyeucautheotrangthai('dangxuly')
+  res.render('layoutkythuat/main/copy', { data: doc })
+
 })
 
 module.exports = router

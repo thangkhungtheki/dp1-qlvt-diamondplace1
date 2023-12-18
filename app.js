@@ -49,20 +49,20 @@ app.use((req, res, next) => {
   res.status(404).redirect("/signin");
 });
 
-app.use((err, req, res, next) => {
-  if (err instanceof multer.MulterError) {
-    // Lỗi từ Multer
-    console.error('Multer error:', err);
-    res.status(500).send('Multer Error');
-  } else if (err) {
-    // Lỗi khác
-    console.error('Unknown error:', err);
-    res.status(500).send('Unknown Error');
-  } else {
-    // Tiếp tục sang middleware tiếp theo nếu không có lỗi
-    next();
-  }
-});
+// app.use((err, req, res, next) => {
+//   if (err instanceof multer.MulterError) {
+//     // Lỗi từ Multer
+//     console.error('Multer error:', err);
+//     res.status(500).send('Multer Error');
+//   } else if (err) {
+//     // Lỗi khác
+//     console.error('Unknown error:', err);
+//     res.status(500).send('Unknown Error');
+//   } else {
+//     // Tiếp tục sang middleware tiếp theo nếu không có lỗi
+//     next();
+//   }
+// });
 
 // catch 404 and forward to error handler
 // app.use(function(req, res, next) {
