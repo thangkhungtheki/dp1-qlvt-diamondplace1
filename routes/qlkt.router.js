@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
         break;
       case "tp":
         let doc = await ycsc.docyeucautheotrangthai('dangxuly')
-        res.render('layoutkythuat/main/dashboard', { data: doc})
+        res.render('layoutkythuat/main/dashboard', { data: doc })
         break;
       case "nv":
         const successMessage = req.flash('success')[0];
@@ -41,8 +41,8 @@ router.post('/taoyc', multer.upload.single('image'), async (req, res) => {
     } catch (error) {
       var fileName = ''
     }
-    
-    
+
+
     //console.log(fileName)
     let doc = {
       mayeucau: req.body.code,
@@ -72,11 +72,11 @@ router.post('/taoyc', multer.upload.single('image'), async (req, res) => {
   }
 })
 
-router.post('/updatettbp', async(req, res) => {
+router.post('/updatettbp', async (req, res) => {
   //let doc = await ycsc.timyctheoma(req.body.mayeucau)
   let ma = req.body.mayeucau
   console.log(ma)
-  await ycsc.updatetttbp(ma,'duyet')
+  await ycsc.updatetttbp(ma, 'duyet')
   res.end()
 })
 
@@ -88,8 +88,32 @@ router.post('/deletettbp', async (req, res) => {
 })
 
 router.get('/xemlichsu', async (req, res) => {
-  let doc = await ycsc.docyeucautheotrangthai('dangxuly')
-  res.render('layoutkythuat/main/copy', { data: doc })
+  if (req.isAuthenticated()) {
+    let user = await xulydb.timUser(req.user.username)
+    // console.log(user)
+
+
+    switch (user.role) {
+      case "admin":
+        res.redirect('/vattutest')
+        break;
+      case "tp":
+        
+        res.render('layoutkythuat/main/viewxemlichsu')
+        break;
+      case "nv":
+        const successMessage = req.flash('success')[0];
+        res.render('layoutkythuat/user/dashboard', { data: user, successMessage })
+        break;
+      default:
+        res.send('bạn đã Đăng ký thành công!!! <br\> Chào bạn: <b>' + user.username + ' </b>, vui lòng liên hệ admin và báo tên user, để được cấp quyền')
+    }
+
+
+
+  } else {
+    res.redirect('/signin')
+  }
 
 })
 

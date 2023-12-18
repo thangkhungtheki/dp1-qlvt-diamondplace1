@@ -43,7 +43,7 @@ app.use(express.static(path.join(__dirname, 'multer-upload/uploads')));
 
 // sử dụng router 
 app.use('/', indexRouter);
-app.use('/qlkt', qltkRouter);
+app.use('/qlkt/', qltkRouter);
 
 app.use((req, res, next) => {
   res.status(404).redirect("/signin");
