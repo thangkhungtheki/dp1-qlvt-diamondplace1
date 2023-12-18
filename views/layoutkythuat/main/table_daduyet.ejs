@@ -1,13 +1,13 @@
 <!-- Page Heading -->
 
 <div class="container-fluid">
-  <h1 class="h3 mb-2 text-gray-800">Bảng Yêu Cầu</h1>
+  <h1 class="h3 mb-2 text-gray-800">Bảng Theo Dõi</h1>
 
   <div class="table-responsive">
     <table class="table table-bordered table-striped" id="dataTable" width="100%" cellspacing="0">
       <thead>
-        <tr class="table-success">
-          <th>Control</th>
+        <tr class="table-primary">
+          <th>STT</th>
           <th>NgườiYC</th>
           <th>NgàyYC</th>
           <th>BP</th>
@@ -16,13 +16,14 @@
           <th>khan</th>
           <th>Mô tả</th>
           <th>ttbp</th>
-          <!-- <th>XemChiTiet</th> -->
+          <th>pkthuat</th>
+          <th>XemChiTiet</th>
 
         </tr>
       </thead>
       <tfoot>
-        <tr class="table-success">
-          <th>Control</th>
+        <tr class="table-primary">
+          <th>STT</th>
           <th>NgườiYC</th>
           <th>NgàyYC</th>
           <th>BP</th>
@@ -31,16 +32,20 @@
           <th>khan</th>
           <th>Mô tả</th>
           <th>ttbp</th>
-          <!-- <th>XemChiTiet</th> -->
+          <th>pkthuat</th>
+          <th>XemChiTiet</th>
         </tr>
       </tfoot>
 
       <tbody>
+        <% var stt = 0 %>
         <% data.forEach((data)=>{ %>
         <% var bien = data.mayeucau %>
+        <% stt = stt + 1 %>
+        
         <tr>
           <td>
-            <div>
+            <!-- <div>
               <div class="btn btn-info btn-circle btn-sm" data-toggle="modal" data-target="#idsua" onclick="sua('<%= bien %>')">
                 <i class="fas fa-info-circle"></i>
               </div>
@@ -48,7 +53,8 @@
                 <i class="fas fa-trash">
                 </i>
               </div>
-            </div>
+            </div> -->
+            <b><%= stt %></b>
             
           </td>
           <td>
@@ -75,9 +81,12 @@
           <td>
             <%= data.ttbp %>
           </td>
-          <!-- <td>
+          <td>
+            <%= data.trangthai %>
+          </td>
+          <td>
             <button type="button" class="btn btn-info" onclick="btnclick('<%= data.mayeucau %>')">Info</button>
-          </td> -->
+          </td>
         </tr>
 
 

@@ -34,12 +34,13 @@ router.get('/', async (req, res) => {
 
 })
 
-router.post('/taoyc', multer.upload.single('image'), async (req, res) => {
+router.post('/taoyc', multer.upload.array('image', 5), async (req, res) => {
   if (req.isAuthenticated()) {
     try {
-      var fileName = req.file.filename
+      var fileName = req.files
+      console.log(fileName)
     } catch (error) {
-      var fileName = ''
+      var fileName = null
     }
 
 
@@ -98,8 +99,8 @@ router.get('/xemlichsu', async (req, res) => {
         res.redirect('/vattutest')
         break;
       case "tp":
-        
-        res.render('layoutkythuat/main/viewxemlichsu')
+        let doc = await ycsc.docyeucautheotrangthai('duyet')
+        res.render('layoutkythuat/main/viewxemlichsu', {data: doc})
         break;
       case "nv":
         const successMessage = req.flash('success')[0];
@@ -115,6 +116,12 @@ router.get('/xemlichsu', async (req, res) => {
     res.redirect('/signin')
   }
 
+})
+
+router.get('/viewyeucau', async (req, res) => {
+  let user = await xulydb.timUser(req.user.username)
+  const successMessage = req.flash('success')[0];
+  res.render('layoutkythuat/main/view_guiyc', { data: user, successMessage })
 })
 
 module.exports = router

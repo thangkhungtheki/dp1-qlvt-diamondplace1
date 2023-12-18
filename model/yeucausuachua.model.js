@@ -13,7 +13,7 @@ const schema = new Schema({
     trangthai: {type: String, required: false},
     motacongviec: {type: String, required: false},
     note: {type: String, required: false},
-    filename: {type: String, required: false},
+    filename: {type: Array, required: false},
 })
 
 
