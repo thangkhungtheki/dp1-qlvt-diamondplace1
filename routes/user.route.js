@@ -714,4 +714,23 @@ router.post('/timxuatvattu', async(req, res) => {
     res.send(data)
 })
 
+router.get('/dathang', async(req, res) => {
+    if (req.isAuthenticated()) {
+        let data = await xulydb.baocaovattu()
+        //console.log(data)
+        res.render("mainSbAdmin/themdathang",{
+            user: req.user, //tạm mở user
+            
+            activeuser: '',
+            activetb: '',
+            activetbdp2: '',
+            activethem: '',
+            
+        })
+    
+    } else {
+        res.redirect('signin')
+    }
+  })
+
 module.exports = router
