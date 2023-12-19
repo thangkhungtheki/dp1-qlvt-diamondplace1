@@ -20,6 +20,8 @@ const storage = multer.diskStorage({
 });
 // Khởi tạo middleware multer với cài đặt storage
 const upload = multer({ storage: storage });
+  
+
 // 'image' là tên trường trong form HTML để tải lên, bạn cần đảm bảo nó khớp
 // Hàm để làm sạch tên file
 function sanitizeFilename(filename) {

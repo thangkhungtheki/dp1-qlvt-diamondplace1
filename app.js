@@ -9,7 +9,7 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var flash = require('connect-flash');
 var app = express();
-
+var multer = require('multer')
 // import router 
 var indexRouter = require('./routes/user.route');
 var qltkRouter = require('./routes/qlkt.router')
@@ -39,16 +39,30 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'multer-upload/uploads')));
 
 // sử dụng router 
 app.use('/', indexRouter);
-app.use('/qlkt', qltkRouter);
+app.use('/qlkt/', qltkRouter);
 
 app.use((req, res, next) => {
   res.status(404).redirect("/signin");
 });
 
-
+// app.use((err, req, res, next) => {
+//   if (err instanceof multer.MulterError) {
+//     // Lỗi từ Multer
+//     console.error('Multer error:', err);
+//     res.status(500).send('Multer Error');
+//   } else if (err) {
+//     // Lỗi khác
+//     console.error('Unknown error:', err);
+//     res.status(500).send('Unknown Error');
+//   } else {
+//     // Tiếp tục sang middleware tiếp theo nếu không có lỗi
+//     next();
+//   }
+// });
 
 // catch 404 and forward to error handler
 // app.use(function(req, res, next) {
