@@ -48,12 +48,12 @@
     </div>
     <div class="form-group">
       <label for="exampleFormControlTextarea1">Mô tả:</label>
-      <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" name='areamota'  readonly><%= data[0].mota %></textarea>
+      <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" name='areamota' readonly><%= data[0].mota %></textarea>
     </div>
     <div class="form-group">
-        Trạng thái trưởng bộ phận <b><%= data[0].bophan %></b>:
-        <% var content1 %>
-        <% switch (data[0].ttbp) {
+      Trạng thái trưởng bộ phận <b><%= data[0].bophan %></b>:
+      <% var content1 %>
+      <% switch (data[0].ttbp) {
               case 'dangxuly':
               content1 = "<h4 class='maudo'> Chờ Duyệt </h4>"
               break
@@ -66,8 +66,8 @@
               default : 
               content1 = '...'
           } %>
-        <%- content1 %>
-      </div>
+      <%- content1 %>
+    </div>
     <div class="form-group">
       Trạng thái phòng kỹ thuật:
       <% var content %>
@@ -90,15 +90,26 @@
   <div>Hình ảnh: </div>
 
   <% data[0].filename.forEach((file, index) => { %>
-  <div class="image-container" style="margin-bottom: 10px;">
-    <img src="/<%= file.filename %>" atl="Responsive image" class="clickable-image img-thumbnail img-fluid max-width: 80%" onclick="showFullSize(this)" >
-  </div>
-  <% }) %>
 
-  <div>
-    <!-- <img src="/2023-12-20-09-58-54-zalo_last_screenshot.png" alt=""> -->
+  <% if ( index % 2 == 0 ) { %>
+  <div class="image-container" style="margin-bottom: 10px;">
+    <% } %>
+    <!-- <div class="row"> -->
+      <div class="col-md-6">
+        <img src="/<%= file.filename %>" atl="Responsive image" class="clickable-image img-fluid" onclick="showFullSize(this)">
+      </div>
+    <!-- </div> -->
+    <% if ( index % 2 != 0 ) { %>
   </div>
+  <% } %>
+
+
+<% }) %>
+
+<div>
+  <!-- <img src="/2023-12-20-09-58-54-zalo_last_screenshot.png" alt=""> -->
 </div>
+
 
 
 <style>
@@ -136,6 +147,7 @@
   .clickable-image {
     cursor: pointer;
     transition: transform 0.3s ease-in-out;
+    max-width: 80%;
   }
 
   .clickable-image.full-size {
