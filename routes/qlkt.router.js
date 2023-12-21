@@ -3,7 +3,8 @@ var router = express.Router()
 var xulydb = require('../CRUD/xulydb')
 const ycsc = require('../CRUD/xulyyeucau')
 const multer = require('../multer-upload/multer')
-
+const sharp = require('sharp')
+const path = require('path')
 router.get('/', async (req, res) => {
   if (req.isAuthenticated()) {
     let user = await xulydb.timUser(req.user.username)
@@ -38,7 +39,7 @@ router.post('/taoyc', multer.upload.array('image', 5), async (req, res) => {
   if (req.isAuthenticated()) {
     try {
       var fileName = req.files
-      console.log(fileName)
+      
     } catch (error) {
       var fileName = null
     }
@@ -100,7 +101,7 @@ router.get('/xemlichsu', async (req, res) => {
         break;
       case "tp":
         let doc = await ycsc.docyeucautheotrangthai('duyet')
-        res.render('layoutkythuat/main/viewxemlichsu', {data: doc})
+        res.render('layoutkythuat/main/viewxemlichsu', { data: doc })
         break;
       case "nv":
         const successMessage = req.flash('success')[0];
