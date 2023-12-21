@@ -91,20 +91,20 @@
 
   <% data[0].filename.forEach((file, index) => { %>
 
-  <% if ( index % 2 == 0 ) { %>
-  <div class="image-container" style="margin-bottom: 10px;">
-    <% } %>
+  <!-- <% if ( index % 2 == 0 ) { %> -->
+  <div class="container mx-auto text-center" >
+    <!-- <% } %> -->
     <!-- <div class="row"> -->
-      <div class="col-md-6">
-        <img src="/<%= file.filename %>" atl="Responsive image" class="clickable-image img-fluid" onclick="showFullSize(this)">
-      </div>
+      
+        <img src="/<%= file.filename %>" atl="" class="clickable-image rounded custom-img" onclick="showFullSize(this)">
+      
     <!-- </div> -->
-    <% if ( index % 2 != 0 ) { %>
+    <!-- <% if ( index % 2 != 0 ) { %> -->
   </div>
-  <% } %>
+  <!-- <% } %> -->
 
 
-<% }) %>
+  <% }) %>
 
 <div>
   <!-- <img src="/2023-12-20-09-58-54-zalo_last_screenshot.png" alt=""> -->
@@ -113,6 +113,12 @@
 
 
 <style>
+  .custom-img {
+   
+    border: 1px solid #fa9005bb; /*Đổi màu sắc của đường viền */
+    padding: 3px; /* Tăng kích thước của đường viền */
+    border-radius: 10px; /* Làm tròn các góc của đường viền */
+  }
   .contentpyc {
     padding: 20px;
     background: #f2f2f2;
@@ -140,18 +146,19 @@
   }
 
   .image-container {
-    position: relative;
-    overflow: hidden;
+    max-width: 50%;
+    overflow: show;
   }
 
   .clickable-image {
     cursor: pointer;
     transition: transform 0.3s ease-in-out;
-    max-width: 80%;
+    max-width: 75%;
+    
   }
 
   .clickable-image.full-size {
-    transform: scale(1.5);
+    transform: scale(2);
     /* You can adjust the scale factor as needed */
   }
 </style>
