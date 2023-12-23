@@ -1,5 +1,6 @@
 const _ycsc = require('../model/yeucausuachua.model')
-
+const _file = require('../FileProcess/file')
+//const _path = 'DP1-VATTU/DP1-Ver.Conect-DB-Node-login-use-schema/multer-upload/uploads/'
 async function taoyc(doc){
     try{
         await _ycsc.create(doc)
@@ -27,6 +28,15 @@ async function timyctheoma(ma){
     }
 }
 
+async function timyctheobophan(bp){
+    try{
+        let doc = await _ycsc.find({bophan: bp , ttbp: 'duyet'})
+        return doc
+    }catch(e){
+        return false
+    }
+}
+
 async function updatetttbp(mayeucau, ttbp){
     try {
         await _ycsc.updateOne({mayeucau: mayeucau}, {$set:{ttbp: ttbp}})
@@ -38,7 +48,15 @@ async function updatetttbp(mayeucau, ttbp){
 
 async function deletettbp (ma) {
     try {
-        await _ycsc.deleteOne({mayeucau: ma})
+        let doc = await timyctheoma(ma)
+        if(doc){
+            doc[0].filename.forEach(file => {
+                _file.xoafile(file.path)
+            })
+            await _ycsc.deleteOne({mayeucau: ma})
+
+        }
+        
     } catch (e) {
         console.log(e)
         return false
@@ -50,4 +68,5 @@ module.exports = {
     updatetttbp,
     timyctheoma,
     deletettbp,
+    timyctheobophan,
 }

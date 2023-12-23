@@ -40,10 +40,15 @@
       <div class="form-group col-md-6">
         <b> Khẩn Cấp : </b>
 
-
-        <div style="color: blue;">
-          <h4> <%= data[0].khancap %> </h4>
+        <% if (data[0].khancap == 'yes') { %>
+        <div style="color: rgb(250, 10, 22);">
+          <h4> Có </h4>
         </div>
+        <% } else { %>
+        <div style="color: rgb(18, 22, 247);">
+            <h4> Không </h4>
+        </div>
+        <% } %>
       </div>
     </div>
     <div class="form-group">
@@ -88,48 +93,37 @@
     </div>
   </form>
   <div>Hình ảnh: </div>
-
+  <div class="mx-auto text-center">
   <% data[0].filename.forEach((file, index) => { %>
-
-  <!-- <% if ( index % 2 == 0 ) { %> -->
-  <div class="container mx-auto text-center" >
-    <!-- <% } %> -->
-    <!-- <div class="row"> -->
-      
-        <img src="/<%= file.filename %>" atl="" class="clickable-image rounded custom-img" onclick="showFullSize(this)">
-      
-    <!-- </div> -->
-    <!-- <% if ( index % 2 != 0 ) { %> -->
-  </div>
-  <!-- <% } %> -->
-
-
+ 
+        <img src="/<%= file.filename %>" atl="..." class="rounded custom-img clickable-image " onclick="showFullSize(this)">
   <% }) %>
-
-<div>
+  </div>
+<div class="margin">
   <!-- <img src="/2023-12-20-09-58-54-zalo_last_screenshot.png" alt=""> -->
 </div>
 
 
 
 <style>
+  .margin {
+    margin-bottom: 100px;
+  }
+  
   .custom-img {
    
     border: 1px solid #fa9005bb; /*Đổi màu sắc của đường viền */
     padding: 3px; /* Tăng kích thước của đường viền */
     border-radius: 10px; /* Làm tròn các góc của đường viền */
+   
   }
   .contentpyc {
-    padding: 20px;
+    padding: 5px;
     background: #f2f2f2;
   }
 
-  .checkmark {
-    margin-right: 20px;
-  }
-
   body {
-    font-size: 100%;
+    font-size: 80%;
     /* Điều chỉnh kích thước tổng thể bằng cách sử dụng font-size */
   }
 
@@ -145,20 +139,20 @@
     color: darkgreen;
   }
 
-  .image-container {
-    max-width: 50%;
-    overflow: show;
-  }
 
   .clickable-image {
     cursor: pointer;
+    width: 150px;
+    height: 150px;
     transition: transform 0.3s ease-in-out;
-    max-width: 75%;
+
     
   }
 
   .clickable-image.full-size {
-    transform: scale(1.5);
+    transform: scaleX(1.5) scaleY(2);
+    transform-origin: center center;
+    
     /* You can adjust the scale factor as needed */
   }
 </style>

@@ -37,7 +37,7 @@ router.get('/', async (req, res) => {
 
 
 
-router.post('/taoyc', filemulter.upload.array('image', 3), filemulter.handleError, async (req, res) => {
+router.post('/taoyc', filemulter.upload.array('image', 4), filemulter.handleError, async (req, res) => {
   if (req.isAuthenticated()) {
     
     // if (req.files.length > 3) {
@@ -95,6 +95,7 @@ router.post('/deletettbp', async (req, res) => {
   let ma = req.body.mayeucau
   console.log('đã xoá: ' + ma)
   await ycsc.deletettbp(ma)
+  
   res.end()
 })
 
@@ -130,19 +131,27 @@ router.get('/xemlichsu', async (req, res) => {
 
 router.get('/viewyeucau', async (req, res) => {
   let user = await xulydb.timUser(req.user.username)
-  const successMessage = req.flash('success')[0];
+  const successMessage = req.flash('success')[0]
   res.render('layoutkythuat/main/view_guiyc', { data: user, successMessage })
 })
 
 router.get('/info', async (req, res) => {
-  let mayeucau = req.query.mayeucau;
-  console.log(mayeucau)
+  let mayeucau = req.query.mayeucau
+  //console.log(mayeucau)
   let doc = await ycsc.timyctheoma(mayeucau)
   //console.log(doc)
-  let datafile = doc[0].filename
+  //let datafile = doc[0].filename
   //console.log(datafile)
   if (doc) {
     res.render('layoutkythuat/main/view_info', { data: doc })
+  }
+})
+
+router.get('/viewtheobophan', async (req, res) => {
+  let bp = req.query.bophan
+  let doc = await ycsc.timyctheobophan(bp)
+  if (doc) {
+    res.json(doc)
   }
 })
 

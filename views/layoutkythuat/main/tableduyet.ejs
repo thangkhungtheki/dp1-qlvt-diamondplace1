@@ -16,7 +16,7 @@
           <th>khan</th>
           <th>Mô tả</th>
           <th>ttbp</th>
-          <!-- <th>XemChiTiet</th> -->
+          <th>XemChiTiet</th>
 
         </tr>
       </thead>
@@ -31,7 +31,7 @@
           <th>khan</th>
           <th>Mô tả</th>
           <th>ttbp</th>
-          <!-- <th>XemChiTiet</th> -->
+          <th>XemChiTiet</th>
         </tr>
       </tfoot>
 
@@ -75,9 +75,9 @@
           <td>
             <%= data.ttbp %>
           </td>
-          <!-- <td>
+          <td>
             <button type="button" class="btn btn-info" onclick="btnclick('<%= data.mayeucau %>')">Info</button>
-          </td> -->
+          </td>
         </tr>
 
 
@@ -156,7 +156,7 @@
 <script>
   function btnclick(ma) {
 
-    alert('Click ' + ma)
+    window.location.href = '/qlkt/info?mayeucau=' + ma
   }
 
   function sua(ma) {
