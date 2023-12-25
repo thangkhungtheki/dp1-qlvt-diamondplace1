@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 
-
-<% var _username = '' %>
-<% var path = '/DP1-VATTU/DP1-Ver.Conect-DB-Node-login-use-schema/' %>
+<% var activeuser =  '' %>
+<% var activetb =  '' %>
+<% var activetbdp2 = '' %>
+<% var activethem = '' %>
 
 <head>
 
@@ -46,15 +47,11 @@
       <!-- Divider -->
       <hr class="sidebar-divider my-0">
 
-
+      
 
       <!-- Nav Item - Tables -->
-      <!-- dùng chỗ này điều hướng cho 2 nơi đen tp chỗ left-sites và xanh admin   -->
-      <% if(user.role == 'tp') { %>
-      <%- include('./left-sites.ejs') %>
-      <% } else { %>
-      <%- include(path + 'views/layout/left-sites.ejs') %>
-      <% } %>
+      <%- include('../layout/left-sites.ejs') %>
+      
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
 
@@ -71,12 +68,12 @@
 
       <!-- Main Content -->
       <div id="content">
-
+        
         <!-- Topbar -->
         <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
           <!-- Sidebar Toggle (Topbar) -->
-          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3" >
             <i class="fa fa-bars"></i>
           </button>
 
@@ -117,12 +114,12 @@
 
             <!-- Nav Item - Alerts -->
             <li class="nav-item dropdown no-arrow mx-1">
-
+              
             </li>
 
             <!-- Nav Item - Messages -->
             <li class="nav-item dropdown no-arrow mx-1">
-
+              
             </li>
 
             <div class="topbar-divider d-none d-sm-block"></div>
@@ -137,7 +134,7 @@
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                 <a class="dropdown-item" href="#">
                   <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Profile
+                  <%= _username %>
                 </a>
                 <!-- <a class="dropdown-item" href="#">
                   <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -161,51 +158,22 @@
         <!-- End of Topbar -->
 
         <!-- Begin Page Content -->
-        <div style="margin: 2px;">
-          <%- include('../formmau/info') %>
-          <% if(user.role == 'tp') { %>
-          <p> Đây là hiển thị của trưởng phòng chỉ để xem </p>
-          <div class="form-group">
-            <label for="exampleFormControlTextarea1">Mô tả Công việc thực hiện kỹ thuật:</label>
-            <textarea class="form-control" id="exampleFormControlTextarea2" rows="5" name='areamota' readonly><%= data[0].motakythuat %></textarea>
-          </div>
-          <div>Hình ảnh đơn hàng có chữ ký: </div>
-          <div class="mx-auto text-center">
-            <% data[0].fileanhdonhang.forEach((file, index) => { %>
-            <img src="/<%= file.filename %>" atl="..." class="rounded custom-img clickable-image " onclick="showFullSize(this)">
-            <% }) %>
-          </div>
-          <% } else if(user.role == 'admin') { %>
-          <p> Đây là hiển thị của admin kỹ thuật để chỉnh sửa </p>
-          <div class="form-group">
-            <label for="exampleFormControlTextarea1">Mô tả công việc thực hiện kỹ thuật:</label>
-            <textarea class="form-control" id="exampleFormControlTextarea2" rows="5" name='areamota'><%= data[0].motakythuat %></textarea>
-          </div>
-          
-          <div class="form-group">
-            <input type="file" id="imageInput2" name="image" accept="image/*" multiple>
-          </div>
-          <div class="form-group">
-            <button type="button" class="btn btn-primary" id="btnupdate">Update</button>
-            <button type="button" class="btn btn-success float-right" id="btnhoanthanh">Hoàn thành</button>
-          </div>
-          <% } else { %>
+        <div style="margin: 10px;">
+        <%- include('../layout/bieudotron.ejs') %>
 
-          <% } %>
-          <div class="margin">
-            <!-- <img src="/2023-12-20-09-58-54-zalo_last_screenshot.png" alt=""> -->
-          </div> 
         </div>
 
+      
+          
 
-
-
+        
+        
 
       </div>
       <!-- End of Main Content -->
 
       <!-- Footer -->
-      <%- include('./footer.ejs') %>
+      <%- include('../layout/footer.ejs') %>
       <!-- End of Footer -->
 
     </div>
@@ -219,29 +187,6 @@
     <i class="fas fa-angle-up"></i>
   </a>
 
-
-
-
-  <!-- Bootstrap core JavaScript-->
-  <script src="/vendor/jquery/jquery.js"></script>
-  <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Core plugin JavaScript-->
-  <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-  <!-- Custom scripts for all pages-->
-  <script src="/js/sb-admin-2.min.js"></script>
-
-  <!-- Page level plugins -->
-  <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
-  <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-  <!-- Page level custom scripts -->
-
-
-  <!-- Xu ly Click button Logout -->
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script src="/xulylogoutdp2.js"></script>
   <!-- Logout Modal-->
   <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -260,19 +205,89 @@
       </div>
     </div>
   </div>
+
+<!-- Xoa User Modal-->
+<div class="modal fade" id="xoauserModal" tabindex="0" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="xoauserModal1">Bạn chắc chắn muốn Delete </h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body" id="xoauserModal2">#.</div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        
+          <button class="btn btn-primary" type="submit" id="btnxoatb" onclick="btnxoatb()">Delete</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ----------------------------------- -->
+
+<!-- Sua  Modal-->
+<div class="modal fade" id="suamodal" tabindex="2" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="suamodal3">Bạn chắc chắn muốn SỬA </h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body" id="suamodal4">#.</div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        
+          <button class="btn btn-primary" type="submit" id="btnxoatb" onclick="btnsuamodal()">Sửa</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ----------------------------------- -->
+
+  <!-- Bootstrap core JavaScript-->
+  <script src="/vendor/jquery/jquery.min.js"></script>
+  <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="/js/sb-admin-2.min.js"></script>
+
+  <!-- Page level plugins -->
+  <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+  <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+  <!-- Page level custom scripts -->
+  
+
+  <!-- Xu ly Click button Logout -->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="/xulylogoutdp2.js"></script>
 </body>
 
 </html>
-<style>
-  .margin {
-    margin: 100px;
-  }
-</style>
 <script>
-  $('#btnupdate').click(()=>{
-    alert('click update')
-  })
-  $('#btnhoanthanh').click(()=>{
-    alert('Click hoàn thành')
-  })
+  function btnxoatb(){
+    $.ajax({
+      method: 'post',
+      url: '/xoathietbi',
+      data: {tentb: $('#xoauserModal2').val()}
+    })
+    .done(function( msg ) {
+              window.location.href = "/viewcreatethietbi"
+            });
+    
+  }
+  function btnsuamodal(){
+    // alert ($('#suamodal4').val())
+    let tentb = $('#suamodal4').val()
+    window.location.href = "/suacreatethietbi?tentb=" + tentb
+  }
 </script>

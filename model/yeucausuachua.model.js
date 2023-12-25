@@ -14,6 +14,9 @@ const schema = new Schema({
     motacongviec: {type: String, required: false},
     note: {type: String, required: false},
     filename: {type: Array, required: false},
+    motakythuat: {type: String, require: false},
+    fileanhdonhang: {type: Array, required: false},
+    ngayhoanthanh:{type: String, required: false},
 })
 
 

@@ -1,0 +1,97 @@
+<div class="row">
+  <!-- Biểu đồ cột -->
+  <div class="col-md-6">
+      <h2 class="text-center">Column Chart</h2>
+      <canvas id="columnChart" style="width: 100%;"></canvas>
+  </div>
+
+  <!-- Biểu đồ tròn -->
+  <div class="col-md-6">
+      <h2 class="text-center">Pie Chart</h2>
+      <canvas id="pieChart" style="width: 100%;"></canvas>
+  </div>
+</div>
+
+<!-- Thêm Bootstrap JS và thư viện Chart.js -->
+<script src="/vendor/chart.js/Chart.bundle.min.js"></script>
+<script src="/vendor/chart.js/Chart.min.js"></script>
+
+<script>
+  // Đặt dữ liệu mẫu
+  var dataForColumnChart = {
+      labels: ["Category 1", "Category 2", "Category 3", "Category 4", "Category 5", "Category 6"],
+      datasets: [{
+          label: 'Column Chart',
+          data: [30, 50, 21, 11, 43, 18],
+          backgroundColor: [
+              'rgba(255, 99, 132, 0.7)',
+              'rgba(54, 162, 235, 0.7)',
+              'rgba(255, 206, 86, 0.7)',
+              'rgba(255, 99, 132, 0.7)',
+              'rgba(54, 162, 235, 0.7)',
+              'rgba(255, 206, 86, 0.7)',
+          ],
+          borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(255, 99, 132, 0.7)',
+              'rgba(54, 162, 235, 0.7)',
+              'rgba(255, 206, 86, 0.7)',
+          ],
+          borderWidth: 1
+      }]
+  };
+
+  var dataForPieChart = {
+      labels: ["Category 1", "Category 2", "Category 3","Category 4", "Category 5", "Category 6"],
+      datasets: [{
+          data: [30, 50, 20, 100, 120, 40],
+          backgroundColor: [
+              'rgba(255, 99, 132, 0.7)',
+              'rgba(54, 162, 235, 0.7)',
+              'rgba(255, 206, 86, 0.7)',
+              'rgba(254, 99, 132, 0.7)',
+              'rgba(55, 162, 235, 0.7)',
+              'rgba(253, 206, 86, 0.7)',
+          ],
+          borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(254, 99, 132, 0.7)',
+              'rgba(55, 162, 235, 0.7)',
+              'rgba(253, 206, 86, 0.7)',
+          ],
+          borderWidth: 1
+      }]
+  };
+
+  // Lấy tham chiếu đến các canvas để vẽ biểu đồ
+  var columnChartCanvas = document.getElementById('columnChart').getContext('2d');
+  var pieChartCanvas = document.getElementById('pieChart').getContext('2d');
+
+  // Vẽ biểu đồ cột
+  var columnChart = new Chart(columnChartCanvas, {
+      type: 'bar',
+      data: dataForColumnChart,
+      options: {
+        scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }],
+                    xAxes: [{
+                        barPercentage: 0.7, // Tỉ lệ chiều rộng của cột
+                    }],
+                }
+      }
+  });
+
+  // Vẽ biểu đồ tròn
+  var pieChart = new Chart(pieChartCanvas, {
+      type: 'pie',
+      data: dataForPieChart
+  });
+</script>

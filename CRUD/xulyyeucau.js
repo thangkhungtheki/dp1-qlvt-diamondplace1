@@ -10,9 +10,9 @@ async function taoyc(doc){
     }
 }
 
-async function docyeucautheotrangthai(trangthai){
+async function docyeucautheotrangthai(trangthai, bophan){
     try{
-        let doc = await _ycsc.find({ttbp: trangthai})
+        let doc = await _ycsc.find({ttbp: trangthai, bophan: bophan})
         return doc
     }catch(e){
         return false

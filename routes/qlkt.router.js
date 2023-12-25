@@ -13,10 +13,10 @@ router.get('/', async (req, res) => {
 
     switch (user.role) {
       case "admin":
-        res.redirect('/vattutest')
+        res.redirect('/qlkt/bieudotron')
         break;
       case "tp":
-        let doc = await ycsc.docyeucautheotrangthai('dangxuly')
+        let doc = await ycsc.docyeucautheotrangthai('dangxuly', user.bp)
         res.render('layoutkythuat/main/dashboard', { data: doc })
         break;
       case "nv":
@@ -110,7 +110,7 @@ router.get('/xemlichsu', async (req, res) => {
         res.redirect('/vattutest')
         break;
       case "tp":
-        let doc = await ycsc.docyeucautheotrangthai('duyet')
+        let doc = await ycsc.docyeucautheotrangthai('duyet', user.bp)
         res.render('layoutkythuat/main/viewxemlichsu', { data: doc })
         break;
       case "nv":
@@ -136,23 +136,34 @@ router.get('/viewyeucau', async (req, res) => {
 })
 
 router.get('/info', async (req, res) => {
-  let mayeucau = req.query.mayeucau
-  //console.log(mayeucau)
-  let doc = await ycsc.timyctheoma(mayeucau)
-  //console.log(doc)
-  //let datafile = doc[0].filename
-  //console.log(datafile)
-  if (doc) {
-    res.render('layoutkythuat/main/view_info', { data: doc })
+  if (req.user){
+    var user = await xulydb.timUser(req.user.username)
+    let mayeucau = req.query.mayeucau
+    //console.log(mayeucau)
+    let doc = await ycsc.timyctheoma(mayeucau)
+    //console.log(doc)
+    //let datafile = doc[0].filename
+    //console.log(datafile)
+    if (doc) {
+      res.render('layoutkythuat/main/view_info', { data: doc, user: user })
+    }
+  }else {
+    res.redirect('/signin')
   }
+  
+ 
 })
 
-router.get('/viewtheobophan', async (req, res) => {
+router.get('/viewtheobophan_daduyet', async (req, res) => {
   let bp = req.query.bophan
   let doc = await ycsc.timyctheobophan(bp)
   if (doc) {
-    res.json(doc)
+    res.render('mainSbAdmin/viewsuachuatheophong', {data: doc,_username:''})
   }
+})
+
+router.get('/bieudotron', async (req, res)=> {
+  res.render('rootadmin/bangduyetpyc',{_username:''})
 })
 
 module.exports = router
