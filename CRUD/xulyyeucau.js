@@ -62,6 +62,16 @@ async function deletettbp (ma) {
         return false
     }
 }
+
+async function updatekythuat (mayeucau, trangthai, motakythuat, fileanhdonhang){
+    try {
+        await _ycsc.updateOne({mayeucau: mayeucau}, {$set:{trangthai:trangthai, motakythuat: motakythuat, fileanhdonhang: fileanhdonhang }})
+    } catch (error) {
+        console.log(e)
+        return false
+    }
+}
+
 module.exports = {
     taoyc,
     docyeucautheotrangthai,
@@ -69,4 +79,5 @@ module.exports = {
     timyctheoma,
     deletettbp,
     timyctheobophan,
+    updatekythuat,
 }

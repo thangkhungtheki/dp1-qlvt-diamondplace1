@@ -3,7 +3,8 @@
 
 
 <% var _username = '' %>
-<% var path = '/DP1-VATTU/DP1-Ver.Conect-DB-Node-login-use-schema/' %>
+
+<% var path = '/NODEJS/dp1-qlvt-diamondplace1/' %>
 
 <head>
 
@@ -164,6 +165,7 @@
         <div style="margin: 2px;">
           <%- include('../formmau/info') %>
           <% if(user.role == 'tp') { %>
+            
           <p> Đây là hiển thị của trưởng phòng chỉ để xem </p>
           <div class="form-group">
             <label for="exampleFormControlTextarea1">Mô tả Công việc thực hiện kỹ thuật:</label>
@@ -183,10 +185,10 @@
           </div>
           
           <div class="form-group">
-            <input type="file" id="imageInput2" name="image" accept="image/*" multiple>
+            <input type="file" id="imageInput2" name="image2" accept="image/*" multiple>
           </div>
           <div class="form-group">
-            <button type="button" class="btn btn-primary" id="btnupdate">Update</button>
+            <button type="button" class="btn btn-primary" id="btnupdate" onclick="Xulyupdate()">Update</button>
             <button type="button" class="btn btn-success float-right" id="btnhoanthanh">Hoàn thành</button>
           </div>
           <% } else { %>
@@ -269,10 +271,30 @@
   }
 </style>
 <script>
-  $('#btnupdate').click(()=>{
-    alert('click update')
-  })
+ 
+ function Xulyupdate(){
+  if ('<%= data[0].trangthai %>'== 'choduyet'){
+    $.ajax({
+      method: 'post',
+      data: {
+        code: '<%= data[0].mayeucau %>',
+        motacuakythuat: $('#exampleFormControlTextarea2').val()
+      },
+      url: '/qlkt/updatekythuat'
+    })
+    .done((mes)=>{
+      
+      window.location.href = "qlkt/info?mayeucau=" + '<%= data[0].mayeucau %>'
+   
+    })
+
+    
+  } else {
+    alert('cac')
+  }
+    
+ }
   $('#btnhoanthanh').click(()=>{
-    alert('Click hoàn thành')
+    
   })
 </script>

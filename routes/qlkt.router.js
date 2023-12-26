@@ -166,4 +166,20 @@ router.get('/bieudotron', async (req, res)=> {
   res.render('rootadmin/bangduyetpyc',{_username:''})
 })
 
+router.post('/updatekythuat', filemulter.upload.array('image2', 4), filemulter.handleError, async (req, res) => {
+  if (req.isAuthenticated()) {
+    try {
+      let fileName = req.files
+      let ma = req.body.code
+      let motacuakythuat = req.body.motacuakythuat
+      let result = await ycsc.updatekythuat(ma, 'dangxuly', motacuakythuat, fileName)
+      res.redirect('qlkt/info?mayeucau=' + ma)
+    } catch(e){
+      res.send(e)
+    }
+  }else{
+    res.redirect('/sign')
+  }
+} )
+
 module.exports = router

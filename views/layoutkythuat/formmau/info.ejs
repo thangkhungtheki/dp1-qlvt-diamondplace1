@@ -5,12 +5,12 @@
   </h3>
 
   <form action='#' method='get' enctype="multipart/form-data">
-    <!-- <div class="form-row">
+    <div class="form-row">
         <div class="form-group col-md-6">
           
-          <input type="text" class="form-control" id="txtmayeucau" name="mayc" value="122122003" disabled>
+          <input type="text" class="form-control" id="txtmayeucau" name="mayc" value="<%= data[0].mayeucau %>" hidden>
         </div>
-      </div> -->
+      </div>
     <input id="idcode" name="code" value="" hidden="true">
     <div class="form-row">
       <div class="form-group col-md-6">
@@ -80,6 +80,9 @@
             case 'choduyet':
             content = "<h4 class='maudo'> Chờ Duyệt </h4>"
             break
+            case 'dangxuly':
+            content = "<h4 class='maucam'> Đang Xử Lý </h4>"
+            break
             case 'daduyet':
             content = "<h4 class='mauxanhduong'> Đã Duyệt </h4>"
             break
@@ -128,7 +131,10 @@
   }
 
   .maudo {
-    color: #f74904;
+    color: #c00000;
+  }
+  .maucam{
+    color: coral;
   }
 
   .mauxanhduong {
