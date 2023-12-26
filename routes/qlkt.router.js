@@ -178,7 +178,7 @@ router.post('/updatekythuat', filemulter.upload.array('image2', 4), filemulter.h
       res.send(e)
     }
   }else{
-    res.redirect('/sign')
+    res.redirect('/signin')
   }
 } )
 
