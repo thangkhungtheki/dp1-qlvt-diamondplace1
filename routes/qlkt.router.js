@@ -162,8 +162,16 @@ router.get('/viewtheobophan_daduyet', async (req, res) => {
   }
 })
 
+// test biểu đồ thống kê
 router.get('/bieudotron', async (req, res)=> {
   res.render('rootadmin/bangduyetpyc',{_username:''})
+})
+
+router.get('/tonghophoanthanh', async (req, res) => {
+  let doc = await ycsc._doctatcayeucauhoanthanh('hoanthanh')
+  if (doc) {
+    res.render('mainSbAdmin/viewsuachuatheophong', {data: doc,_username:''})
+  }
 })
 
 router.post('/updatekythuat', filemulter.upload.array('image2', 4), filemulter.handleError, async (req, res) => {
@@ -173,7 +181,7 @@ router.post('/updatekythuat', filemulter.upload.array('image2', 4), filemulter.h
       let ma = req.body.code
       let motacuakythuat = req.body.motacuakythuat
       let result = await ycsc.updatekythuat(ma, 'dangxuly', motacuakythuat, fileName)
-      res.redirect('qlkt/info?mayeucau=' + ma)
+      res.redirect('/qlkt/info?mayeucau=' + ma)
     } catch(e){
       res.send(e)
     }
@@ -181,5 +189,18 @@ router.post('/updatekythuat', filemulter.upload.array('image2', 4), filemulter.h
     res.redirect('/signin')
   }
 } )
+
+router.post('/updatehoanthanh', async(req, res) => {
+  if(req.isAuthenticated()){
+    try {
+      let ma = req.body.code
+      let trangthai = req.body.trangthai
+      let result = await ycsc._updatetrangthai(ma, trangthai)
+      res.send(result)
+    } catch (error) {
+      
+    }
+  }
+})
 
 module.exports = router

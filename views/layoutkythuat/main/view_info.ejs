@@ -4,7 +4,7 @@
 
 <% var _username = '' %>
 
-<% var path = '/NODEJS/dp1-qlvt-diamondplace1/' %>
+<% var path = '/DP1-VATTU/DP1-Ver.Conect-DB-Node-login-use-schema/' %>
 
 <head>
 
@@ -18,7 +18,7 @@
 
   <!-- Custom fonts for this template -->
   <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+  <!-- <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet"> -->
 
   <!-- Custom styles for this template -->
   <link href="/css/sb-admin-2.min.css" rel="stylesheet">
@@ -164,8 +164,9 @@
         <!-- Begin Page Content -->
         <div style="margin: 2px;">
           <%- include('../formmau/info') %>
-          <% if(user.role == 'tp') { %>
-            
+          <% var noidung %>
+          <% switch (user.role) {
+             case 'tp': %>
           <p> Đây là hiển thị của trưởng phòng chỉ để xem </p>
           <div class="form-group">
             <label for="exampleFormControlTextarea1">Mô tả Công việc thực hiện kỹ thuật:</label>
@@ -177,42 +178,63 @@
             <img src="/<%= file.filename %>" atl="..." class="rounded custom-img clickable-image " onclick="showFullSize(this)">
             <% }) %>
           </div>
-          <% } else if(user.role == 'admin') { %>
-            
+          <% break 
+             case 'admin': %>
+          <% if (data[0].trangthai !== 'daduyet' && data[0].trangthai !== 'hoanthanh') { %>
           <p> Đây là hiển thị của admin kỹ thuật để chỉnh sửa </p>
           <form action='/qlkt/updatekythuat' method='post' enctype="multipart/form-data">
-            
-              
-              <input type="text" class="form-control" id="txtmayeucau" name="code" value="<%= data[0].mayeucau %>" hidden>
-            
+
+
+            <input type="text" class="form-control" id="txtmayeucau" name="code" value="<%= data[0].mayeucau %>" hidden>
+
             <div class="form-row">
               <label for="exampleFormControlTextarea1">Mô tả công việc thực hiện kỹ thuật:</label>
               <textarea class="form-control" id="exampleFormControlTextarea2" rows="5" name='motacuakythuat'><%= data[0].motakythuat %></textarea>
             </div>
+            <div>Hình ảnh đơn hàng có chữ ký: </div>
+            <div class="mx-auto text-center">
+              <% data[0].fileanhdonhang.forEach((file, index) => { %>
+
+              <img src="/<%= file.filename %>" atl="..." class="rounded custom-img clickable-image " onclick="showFullSize(this)">
+              <% }) %>
+            </div>
+            <div class="form-group">
+              <input type="file" id="imageInput2" name="image2" accept="image/*" multiple>
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary" id="btnupdate">Update</button>
+              <button type="button" class="btn btn-success float-right" id="btnhoanthanh" onclick="hoanthanh('<%= data[0].trangthai %>')">Hoàn thành</button>
+            </div>
+          </form>
+          <% } else { %>
+          <div> này là đã duyệt không sửa </div>
+          <div class="form-group">
+            <label for="exampleFormControlTextarea1">Mô tả Công việc thực hiện kỹ thuật:</label>
+            <textarea class="form-control" id="exampleFormControlTextarea2" rows="5" name='areamota' readonly><%= data[0].motakythuat %></textarea>
+          </div>
           <div>Hình ảnh đơn hàng có chữ ký: </div>
           <div class="mx-auto text-center">
-          <% data[0].fileanhdonhang.forEach((file, index) => { %>
- 
-          <img src="/<%= file.filename %>" atl="..." class="rounded custom-img clickable-image " onclick="showFullSize(this)">
-          <% }) %>
+            <% data[0].fileanhdonhang.forEach((file, index) => { %>
+            <img src="/<%= file.filename %>" atl="..." class="rounded custom-img clickable-image " onclick="showFullSize(this)">
+            <% }) %>
+            <div class="form-group">
+              <button type="button" class="btn btn-success float-right" id="btnhoanthanh1" onclick="hoanthanh('<%= data[0].trangthai %>')">Hoàn thành</button>
+            </div>
           </div>
-          <div class="form-group">
-            <input type="file" id="imageInput2" name="image2" accept="image/*" multiple>
-          </div>
-          <div class="form-group">
-            <button type="submit" class="btn btn-primary" id="btnupdate">Update</button>
-            <button type="button" class="btn btn-success float-right" id="btnhoanthanh">Hoàn thành</button>
-          </div>
-        </form>
-            
-                   
-              
-          <% } else { %>
+          <% } %>
+          <% break 
+             case 'root': %>
+
+          <% break 
+             default: %>
 
           <% } %>
+
+
+
           <div class="margin">
             <!-- <img src="/2023-12-20-09-58-54-zalo_last_screenshot.png" alt=""> -->
-          </div> 
+          </div>
         </div>
 
 
@@ -242,6 +264,9 @@
 
   <!-- Bootstrap core JavaScript-->
   <script src="/vendor/jquery/jquery.js"></script>
+  <script src="/vendor/jquery/jquery.min.js"></script>
+  <script src="/vendor/jquery/jquery.min.map"></script>
+
   <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
   <!-- Core plugin JavaScript-->
@@ -258,7 +283,7 @@
 
 
   <!-- Xu ly Click button Logout -->
-  
+
   <script src="/xulylogoutdp2.js"></script>
   <!-- Logout Modal-->
   <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -287,30 +312,30 @@
   }
 </style>
 <script>
- 
- function Xulyupdate(){
-  if ('<%= data[0].trangthai %>'== 'choduyet'){
-    $.ajax({
-      method: 'post',
-      data: {
-        code: '<%= data[0].mayeucau %>',
-        motacuakythuat: $('#exampleFormControlTextarea2').val()
-      },
-      url: '/qlkt/updatekythuat'
-    })
-    .done((mes)=>{
-      
-      window.location.href = "qlkt/info?mayeucau=" + '<%= data[0].mayeucau %>'
-   
-    })
+  function hoanthanh(value) {
+    var ktraduyet = '<%= data[0].trangthai %>'
+    if (value == 'daduyet') {
+      $.ajax({
+          method: 'post',
+          data: {
+            code: $('#txtmayeucau').val(),
+            trangthai: 'hoanthanh'
+          },
+          url: '/qlkt/updatehoanthanh'
+        })
+        .done((mes) => {
+          if (mes == true) {
+            alert('Thông báo: Đã Hoàn thành')
+            window.location.href = "/qlkt/info?mayeucau=" + $('#txtmayeucau').val()
+          } else {
+            alert('Có lỗi gì đó ...')
+          }
 
-    
-  } else {
-    alert('cac')
+
+        })
+    } else {
+      
+      alert('Chưa duyệt hoặc đã hoàn thành !!!')
+    }
   }
-    
- }
-  $('#btnhoanthanh').click(()=>{
-    
-  })
 </script>

@@ -76,18 +76,19 @@
     <div class="form-group">
       Trạng thái phòng kỹ thuật:
       <% var content %>
+      
       <% switch (data[0].trangthai) {
             case 'choduyet':
-            content = "<h4 class='maudo'> Chờ Duyệt </h4>"
+            content = "<h4 class='maudo' id='contenth4'> Chờ Duyệt </h4>"
             break
             case 'dangxuly':
-            content = "<h4 class='maucam'> Đang Xử Lý </h4>"
+            content = "<h4 class='maucam' id='contenth4'> Đang Xử Lý </h4>"
             break
             case 'daduyet':
-            content = "<h4 class='mauxanhduong'> Đã Duyệt </h4>"
+            content = "<h4 class='mauxanhduong' id='contenth4'> Đã Duyệt </h4>"
             break
             case 'hoanthanh':
-            content = "<h4 class='mauxanhla'> Đã Hoàn Thành </h4>"
+            content = "<h4 class='mauxanhla' id='contenth4'> Đã Hoàn Thành </h4>"
             break
             default : 
             content = '...'

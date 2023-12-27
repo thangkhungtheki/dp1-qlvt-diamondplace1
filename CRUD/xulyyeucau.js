@@ -30,7 +30,12 @@ async function timyctheoma(ma){
 
 async function timyctheobophan(bp){
     try{
-        let doc = await _ycsc.find({bophan: bp , ttbp: 'duyet'})
+        let doc = await _ycsc.find({
+            bophan: bp , 
+            ttbp: 'duyet', 
+            $or: [
+                { trangthai: { $ne: 'hoanthanh' } }]
+            })
         return doc
     }catch(e){
         return false
@@ -64,14 +69,52 @@ async function deletettbp (ma) {
 }
 
 async function updatekythuat (mayeucau, trangthai, motakythuat, fileanhdonhang){
+    const options = {
+        upsert: true, // Nếu không tìm thấy, thêm mới
+        new: true,    // Trả về bản ghi sau khi cập nhật (mặc định là trả về bản ghi trước khi cập nhật)
+      };
+      //console.log(fileanhdonhang)
+      const update = {
+        $push: {
+          fileanhdonhang : {
+            $each: fileanhdonhang
+        }
+         
+        },
+        $set: {
+          trangthai : trangthai,
+          motakythuat: motakythuat
+          // Thêm các trường cần cập nhật khác ngoài mảng filename
+        }
+      };
     try {
-        await _ycsc.updateOne({mayeucau: mayeucau}, {$set:{trangthai:trangthai, motakythuat: motakythuat, fileanhdonhang: fileanhdonhang }})
+        await _ycsc.updateOne({mayeucau: mayeucau}, update, options)
     } catch (error) {
         console.log(e)
         return false
     }
 }
 
+async function _updatetrangthai(mayeucau, trangthai){
+    try {
+        await _ycsc.updateOne({mayeucau: mayeucau}, {$set:{trangthai: trangthai}})
+        return true
+    } catch (e) {
+        console.log(e)
+        return false
+    }
+}
+
+async function _doctatcayeucauhoanthanh(trangthai){
+    try{
+        let doc = await _ycsc.find({
+            trangthai: trangthai
+            })
+        return doc
+    }catch(e){
+        return false
+    }
+}
 module.exports = {
     taoyc,
     docyeucautheotrangthai,
@@ -80,4 +123,6 @@ module.exports = {
     deletettbp,
     timyctheobophan,
     updatekythuat,
+    _updatetrangthai,
+    _doctatcayeucauhoanthanh
 }
