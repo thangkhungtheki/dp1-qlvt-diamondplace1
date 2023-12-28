@@ -12,6 +12,10 @@ router.get('/', async (req, res) => {
 
 
     switch (user.role) {
+      
+      case "root":
+        res.redirect('/qlkt/bieudotron')
+        break;
       case "admin":
         res.redirect('/qlkt/bieudotron')
         break;
@@ -74,7 +78,7 @@ router.post('/taoyc', filemulter.upload.array('image', 4), filemulter.handleErro
       }
         // console.log(fileName)
       } catch (error) {
-        res.send('Lôi Không xác định ')
+        res.send('Lỗi không xác định ')
       }
       
     // }
@@ -99,12 +103,10 @@ router.post('/deletettbp', async (req, res) => {
   res.end()
 })
 
-router.get('/xemlichsu', async (req, res) => {
-  if (req.isAuthenticated()) {
+router.get('/xemlichsu', authenticated, async (req, res) => {
+ 
     let user = await xulydb.timUser(req.user.username)
     // console.log(user)
-
-
     switch (user.role) {
       case "admin":
         res.redirect('/vattutest')
@@ -123,20 +125,18 @@ router.get('/xemlichsu', async (req, res) => {
 
 
 
-  } else {
-    res.redirect('/signin')
-  }
+  
 
 })
 
-router.get('/viewyeucau', async (req, res) => {
+router.get('/viewyeucau',authenticated, async (req, res) => {
   let user = await xulydb.timUser(req.user.username)
   const successMessage = req.flash('success')[0]
   res.render('layoutkythuat/main/view_guiyc', { data: user, successMessage })
 })
 
-router.get('/info', async (req, res) => {
-  if (req.user){
+router.get('/info',authenticated, async (req, res) => {
+  
     var user = await xulydb.timUser(req.user.username)
     let mayeucau = req.query.mayeucau
     //console.log(mayeucau)
@@ -145,16 +145,13 @@ router.get('/info', async (req, res) => {
     //let datafile = doc[0].filename
     //console.log(datafile)
     if (doc) {
-      res.render('layoutkythuat/main/view_info', { data: doc, user: user })
+      res.render('layoutkythuat/main/view_info', { data: doc, user: user, myPathENV: process.env.myPathENV })
     }
-  }else {
-    res.redirect('/signin')
-  }
   
  
 })
 
-router.get('/viewtheobophan_daduyet', async (req, res) => {
+router.get('/viewtheobophan_daduyet',ruleAdmin, async (req, res) => {
   let bp = req.query.bophan
   let doc = await ycsc.timyctheobophan(bp)
   if (doc) {
@@ -163,11 +160,11 @@ router.get('/viewtheobophan_daduyet', async (req, res) => {
 })
 
 // test biểu đồ thống kê
-router.get('/bieudotron', async (req, res)=> {
+router.get('/bieudotron', ruleAdmin, async (req, res)=> {
   res.render('rootadmin/bangduyetpyc',{_username:''})
 })
 
-router.get('/tonghophoanthanh', async (req, res) => {
+router.get('/tonghophoanthanh',ruleAdmin, async (req, res) => {
   let doc = await ycsc._doctatcayeucauhoanthanh('hoanthanh')
   if (doc) {
     res.render('mainSbAdmin/viewsuachuatheophong', {data: doc,_username:''})
@@ -202,5 +199,20 @@ router.post('/updatehoanthanh', async(req, res) => {
     }
   }
 })
+
+function authenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/login');
+}
+
+function ruleAdmin(req, res, next) {
+  if (req.isAuthenticated() && (req.user.role == 'admin' || req.user.role == 'root')) {
+    return next();
+  }
+  
+  res.redirect('/signin');
+}
 
 module.exports = router
