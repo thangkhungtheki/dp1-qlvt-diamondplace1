@@ -203,7 +203,7 @@
               <input type="file" id="imageInput2" name="image2" accept="image/*" multiple>
             </div>
             <div class="form-group">
-              <button type="submit" class="btn btn-primary" id="btnupdate">Update</button>
+              <button type="submit" class="btn btn-primary" id="btnupdate">Update Xử lý</button>
               <button type="button" class="btn btn-success float-right" id="btnhoanthanh" onclick="hoanthanh('<%= data[0].trangthai %>')">Hoàn thành</button>
             </div>
           </form>
@@ -246,12 +246,12 @@
               <input type="file" id="imageInput2" name="image2" accept="image/*" multiple>
             </div>
             <div class="form-group">
-              <button type="submit" class="btn btn-primary" id="btnupdate">Update</button>
+              <button type="submit" class="btn btn-primary" id="btnupdate">Update Xử lý</button>
               <button type="button" class="btn btn-success float-right" id="btnhoanthanh" onclick="hoanthanh('<%= data[0].trangthai %>')">Hoàn thành</button>
               
               </div>
               <div class="form-group"> 
-                <button type="button" class="btn btn-danger float-right" id="btndelete">Delete</button>
+                <button type="button" class="btn btn-danger float-right" id="btndeleteyc" data-toggle="modal" data-target="#deleteModal">Delete</button>
               <button type="button" class="btn btn btn-secondary " id="btnduyet" onclick="duyet('<%= data[0].trangthai %>')">Duyệt</button>
               </div>
           </form>
@@ -333,6 +333,25 @@
       </div>
     </div>
   </div>
+
+  <!-- Delete Modal-->
+  <div class="modal fade" id="deleteModal" tabindex="3" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel3">Bạn chắc chắn muốn Delete?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">"Delete" chúng tôi sẽ xóa tất cả Phiếu YC mã: <strong><%= data[0].mayeucau %></strong>, bao gồm cả hình ảnh kèm theo.</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <button class="btn btn-danger" type="button" id="btndeletemodal" onclick="deleteyc()">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>
@@ -387,5 +406,8 @@
 
       alert('Chưa duyệt hoặc đã hoàn thành !!!')
     }
+  }
+  function deleteyc(){
+    alert('Đã bấm delete')
   }
 </script>

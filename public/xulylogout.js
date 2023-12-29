@@ -1,5 +1,7 @@
 $('document').ready(()=>{
-  
+  $("#btndeleteyc").click(function(){
+    $("#myModal").modal();
+  });
     $('#btnlogout').click(()=>{
         $.ajax({
             method: "POST",
