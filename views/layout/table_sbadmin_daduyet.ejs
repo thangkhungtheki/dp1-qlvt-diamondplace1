@@ -161,7 +161,10 @@
     </div>
   </div>
 </div>
-<script src="vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/jquery/jquery.min.js"></script>
+<!-- Page level plugins -->
+<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 <script>
   function btnclick(ma) {
 
@@ -203,4 +206,10 @@
         window.location.href = "/qlkt"
       });
   }
+</script>
+<script>
+  $(document).ready(function() {
+    $.noConflict();
+    var table = $('#dataTable').DataTable();
+  });
 </script>

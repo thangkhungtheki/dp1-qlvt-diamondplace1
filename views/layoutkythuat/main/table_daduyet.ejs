@@ -2,50 +2,54 @@
 
 <div class="container-fluid">
   <h1 class="h3 mb-2 text-gray-800">Bảng Theo Dõi</h1>
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Yêu Cầu </h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped" id="dataTable" width="100%" cellspacing="0">
+          <thead>
+            <tr class="table-primary">
+              <th>STT</th>
+              <th>NgườiYC</th>
+              <th>NgàyYC</th>
+              <th>BP</th>
+              <th>Đt</th>
+              <th>Vịtri</th>
+              <th>khan</th>
+              <th>Mô tả</th>
+              <th>ttbp</th>
+              <th>pkthuat</th>
+              <th>XemChiTiet</th>
 
-  <div class="table-responsive">
-    <table class="table table-bordered table-striped" id="dataTable" width="100%" cellspacing="0">
-      <thead>
-        <tr class="table-primary">
-          <th>STT</th>
-          <th>NgườiYC</th>
-          <th>NgàyYC</th>
-          <th>BP</th>
-          <th>Đt</th>
-          <th>Vịtri</th>
-          <th>khan</th>
-          <th>Mô tả</th>
-          <th>ttbp</th>
-          <th>pkthuat</th>
-          <th>XemChiTiet</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr class="table-primary">
+              <th>STT</th>
+              <th>NgườiYC</th>
+              <th>NgàyYC</th>
+              <th>BP</th>
+              <th>Đt</th>
+              <th>Vịtri</th>
+              <th>khan</th>
+              <th>Mô tả</th>
+              <th>ttbp</th>
+              <th>pkthuat</th>
+              <th>XemChiTiet</th>
+            </tr>
+          </tfoot>
 
-        </tr>
-      </thead>
-      <tfoot>
-        <tr class="table-primary">
-          <th>STT</th>
-          <th>NgườiYC</th>
-          <th>NgàyYC</th>
-          <th>BP</th>
-          <th>Đt</th>
-          <th>Vịtri</th>
-          <th>khan</th>
-          <th>Mô tả</th>
-          <th>ttbp</th>
-          <th>pkthuat</th>
-          <th>XemChiTiet</th>
-        </tr>
-      </tfoot>
+          <tbody>
+            <% var stt = 0 %>
+            <% data.forEach((data)=>{ %>
+            <% var bien = data.mayeucau %>
+            <% stt = stt + 1 %>
 
-      <tbody>
-        <% var stt = 0 %>
-        <% data.forEach((data)=>{ %>
-        <% var bien = data.mayeucau %>
-        <% stt = stt + 1 %>
-        
-        <tr>
-          <td>
-            <!-- <div>
+            <tr>
+              <td>
+                <!-- <div>
               <div class="btn btn-info btn-circle btn-sm" data-toggle="modal" data-target="#idsua" onclick="sua('<%= bien %>')">
                 <i class="fas fa-info-circle"></i>
               </div>
@@ -54,50 +58,50 @@
                 </i>
               </div>
             </div> -->
-            <b><%= stt %></b>
-            
-          </td>
-          <td>
-            <%= data.nguoiyeucau %>
-          </td>
-          <td>
-            <%= data.ngayyeucau %>
-          </td>
-          <td>
-            <%= data.bophan %>
-          </td>
-          <td>
-            <%= data.dienthoai %>
-          </td>
-          <td>
-            <%= data.vitri %>
-          </td>
-          <td>
-            <%= data.khancap %>
-          </td>
-          <td>
-            <%= data.mota %>
-          </td>
-          <td>
-            <%= data.ttbp %>
-          </td>
-          <td>
-            <%= data.trangthai %>
-          </td>
-          <td>
-            <button type="button" class="btn btn-info" onclick="btnclick('<%= data.mayeucau %>')">Info</button>
-          </td>
-        </tr>
+                <b><%= stt %></b>
+
+              </td>
+              <td>
+                <%= data.nguoiyeucau %>
+              </td>
+              <td>
+                <%= data.ngayyeucau %>
+              </td>
+              <td>
+                <%= data.bophan %>
+              </td>
+              <td>
+                <%= data.dienthoai %>
+              </td>
+              <td>
+                <%= data.vitri %>
+              </td>
+              <td>
+                <%= data.khancap %>
+              </td>
+              <td>
+                <%= data.mota %>
+              </td>
+              <td>
+                <%= data.ttbp %>
+              </td>
+              <td>
+                <%= data.trangthai %>
+              </td>
+              <td>
+                <button type="button" class="btn btn-info" onclick="btnclick('<%= data.mayeucau %>')">Info</button>
+              </td>
+            </tr>
 
 
-        <% }) %>
+            <% }) %>
 
 
-      </tbody>
-    </table>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
-  <!-- </div>
-    </div> -->
 </div>
 
 <!-- Logout Modal-->
@@ -153,15 +157,25 @@
       <div class="modal-footer">
         <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
         <!-- <form action="searcheditdp2" method="post"> -->
-          <!-- <input type="text" id="txtid" name="txtsearch" value="" hidden="true" /> -->
-          <button class="btn btn-primary" type="button" id="btnxoayc" onclick="xoayc()">Thực hiện Xoá</button>
+        <!-- <input type="text" id="txtid" name="txtsearch" value="" hidden="true" /> -->
+        <button class="btn btn-primary" type="button" id="btnxoayc" onclick="xoayc()">Thực hiện Xoá</button>
 
         <!-- </form> -->
       </div>
     </div>
   </div>
 </div>
-<script src="vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/jquery/jquery.min.js"></script>
+ <!-- Page level plugins -->
+ <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+ <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+ <script>
+  $(document).ready(function() {
+    $.noConflict();
+    var table = $('#dataTable').DataTable();
+  });
+</script>
 <script>
   function btnclick(ma) {
 
@@ -182,7 +196,9 @@
     $.ajax({
         method: "POST",
         url: "/qlkt/updatettbp",
-        data: {mayeucau: mas},
+        data: {
+          mayeucau: mas
+        },
       })
       .done(function(msg) {
         alert('Đã duyệt !!!')
@@ -196,7 +212,9 @@
     $.ajax({
         method: "POST",
         url: "/qlkt/deletettbp",
-        data: {mayeucau: mes},
+        data: {
+          mayeucau: mes
+        },
       })
       .done(function(msg) {
         alert('Đã xoá !!!')
