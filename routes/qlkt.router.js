@@ -103,6 +103,14 @@ router.post('/deletettbp', async (req, res) => {
   res.end()
 })
 
+router.post('/deletephongkythuat', ruleAdmin, async (req, res) => {
+  let ma = req.body.mayeucau
+  console.log('đã xoá: ' + ma)
+  await ycsc._deletephongkythuat(ma)
+  
+  res.send(true)
+})
+
 router.get('/xemlichsu', authenticated, async (req, res) => {
  
     let user = await xulydb.timUser(req.user.username)

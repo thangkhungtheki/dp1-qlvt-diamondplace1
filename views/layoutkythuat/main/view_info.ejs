@@ -408,6 +408,23 @@
     }
   }
   function deleteyc(){
-    alert('Đã bấm delete')
+    $.ajax({
+          method: 'post',
+          data: {
+            mayeucau: $('#txtmayeucau').val(),
+            
+          },
+          url: '/qlkt/deletephongkythuat'
+        })
+        .done((mes) => {
+          if (mes == true) {
+            alert('Thông báo: Xoá thành công !!!')
+            window.location.href = "/qlkt/tonghophoanthanh"
+          } else {
+            alert('Có lỗi gì đó ...')
+          }
+
+
+        })
   }
 </script>

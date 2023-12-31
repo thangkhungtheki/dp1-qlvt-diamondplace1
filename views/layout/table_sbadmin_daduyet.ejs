@@ -210,6 +210,8 @@
 <script>
   $(document).ready(function() {
     $.noConflict();
-    var table = $('#dataTable').DataTable();
+    var table = $('#dataTable').DataTable({
+      "pageLength": 50
+    });
   });
 </script>

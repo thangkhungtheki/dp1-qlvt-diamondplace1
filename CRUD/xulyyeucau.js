@@ -115,6 +115,27 @@ async function _doctatcayeucauhoanthanh(trangthai){
         return false
     }
 }
+
+async function _deletephongkythuat(ma){
+    try {
+        let doc = await timyctheoma(ma)
+        if(doc){
+            doc[0].filename.forEach(file => {
+                _file.xoafile(file.path)
+            })
+            doc[0].fileanhdonhang.forEach(file => {
+                _file.xoafile(file.path)
+            })
+            await _ycsc.deleteOne({mayeucau: ma})
+
+        }
+        return true
+    } catch (e) {
+        console.log(e)
+        return false
+    }
+}
+
 module.exports = {
     taoyc,
     docyeucautheotrangthai,
@@ -124,5 +145,6 @@ module.exports = {
     timyctheobophan,
     updatekythuat,
     _updatetrangthai,
-    _doctatcayeucauhoanthanh
+    _doctatcayeucauhoanthanh,
+    _deletephongkythuat,
 }
