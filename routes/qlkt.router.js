@@ -4,6 +4,12 @@ var xulydb = require('../CRUD/xulydb')
 const ycsc = require('../CRUD/xulyyeucau')
 const filemulter = require('../multer-upload/multer')
 
+// Middleware để thiết lập dữ liệu trong res.locals
+router.use(async(req, res, next) => {
+  let total = await tongsuachuaton()
+  res.locals.arrayTong = total
+  next();
+});
 
 router.get('/', async (req, res) => {
   if (req.isAuthenticated()) {
