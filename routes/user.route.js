@@ -3,11 +3,15 @@ var router = express.Router()
 var passport = require("../config/passport")
 var xulydb = require("../CRUD/xulydb")
 var moment = require('moment')
-
+const ycsc = require('../CRUD/xulyyeucau')
 const sendmail = require('../sendmail/sendmail')
 
 //sendmail.sendmail()
-
+router.use(async(req, res, next) => {
+    let total = await tongsuachuaton()
+    res.locals.arrayTong = total
+    next();
+  });
 router.get('/cronjobsendmail', async (req, res) => {
     var data = await xulydb.doc_createthietbi()
     var newdata = await tinhngayconlai(data)
@@ -743,4 +747,28 @@ function isadminroot(req, res, next) {
 
     res.redirect('/signin');
 }
+
+async function tongsuachuaton(){
+    let bep = await ycsc.timyctheobophan('bep')
+    let sales = await ycsc.timyctheobophan('sales')
+    let mar =  await ycsc.timyctheobophan('mar')
+    let fb =  await ycsc.timyctheobophan('fb')
+    let ketoan = await ycsc.timyctheobophan('ketoan')
+    let av = await ycsc.timyctheobophan('av')
+    let house = await ycsc.timyctheobophan('house')
+    let nhansu = await ycsc.timyctheobophan('nhansu')
+    let khac = await ycsc.timyctheobophan('khac')
+    let total = {
+      bep: bep.length,
+      sales: sales.length,
+      mar: mar.length,
+      fb: fb.length,
+      ketoan: ketoan.length,
+      av: av.length,
+      house: house.length,
+      nhansu: nhansu.length,
+      khac: khac.length
+    }
+    return total
+  }
 module.exports = router
