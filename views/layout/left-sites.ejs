@@ -49,7 +49,18 @@
     <div id="collapseUtilities1" class="collapse hide" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Kiểm tra sửa chữa DP1</h6>
-        <a class="collapse-item " href="/qlkt/viewtheobophan_daduyet?bophan=bep">Bếp</a>
+
+        <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=bep"><span id="sbep" class="circle-badge"></span>Bếp</a>
+          <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=sales"><span id="ssales" class="circle-badge"></span>Sales</a>
+          <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=fb"><span id="sfb" class="circle-badge"></span>F&B</a>
+          <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=ketoan"><span id="sketoan" class="circle-badge"></span>Kế toán</a>
+          <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=marketing"><span id="smar" class="circle-badge"></span>Marketing</a>
+          <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=avtrangtri"><span id="sav" class="circle-badge"></span>AV-TrangTri</a>
+          <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=house"><span id="shouse" class="circle-badge"></span>House</a>
+          <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=nhansu"><span id="snhansu" class="circle-badge"></span>Nhân Sự</a>
+          <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=khac"><span id="skhac" class="circle-badge"></span>Khác</a>
+
+        <!-- <a class="collapse-item " href="/qlkt/viewtheobophan_daduyet?bophan=bep">Bếp</a>
         <a class="collapse-item " href="/qlkt/viewtheobophan_daduyet?bophan=sales">Sales</a>
         <a class="collapse-item " href="/qlkt/viewtheobophan_daduyet?bophan=fb">F&B</a>
         <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=ketoan">Kế toán</a>
@@ -57,18 +68,71 @@
         <a class="collapse-item " href="/qlkt/viewtheobophan_daduyet?bophan=avtrangtri">AV-TrangTri</a>
         <a class="collapse-item " href="/qlkt/viewtheobophan_daduyet?bophan=house">House</a>
         <a class="collapse-item " href="/qlkt/viewtheobophan_daduyet?bophan=nhansu">Nhân Sự</a>
-        <a class="collapse-item " href="/qlkt/viewtheobophan_daduyet?bophan=nhansu">Khác</a>
+        <a class="collapse-item " href="/qlkt/viewtheobophan_daduyet?bophan=nhansu">Khác</a> -->
         <h6 class= "collapse-header"><span>Thống Kê</span></h6>
         
         <a class="collapse-item" href="/qlkt/bieudotron">Biểu đồ</a>
         <a class="collapse-item" href="/qlkt/tonghophoanthanh">Lịch sử</a>
         
-        <!-- <a class="collapse-item active" href="utilities-other.html">Other</a> -->
+        
       </div>
-    </div>
+      
+      
+      <!-- <div id="collapseUtilities1" class="collapse hide" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <h6 class="collapse-header">Kiểm tra sửa chữa DP1</h6>
+          <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=bep"><span class="circle-badge">1</span>Bếp</a>
+          <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=sales"><span class="circle-badge">2</span>Sales</a>
+          <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=fb"><span class="circle-badge">3</span>F&B</a>
+          <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=ketoan"><span class="circle-badge">4</span>Kế toán</a>
+          <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=marketing"><span class="circle-badge">5</span>Marketing</a>
+          <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=avtrangtri"><span class="circle-badge">6</span>AV-TrangTri</a>
+          <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=house"><span class="circle-badge">7</span>House</a>
+          <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=nhansu"><span class="circle-badge">8</span>Nhân Sự</a>
+          <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=khac"><span class="circle-badge">9</span>Khác</a>
+          <h6 class="collapse-header"><span>Thống Kê</span></h6>
+          <a class="collapse-item" href="/qlkt/bieudotron">Biểu đồ</a>
+          <a class="collapse-item" href="/qlkt/tonghophoanthanh">Lịch sử</a>
+        
+        </div>
+      </div> -->
+      
+    
   </li>
   <li class="nav-item ">
     <a class="nav-link" href="#">
         <i class="fa fa-edit" >  </i>    
         <span>Yêu Cầu</span></a>
-</li>
+  </li>
+
+
+<style>
+  .circle-badge {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    color: white;
+    text-align: center;
+    line-height: 20px;
+    border-radius: 50%;
+    margin-right: 5px;
+  }
+</style>
+<script src="/vendor/jquery/jquery.min.js"></script>
+
+<script>
+  // $('document').ready(()=>{
+    
+    // $.ajax({
+    //     method: "get",
+    //     url: "/qlkt/tongsuachuaton",
+        
+    //   })
+    //   .done(function(data) {
+       
+    //    $('#sbep').html() = data.bep
+    //    console.log(data)
+    //   });
+  // })
+</script>

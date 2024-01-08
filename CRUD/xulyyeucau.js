@@ -136,6 +136,16 @@ async function _deletephongkythuat(ma){
     }
 }
 
+async function _updatefeedback(mayeucau, diem, feedback){
+    try {
+        await _ycsc.updateOne({mayeucau: mayeucau}, {$set:{diem: diem, feedback: feedback}})
+        return true
+    } catch (e) {
+        //console.log(e)
+        return false
+    }
+}
+
 module.exports = {
     taoyc,
     docyeucautheotrangthai,
@@ -147,4 +157,5 @@ module.exports = {
     _updatetrangthai,
     _doctatcayeucauhoanthanh,
     _deletephongkythuat,
+    _updatefeedback
 }

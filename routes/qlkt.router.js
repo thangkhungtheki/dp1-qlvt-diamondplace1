@@ -169,7 +169,8 @@ router.get('/viewtheobophan_daduyet',ruleAdmin, async (req, res) => {
 
 // test biểu đồ thống kê
 router.get('/bieudotron', ruleAdmin, async (req, res)=> {
-  res.render('rootadmin/bangduyetpyc',{_username:''})
+  let total = await tongsuachuaton()
+  res.render('rootadmin/bangduyetpyc',{_username:'', total: total},)
 })
 
 router.get('/tonghophoanthanh',ruleAdmin, async (req, res) => {
@@ -208,6 +209,47 @@ router.post('/updatehoanthanh', async(req, res) => {
   }
 })
 
+router.post('/updatefeedback',authenticated, async(req, res) => {
+  try {
+   let ma = req.body.mayeucau
+   let diem = req.body.diem
+   let feedback = req.body.feedback
+   let result = await ycsc._updatefeedback(ma, diem, feedback)
+   res.send(result)
+  } catch (error) {
+    
+  }
+})
+
+router.get('/tongsuachuaton', async(req, res)=>{
+  let total =  await tongsuachuaton()
+  res.json({total: total})
+})
+
+async function tongsuachuaton(){
+  let bep = await ycsc.timyctheobophan('bep')
+  let sales = await ycsc.timyctheobophan('sales')
+  let mar =  await ycsc.timyctheobophan('mar')
+  let fb =  await ycsc.timyctheobophan('fb')
+  let ketoan = await ycsc.timyctheobophan('ketoan')
+  let av = await ycsc.timyctheobophan('av')
+  let house = await ycsc.timyctheobophan('house')
+  let nhansu = await ycsc.timyctheobophan('nhansu')
+  let khac = await ycsc.timyctheobophan('khac')
+  let total = {
+    bep: bep.length,
+    sales: sales.length,
+    mar: mar.length,
+    fb: fb.length,
+    ketoan: ketoan.length,
+    av: av.length,
+    house: house.length,
+    nhansu: nhansu.length,
+    khac: khac.length
+  }
+  return total
+}
+
 function authenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
@@ -222,5 +264,7 @@ function ruleAdmin(req, res, next) {
   
   res.redirect('/signin');
 }
+
+
 
 module.exports = router

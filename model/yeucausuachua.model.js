@@ -17,6 +17,8 @@ const schema = new Schema({
     motakythuat: {type: String, require: false},
     fileanhdonhang: {type: Array, required: false},
     ngayhoanthanh:{type: String, required: false},
+    feedback: {type: String, required: false},
+    diem: {type: Number, required: false}
 })
 
 
