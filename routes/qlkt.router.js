@@ -3,6 +3,10 @@ var router = express.Router()
 var xulydb = require('../CRUD/xulydb')
 const ycsc = require('../CRUD/xulyyeucau')
 const filemulter = require('../multer-upload/multer')
+const toolmongo = require('../tool_mongo/backup')
+
+var uridatabase =  process.env.DATABASE_URL
+
 
 // Middleware để thiết lập dữ liệu trong res.locals
 router.use(async(req, res, next) => {
@@ -10,6 +14,13 @@ router.use(async(req, res, next) => {
   res.locals.arrayTong = total
   next();
 });
+
+router.get('/backupdatabase', async (req, res) => {
+  await toolmongo.backupMongo(uridatabase,()=>{
+    
+  })
+  res.send('ok done')
+})
 
 router.get('/', async (req, res) => {
   if (req.isAuthenticated()) {

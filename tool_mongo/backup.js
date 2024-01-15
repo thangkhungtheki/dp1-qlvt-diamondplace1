@@ -1,9 +1,10 @@
 const { exec } = require('child_process');
 require('dotenv').config(); // Đảm bảo bạn đã cài đặt mô-đun dotenv
-
+const path = require('path')
+const currentDir = path.dirname(__filename);
 function backupMongo(uri, callback) {
     const databaseUrl = uri;
-    const backupFilePath = '/backup/'; // Thay đổi tên tệp và đường dẫn nếu cần thiết
+    const backupFilePath = currentDir; // Thay đổi tên tệp và đường dẫn nếu cần thiết
 
     if (!databaseUrl) {
         const error = new Error('DATABASE_URL is not defined in the environment variables.');
