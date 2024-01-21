@@ -7,11 +7,11 @@ const ycsc = require('../CRUD/xulyyeucau')
 const sendmail = require('../sendmail/sendmail')
 
 //sendmail.sendmail()
-router.use(async(req, res, next) => {
+router.use(async (req, res, next) => {
     let total = await tongsuachuaton()
     res.locals.arrayTong = total
     next();
-  });
+});
 router.get('/cronjobsendmail', async (req, res) => {
     var data = await xulydb.doc_createthietbi()
     var newdata = await tinhngayconlai(data)
@@ -197,24 +197,58 @@ router.get('/viewcreatethietbi', async (req, res) => {
     }
 })
 
-router.get('/baotridinhky', async (req, res) => {
-    if (req.isAuthenticated()) {
-        var data = await xulydb.tim_createthietbi_baotridinhky("Bảo trì định kỳ")
-        var newdata = await tinhngayconlai(data)
-        const daynow = moment().format('DD-MM-YYYY');
-        //console.log(newdata)
-        res.render("mainSbAdmin/createthietbiview_baotridinhky", {
-            _username: req.user.username,
-            data: newdata,
-            activeuser: '',
-            activetb: '',
-            activetbdp2: 'active',
-            daynow: daynow
-        })
-    } else {
-        res.redirect("/signin")
-    }
-})
+router
+    .get('/baotridinhky', async (req, res) => {
+        if (req.isAuthenticated()) {
+            var data = await xulydb.tim_createthietbi_baotridinhky("Bảo trì định kỳ")
+            var newdata = await tinhngayconlai(data)
+            const daynow = moment().format('DD-MM-YYYY');
+            //console.log(newdata)
+            res.render("mainSbAdmin/createthietbiview_baotridinhky", {
+                _username: req.user.username,
+                data: newdata,
+                activeuser: '',
+                activetb: '',
+                activetbdp2: 'active',
+                daynow: daynow
+            })
+        } else {
+            res.redirect("/signin")
+        }
+    })
+    .post('/baotridinhky', async (req, res) => {
+        if (req.isAuthenticated()) {
+            let daynow = moment().format('YYYY-MM-DD')
+            //var nnhap = moment(req.body.ngaynhap)
+            var sothang = req.body.timehethan
+            let ngayThangKeTiep = moment(daynow).add(sothang, 'months').format('YYYY-MM-DD');
+
+            var data = {
+                username: req.user.username,
+                tentb: req.body.tentb,
+                // dvt: req.body.dvt,
+                // soluong: req.body.soluong,
+                ngaynhap: daynow,
+                // timehethan: req.body.timehethan,
+                // tenncc: req.body.tenncc,
+                // sdtncc: req.body.sdtncc,
+                // tinhtrang: req.body.tinhtrang,
+                // ghichu: req.body.ghichu,
+                ngayhethan: ngayThangKeTiep,
+            }
+            try {
+                // console.log(data)
+                await xulydb.sua_createthietbi(data.tentb, data)
+                res.redirect('/baotridinhky')
+            } catch {
+                e => {
+                    res.send(e)
+                }
+            }
+        } else {
+            res.redirect("/signin")
+        }
+    })
 
 async function tinhngayconlai(data) {
     var newdata = []
@@ -767,27 +801,27 @@ function isadminroot(req, res, next) {
     res.redirect('/signin');
 }
 
-async function tongsuachuaton(){
+async function tongsuachuaton() {
     let bep = await ycsc.timyctheobophan('bep')
     let sales = await ycsc.timyctheobophan('sales')
-    let mar =  await ycsc.timyctheobophan('mar')
-    let fb =  await ycsc.timyctheobophan('fb')
+    let mar = await ycsc.timyctheobophan('mar')
+    let fb = await ycsc.timyctheobophan('fb')
     let ketoan = await ycsc.timyctheobophan('ketoan')
     let av = await ycsc.timyctheobophan('av')
     let house = await ycsc.timyctheobophan('house')
     let nhansu = await ycsc.timyctheobophan('nhansu')
     let khac = await ycsc.timyctheobophan('khac')
     let total = {
-      bep: bep.length,
-      sales: sales.length,
-      mar: mar.length,
-      fb: fb.length,
-      ketoan: ketoan.length,
-      av: av.length,
-      house: house.length,
-      nhansu: nhansu.length,
-      khac: khac.length
+        bep: bep.length,
+        sales: sales.length,
+        mar: mar.length,
+        fb: fb.length,
+        ketoan: ketoan.length,
+        av: av.length,
+        house: house.length,
+        nhansu: nhansu.length,
+        khac: khac.length
     }
     return total
-  }
+}
 module.exports = router

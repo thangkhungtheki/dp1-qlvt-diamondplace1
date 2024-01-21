@@ -53,6 +53,7 @@
 			<% var stt = 0 %>
                         <% data.forEach((value)=>{ %>
                             <% var bien = value.tentb %>
+                            <% var timehethan = value.timehethan %>
 			<% stt = stt + 1 %>
                                 <td>
 				<b><%= stt %></b>
@@ -113,7 +114,7 @@
                                 </td>
 				<td>
                                     
-                                        <div class="btn btn-info btn-circle btn-sm" onclick="Sua('<%= bien %>')"
+                                        <div class="btn btn-info btn-circle btn-sm" onclick="Sua('<%= bien %>', '<%= timehethan %>')"
                                             data-toggle="modal" data-target="#baotridinhky">
                                             <i class="fas fa-info-circle"></i>
                                         </div>
@@ -139,12 +140,14 @@
     </div>
 </div>
 <script>
-function Sua(bien) {
+function Sua(bien, timehethan) {
     _xoa = bien;
+    time = timehethan
     //alert("Chưa có làm ... bấm vui thôi nhé :))")
     // $('#xoauserModal1').html('Bạn chắc chắn muốn xóa <strong>' + _xoa + "</strong> ?");
     // $("#xoauserModal2").html("Delete <strong> " + _xoa + "</strong> ... ???")
     $('#baotridinhky-1').val(_xoa)
+    $('#baotridinhky-2').val(time)
     $("#baotridinhky-1").html("Bạn chắn chắn hoàn thành bảo trì <strong> " + _xoa + "</strong> ... ???")
 }
 function Xoatb(bien) {
