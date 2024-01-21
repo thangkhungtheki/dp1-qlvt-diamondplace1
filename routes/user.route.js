@@ -111,7 +111,7 @@ router
         }
     })
 
-router.post('/xoathietbi', async (req, res) => {
+router.post('/xoathietbi', isroot, async (req, res) => {
     if (req.isAuthenticated()) {
         let tentb = req.body.tentb
         await xulydb.xoa_createthietbi(tentb)
@@ -145,7 +145,7 @@ router
             res.redirect("/signin")
         }
     })
-    .post('/suacreatethietbi', async (req, res) => {
+    .post('/suacreatethietbi',isroot, async (req, res) => {
         if (req.isAuthenticated()) {
             var nnhap = moment(req.body.ngaynhap)
             var sothang = req.body.timehethan
@@ -795,6 +795,15 @@ router.get('/dathang', async (req, res) => {
 
 function isadminroot(req, res, next) {
     if (req.isAuthenticated() && (req.user.role == 'admin' || req.user.role == 'root')) {
+        return next();
+    }
+
+    res.redirect('/signin');
+}
+
+function isroot(req, res , next){
+    if (req.isAuthenticated() && (
+        req.user.role == 'root')) {
         return next();
     }
 
