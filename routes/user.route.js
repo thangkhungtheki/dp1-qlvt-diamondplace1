@@ -197,6 +197,25 @@ router.get('/viewcreatethietbi', async (req, res) => {
     }
 })
 
+router.get('/baotridinhky', async (req, res) => {
+    if (req.isAuthenticated()) {
+        var data = await xulydb.tim_createthietbi_baotridinhky("Bảo trì định kỳ")
+        var newdata = await tinhngayconlai(data)
+        const daynow = moment().format('DD-MM-YYYY');
+        //console.log(newdata)
+        res.render("mainSbAdmin/createthietbiview_baotridinhky", {
+            _username: req.user.username,
+            data: newdata,
+            activeuser: '',
+            activetb: '',
+            activetbdp2: 'active',
+            daynow: daynow
+        })
+    } else {
+        res.redirect("/signin")
+    }
+})
+
 async function tinhngayconlai(data) {
     var newdata = []
 

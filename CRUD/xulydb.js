@@ -62,6 +62,18 @@ async function tim_createthietbi(tentbb){
     }
 }
 
+async function tim_createthietbi_baotridinhky(ghichu){
+    let doc = await _createthietbi.find({ghichu: ghichu})
+    //console.log(doc)
+    if(doc){
+        //console.log(doc)
+        return doc
+    } 
+    else {
+        return false
+    }
+}
+
 async function find(users){
     let doc = await _user.findOne({username: users})
     
@@ -311,5 +323,6 @@ module.exports = {
     xoa_createthietbi,
     tim_createthietbi,
     sua_createthietbi,
-    timUser
+    timUser,
+    tim_createthietbi_baotridinhky
 }

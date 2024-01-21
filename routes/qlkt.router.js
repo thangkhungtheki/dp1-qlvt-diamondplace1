@@ -22,6 +22,12 @@ router.get('/backupdatabase', async (req, res) => {
   res.send('ok done')
 })
 
+router.get('/rootyeucau',ruleroot, async(req, res) => {
+  let user = await xulydb.timUser(req.user.username)
+  const successMessage = req.flash('success')[0];
+  res.render('rootadmin/main-yeucau',{data: user,user: req.user, successMessage})
+})
+
 router.get('/', async (req, res) => {
   if (req.isAuthenticated()) {
     let user = await xulydb.timUser(req.user.username)
@@ -279,6 +285,18 @@ function ruleAdmin(req, res, next) {
     return next();
   }
   
+  res.redirect('/signin');
+}
+
+function ruleroot(req, res, next) {
+  if (req.isAuthenticated()) {
+    if(req.user.role == 'root'){
+      return next();
+    }else{
+      res.redirect('/qlkt/bieudotron')
+    }
+    
+  }
   res.redirect('/signin');
 }
 
