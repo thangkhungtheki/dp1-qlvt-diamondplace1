@@ -23,9 +23,9 @@ router.get('/backupdatabase', async (req, res) => {
 })
 
 router.get('/rootyeucau',ruleroot, async(req, res) => {
-  let user = await xulydb.timUser(req.user.username)
+  
   const successMessage = req.flash('success')[0];
-  res.render('rootadmin/main-yeucau',{data: user,user: req.user, successMessage})
+  res.render('rootadmin/main-yeucau',{data: req.user, successMessage})
 })
 
 router.get('/', async (req, res) => {

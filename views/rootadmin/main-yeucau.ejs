@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<% var _username = user.username %>
+
 <% var activeuser =  '' %>
 <% var activetb =  '' %>
 <% var activetbdp2 = '' %>
@@ -41,7 +41,7 @@
         <div class="sidebar-brand-icon rotate-n-15">
           <i class="fas fa-laugh-wink"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">TESTFORM</div>
+        <div class="sidebar-brand-text mx-3"><%= data.username %></div>
       </a>
 
       <!-- Divider -->
@@ -127,8 +127,8 @@
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><strong>TEST FORM</strong></span>
-                <img class="img-profile rounded-circle" src="img/undraw_posting_photo.svg">
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><strong><%= data.username %></strong></span>
+                <img class="img-profile rounded-circle" src="/img/undraw_posting_photo.svg">
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -239,7 +239,7 @@
   <!-- Page level plugins -->
   <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
   <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-  <script src="/vendor/chart.js/Chart.min.js"></script>
+  
 
   <!-- Page level custom scripts -->
   
@@ -247,7 +247,8 @@
   <!-- Xu ly Click button Logout -->
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
  
-  <script src="/chart.js"></script>
+  
+  <script src="/xulylogoutdp2.js"></script>
 </body>
 
 </html>
