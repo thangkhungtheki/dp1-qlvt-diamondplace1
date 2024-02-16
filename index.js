@@ -4,7 +4,7 @@ var app = require("./app")
 // var server = http.createServer(app)
 
 //server.listen(4000)
-
-app.listen(3000,()=>{
-    console.log("Server run port 3000")
+const port = process.env.portsv
+app.listen(port,()=>{
+    console.log("Server run port: ", port)
 })
