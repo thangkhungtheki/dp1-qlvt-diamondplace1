@@ -76,16 +76,28 @@ router.post('/taoyc', filemulter.upload.array('image', 4), filemulter.handleErro
         var fileName = req.files
         var ma = req.body.code
       //console.log(fileName)
+      const checkbophan = req.body.bophan
+      
+      switch (checkbophan) {
+        case "khac":
+          var ttbp = 'duyet'
+          var vitri = 'TP KyThuat'
+          break
+        default:
+          var ttbp = 'dangxuly'
+          var vitri = req.body.vitri
+          
+      }
       let doc = {
         mayeucau: ma.replace(/\+/g, ' '),
         nguoiyeucau: req.body.nguoiyc,
         ngayyeucau: req.body.ngay,
         bophan: req.body.bophan,
         dienthoai: req.body.dienthoai,
-        vitri: req.body.vitri,
+        vitri: vitri,
         khancap: req.body.option,
         mota: req.body.areamota,
-        ttbp: 'dangxuly',
+        ttbp: ttbp,
         trangthai: 'choduyet',
         filename: fileName
       }
@@ -101,6 +113,7 @@ router.post('/taoyc', filemulter.upload.array('image', 4), filemulter.handleErro
       }
         // console.log(fileName)
       } catch (error) {
+        console.log(error)
         res.send('Lỗi không xác định ')
       }
       
