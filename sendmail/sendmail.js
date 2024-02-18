@@ -63,7 +63,7 @@ function sendmail(data){
                 console.log(err);
                 
             } else {
-                console.log('Message sent: ' +  info.response);
+                console.log('Message sent: ' +  'send mail Success');
             }
         });
     }else{
