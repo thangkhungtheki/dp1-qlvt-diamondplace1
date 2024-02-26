@@ -265,10 +265,10 @@ router.get('/tongsuachuaton', async(req, res)=>{
 async function tongsuachuaton(){
   let bep = await ycsc.timyctheobophan('bep')
   let sales = await ycsc.timyctheobophan('sales')
-  let mar =  await ycsc.timyctheobophan('mar')
+  let mar =  await ycsc.timyctheobophan('marketing')
   let fb =  await ycsc.timyctheobophan('fb')
   let ketoan = await ycsc.timyctheobophan('ketoan')
-  let av = await ycsc.timyctheobophan('av')
+  let av = await ycsc.timyctheobophan('avtrangtri')
   let house = await ycsc.timyctheobophan('house')
   let nhansu = await ycsc.timyctheobophan('nhansu')
   let khac = await ycsc.timyctheobophan('khac')
