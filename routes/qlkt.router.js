@@ -313,6 +313,20 @@ function ruleroot(req, res, next) {
   res.redirect('/signin');
 }
 
+router.get('/printyeucau',ruleAdmin, async (req, res) => {
+  
+  var user = await xulydb.timUser(req.user.username)
+  let mayeucau = req.query.mayeucau
+  //console.log(mayeucau)
+  let doc = await ycsc.timyctheoma(mayeucau)
+  //console.log(doc)
+  //let datafile = doc[0].filename
+  //console.log(datafile)
+  if (doc) {
+    res.render('docformtoejs/phieuyeucau.ejs', { data: doc, user: user, myPathENV: process.env.myPathENV })
+  }
 
+
+})
 
 module.exports = router
