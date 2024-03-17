@@ -88,6 +88,11 @@
           <span id="snhansu" class="circle-badge"><%= arrayTong.nhansu %></span>
         <% } %>
         Nhân Sự</a>
+        <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=baove">
+          <% if (arrayTong.baove != 0){ %>
+            <span id="sbaove" class="circle-badge"><%= arrayTong.baove %></span>
+          <% } %>
+        Bảo vệ</a>
       <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=khac">
         <% if (arrayTong.khac != 0){ %>
           <span id="skhac" class="circle-badge"><%= arrayTong.khac %></span>

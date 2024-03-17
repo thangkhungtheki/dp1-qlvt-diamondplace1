@@ -271,6 +271,7 @@ async function tongsuachuaton(){
   let av = await ycsc.timyctheobophan('avtrangtri')
   let house = await ycsc.timyctheobophan('house')
   let nhansu = await ycsc.timyctheobophan('nhansu')
+  let baove = await ycsc.timyctheobophan('baove')
   let khac = await ycsc.timyctheobophan('khac')
   let total = {
     bep: bep.length,
@@ -281,6 +282,7 @@ async function tongsuachuaton(){
     av: av.length,
     house: house.length,
     nhansu: nhansu.length,
+    baove: baove.length,
     khac: khac.length
   }
   return total
