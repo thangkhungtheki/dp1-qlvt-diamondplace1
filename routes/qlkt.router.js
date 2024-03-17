@@ -313,7 +313,7 @@ function ruleroot(req, res, next) {
   res.redirect('/signin');
 }
 
-router.get('/printyeucau',ruleAdmin, async (req, res) => {
+router.get('/printyeucau', async (req, res) => {
   
   var user = await xulydb.timUser(req.user.username)
   let mayeucau = req.query.mayeucau

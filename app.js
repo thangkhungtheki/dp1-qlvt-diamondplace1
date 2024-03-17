@@ -13,6 +13,7 @@ var multer = require('multer')
 // import router 
 var indexRouter = require('./routes/user.route');
 var qltkRouter = require('./routes/qlkt.router')
+var userktRouter = require('./routes/user.kt')
 
 // path database
 mongoose.connect(process.env.DATABASE_URL,{useNewUrlParser:true, useUnifiedTopology: true });
@@ -45,6 +46,7 @@ app.use(express.static(path.join(__dirname, 'uploads')));
 // sử dụng router 
 app.use('/', indexRouter);
 app.use('/qlkt/', qltkRouter);
+app.use('/user/' ,userktRouter )
 
 app.use((req, res, next) => {
   res.status(404).redirect("/signin");

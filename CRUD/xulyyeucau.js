@@ -42,6 +42,21 @@ async function timyctheobophan(bp){
     }
 }
 
+async function timtatca_yctheobophan(bp){
+    try{
+        let doc = await _ycsc.find({
+            bophan: bp , 
+            // ttbp: 'duyet', 
+            // $or: [
+            //     { trangthai: { $ne: 'hoanthanh' } }]
+            })
+        return doc
+    }catch(e){
+        return false
+    }
+}
+
+
 async function updatetttbp(mayeucau, ttbp){
     try {
         await _ycsc.updateOne({mayeucau: mayeucau}, {$set:{ttbp: ttbp}})
@@ -157,5 +172,6 @@ module.exports = {
     _updatetrangthai,
     _doctatcayeucauhoanthanh,
     _deletephongkythuat,
-    _updatefeedback
+    _updatefeedback,
+    timtatca_yctheobophan
 }
