@@ -1,15 +1,15 @@
 <div style="margin-bottom:20px; color: rgb(148, 11, 239); position: relative; bottom: auto;" >
     <h3>FORM NHẬP CÔNG VIỆC ĐỊNH KỲ</h3>
 </div>
-<form action="/themcvdinhky" method="post" >
+<form action="/house/themhouse" method="post" >
   <div class="form-row">
     <div class="form-group col-md-6">
         <label>Tên Công Việc</label>
-        <input type="text" class="form-control" id="txttentb" placeholder="Tên Công Việc" name="tencv">
+        <input type="text" class="form-control" id="txttencv" placeholder="Tên Công Việc" name="tencv">
     </div>
     <div class="form-group col-md-6">
       <label>Vị Trí</label>
-      <input type="text" class="form-control" id="txtvitri" placeholder="Vị trí" name="vitri">
+      <input type="text" class="form-control" id="txtvitricv" placeholder="Vị trí" name="vitricv">
           <!-- <select class="form-control" id="txtvitri" name="vitri">
             <option value="" selected disabled hidden>Choose here ...</option>
             <option value="ruby1">Ruby1</option>
@@ -31,22 +31,22 @@
   <div class="form-row">
     <div class="form-group col-md-6">
         <label>Ngày bắt đầu</label>
-        <input type="date" class="form-control" id="txtngaynhap" placeholder="Ngày bắt đầu" name="ngaybatdau">
+        <input type="date" class="form-control" id="txtngaybatdau" placeholder="Ngày bắt đầu" name="ngaybatdau" onchange="TinhNgayKetThuc()">
     </div>
     <div class="form-group col-md-6">
       <label>Time hết hạn - số ngày</label>
-      <input type="number" class="form-control" id="txttimehethan" placeholder="Time hết hạn - số ngày" name="timehethan">
+      <input type="number" class="form-control" id="txttimehethan" placeholder="Time hết hạn - số ngày" name="timehethan" onchange="TinhNgayKetThuc()">
     </div>
     
   </div>
   <div class="form-row">
     <div class="form-group col-md-6">
         <label>Ngày kết thúc</label>
-        <input type="date" class="form-control" id="txtngaynhap" placeholder="Ngày bắt đầu" name="ngaybatdau" disabled>
+        <input type="date" class="form-control" id="txtngaykethuc" placeholder="Ngày kết thúc" name="ngayketthuc" disabled>
     </div>
     <div class="form-group col-md-6">
       <label>Số ngày gửi mail</label>
-      <input type="number" class="form-control" id="txttimeguimail" placeholder="Số ngày gửi mail" name="timeguimail">
+      <input type="number" class="form-control" id="txtngayguimail" placeholder="Số ngày gửi mail" name="ngayguimail">
     </div>
   </div>  
   <!-- <div class="form-row">
@@ -85,5 +85,21 @@
 </form>
   
 <script>
-  
+  function tinhNgayKetThuc(ngayBatDau, soNgayBuoc) {
+    var ngay = new Date(ngayBatDau);
+    //console.log(ngay)
+    ngay.setDate(ngay.getDate() + soNgayBuoc);
+    // var ngayKetThuc = ('0' + ngay.getDate()).slice(-2) + '-' + ('0' + (ngay.getMonth() + 1)).slice(-2) + '-' + ngay.getFullYear();
+     var ngayKetThuc = ngay.getFullYear() + '-' + ('0' + (ngay.getMonth() + 1)).slice(-2) + '-' + ('0' + ngay.getDate()).slice(-2);
+    
+    return ngayKetThuc;
+}
+  function TinhNgayKetThuc() { 
+    var ngayBatDau = $('#txtngaybatdau').val() // Thay đổi ngày bắt đầu tại đây
+    var soNgayBuoc = $('#txttimehethan').val() * 1 // Thay đổi số ngày bước tại đây
+    //console.log(soNgayBuoc)
+    var ngayKetThuc = tinhNgayKetThuc(ngayBatDau, soNgayBuoc);
+    //console.log(ngayKetThuc)
+    $('#txtngaykethuc').val(ngayKetThuc)
+   }
 </script>
