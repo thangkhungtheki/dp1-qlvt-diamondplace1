@@ -10,7 +10,7 @@
   <div class="form-row">
     <div class="form-group col-md-6">
       <label>Ngày hiện tại</label>
-      <input type="date" class="form-control" id="txtngayhientai" name="ngayhientai" disabled value="<%= ngayHienTaiFormatted %>">
+      <input type="date" class="form-control" id="txtngayhientai" name="ngayhientai" readonly value="<%= ngayHienTaiFormatted %>">
     </div>
   </div>
   <div class="form-row">
@@ -42,7 +42,7 @@
   <div class="form-row">
     <div class="form-group col-md-6">
       <label>Ngày bắt đầu</label>
-      <input type="date" class="form-control" id="txtngaybatdau" placeholder="Ngày bắt đầu" name="ngaybatdau" onchange="TinhNgayKetThuc()">
+      <input type="date" class="form-control" id="txtngaybatdau"  name="ngaybatdau" onchange="TinhNgayKetThuc()">
     </div>
     <div class="form-group col-md-6">
       <label>Time hết hạn - số ngày</label>
@@ -53,7 +53,7 @@
   <div class="form-row">
     <div class="form-group col-md-6">
       <label>Ngày kết thúc</label>
-      <input type="date" class="form-control" id="txtngaykethuc" placeholder="Ngày kết thúc" name="ngayketthuc" disabled>
+      <input type="date" class="form-control" id="txtngaykethuc"  name="ngayketthuc" readonly>
     </div>
     <div class="form-group col-md-6">
       <label>Số ngày gửi mail</label>
@@ -71,6 +71,12 @@
     </div>
   </div> -->
   <div class="form-row">
+    <div class="form-group col-md-6">
+      <label>Số ngày còn lại</label>
+      <input type="number" class="form-control" id="txtsongayconlai" name="ngayconlai" readonly>
+    </div>
+  </div>
+  <div class="form-row">
     <!-- <div class="form-group col-md-6">
           <label>Tình trạng</label>
           <select class="form-control" id="txttinhtrang" name="tinhtrang">
@@ -84,24 +90,23 @@
 
     <div class="form-group col-md-12">
       <label>Ghi chú</label>
-      <textarea class="form-control" id="txtghichu" placeholder="Ghi chú / Vị trí" name="ghichu" rows="5"> </textarea>
+      <textarea class="form-control" id="txtghichu" placeholder="Ghi chú / Vị trí" name="ghichu" rows="5"></textarea>
     </div>
   </div>
-   <div class="form-row">
-  <div class="form-group col-md-6">
-      <label>Số ngày còn lại</label>
-      <input type="number" class="form-control" id="txtsongayconlai" name="ngayconlai" disabled>
-    </div>
-  </div>
+
   <div class="form-group">
     <button type="submit" class="btn btn-primary float-left" id="btncreatetb">THÊM CÔNG VIỆC</button>
-    <button type="button" class="btn btn-info float-right" id="btnxem">XEM CÔNG VIỆC</button>
+    <button type="button" class="btn btn-info float-right" id="btnxemcv" onclick="ClickXem()">XEM CÔNG VIỆC</button>
   </div>
 
 
 </form>
 
 <script>
+  function ClickXem() {
+    window.location.href = '/house/xemcongviecdinhky'
+  }
+
   function tinhNgayKetThuc(ngayBatDau, soNgayBuoc) {
     var ngay = new Date(ngayBatDau);
     //console.log(ngay)
@@ -121,6 +126,7 @@
     $('#txtngaykethuc').val(ngayKetThuc)
     ngayconlai()
   }
+
   function ngayconlai() {
     var ngay1 = $('#txtngaykethuc').val(); // Định dạng: yyyy-mm-dd
     var ngay2 = $('#txtngayhientai').val(); // Định dạng: yyyy-mm-dd
@@ -128,6 +134,7 @@
     //console.log(soNgay)
     $('#txtsongayconlai').val(soNgay)
   }
+
   function tinhSoNgay(ngay1, ngay2) {
     // Chuyển hai ngày vào đối tượng Date
     var date1 = new Date(ngay1);
@@ -138,5 +145,5 @@
     var soNgay = Math.ceil(soMiligiay / (1000 * 60 * 60 * 24));
 
     return soNgay;
-}
+  }
 </script>

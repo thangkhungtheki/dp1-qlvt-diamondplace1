@@ -10,18 +10,49 @@ async function them(doc){
     }
 }
 
-async function xoa(param) {  }
+async function xoa(id) { 
+     try {
+        await housemodem.deleteOne({_id: id})
+        return true
+    } catch (error) {
+        return error
+    }
+ }
 
-async function sua() {
-
+async function sua(id, doc) {
+     try{
+        await housemodem.findByIdAndUpdate(id, doc)
+        return true
+    }catch(e){
+        return false
+    }
 }
 
 async function tim(){
-
+    try{
+        const docs = await housemodem.find()
+        return docs
+    }catch(e){
+        return false
+    }
 }
+async function timid(id){
+    try{
+        const docs = await housemodem.find({_id: id})
+        //console.log(docs)
+        return docs
+    }catch(e){
+        return false
+    }
+}
+
+
 
 module.exports = {
     them,
     xoa, 
-    sua
+    sua,
+    tim,
+    timid,
+
 }

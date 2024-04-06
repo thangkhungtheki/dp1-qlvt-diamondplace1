@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 
-
+<% var activeuser =  '' %>
+<% var activetb =  '' %>
+<% var activetbdp2 = '' %>
+<% var activethem = '' %>
 <% var _username = '' %>
 
 <head>
@@ -35,7 +38,7 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/test">
         <div class="sidebar-brand-icon rotate-n-15">
           <i class="fas fa-laugh-wink"></i>
         </div>
@@ -45,11 +48,11 @@
       <!-- Divider -->
       <hr class="sidebar-divider my-0">
 
-
+      
 
       <!-- Nav Item - Tables -->
       <%- include('./left-sites.ejs') %>
-
+      
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
 
@@ -66,12 +69,12 @@
 
       <!-- Main Content -->
       <div id="content">
-
+        
         <!-- Topbar -->
         <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
           <!-- Sidebar Toggle (Topbar) -->
-          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3" >
             <i class="fa fa-bars"></i>
           </button>
 
@@ -112,12 +115,12 @@
 
             <!-- Nav Item - Alerts -->
             <li class="nav-item dropdown no-arrow mx-1">
-
+              
             </li>
 
             <!-- Nav Item - Messages -->
             <li class="nav-item dropdown no-arrow mx-1">
-
+              
             </li>
 
             <div class="topbar-divider d-none d-sm-block"></div>
@@ -157,14 +160,15 @@
 
         <!-- Begin Page Content -->
         <div style="margin: 10px;">
-          <%- include('./table_cvdk.ejs') %>
-
+        <%- include('./formsuacvdinhky.ejs') %>
 
         </div>
 
+      
+          
 
-
-
+        
+        
 
       </div>
       <!-- End of Main Content -->
@@ -184,7 +188,43 @@
     <i class="fas fa-angle-up"></i>
   </a>
 
+  <!-- Logout Modal-->
+  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel1">Bạn chắc chắn muốn thoát?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Lựa chọn "Logout" chúng tôi sẽ xóa session.</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <button class="btn btn-primary" type="button" id="btnlogout">Logout</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
+<!-- Xoa User Modal-->
+<div class="modal fade" id="xoauserModal" tabindex="0" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="xoauserModal1">Bạn chắc chắn muốn thoát?</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body" id="xoauserModal2">#.</div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        <button class="btn btn-primary" type="button" id="btnlogout">Logout</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
   <!-- Bootstrap core JavaScript-->
@@ -202,10 +242,9 @@
   <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
   <!-- Page level custom scripts -->
-
+  
 
   <!-- Xu ly Click button Logout -->
-
   <!-- Xu ly Click button Logout -->
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script src="/xulylogoutdp2.js"></script>
