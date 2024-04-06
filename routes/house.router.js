@@ -98,7 +98,7 @@ router.get('/cronjobsendmail', async(req, res) => {
   const docs = await xulyhouse.tim()
   const newdata = await tinhngayconlai(docs)
   sendmail.sendmail(newdata)
-  res.json(newdata)
+  res.end()
 })
 
 function authenticated(req, res, next) {
