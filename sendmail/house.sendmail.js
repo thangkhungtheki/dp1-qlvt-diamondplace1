@@ -20,11 +20,11 @@ function sendmail(data){
         
 
     });
-    var text = ``
+    var text = ''
     for (let i = 0; i < data.length; i++) {
         
-        if( data[i].songayhethan <= data[i].ngayguimail && data[i].songayhethan > 0 ){
-            
+        if( (data[i].songayhethan * 1) <= (data[i].ngayguimail * 1) && (data[i].songayhethan * 1) > 0 ){
+           
             var string = '<b>.TênCV: ' + `</b><span style='color: blue'>` + data[i].tencv + ` </span>
                             <span>` + ` ngày đến hạn: </span>
                             <span style="color: red">` + data[i].songayhethan + `</span> ngày <br>`
@@ -57,6 +57,7 @@ function sendmail(data){
                 return null
             }
         });
+        // console.log('>>>sendmail: ', text)
     }else{
         
         

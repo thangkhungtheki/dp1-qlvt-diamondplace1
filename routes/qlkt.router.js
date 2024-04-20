@@ -4,6 +4,8 @@ var xulydb = require('../CRUD/xulydb')
 const ycsc = require('../CRUD/xulyyeucau')
 const filemulter = require('../multer-upload/multer')
 const toolmongo = require('../tool_mongo/backup')
+const sendmailpkythuat = require('../sendmail/sendmailpyc')
+
 
 var uridatabase = process.env.DATABASE_URL
 
@@ -43,7 +45,7 @@ router.get('/', async (req, res) => {
         res.redirect('/qlkt/bieudotron')
         break;
       case "tp":
-        if (user.bp == 'house') {
+        if (user.bp === 'house') {
           let doc = await ycsc.docyeucautheotrangthai('dangxuly', user.bp)
           res.render('admin_house/main/dashboard', { data: doc })
           break;
@@ -131,8 +133,12 @@ router.post('/taoyc', filemulter.upload.array('image', 4), filemulter.handleErro
 router.post('/updatettbp', async (req, res) => {
   //let doc = await ycsc.timyctheoma(req.body.mayeucau)
   let ma = req.body.mayeucau
-  console.log(ma)
+  //console.log(ma)
   await ycsc.updatetttbp(ma, 'duyet')
+  let doc = await ycsc.timyctheoma(ma)
+  if(doc){
+    sendmailpkythuat.sendmail(doc)
+  }
   res.end()
 })
 
@@ -179,10 +185,6 @@ router.get('/xemlichsu', authenticated, async (req, res) => {
     default:
       res.send('bạn đã Đăng ký thành công!!! <br\> Chào bạn: <b>' + user.username + ' </b>, vui lòng liên hệ admin và báo tên user, để được cấp quyền')
   }
-
-
-
-
 
 })
 
