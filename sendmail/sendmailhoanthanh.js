@@ -20,11 +20,11 @@ function sendmail(params){
         
 
     });
-    var content = `<b>Phiếu yêu cầu mới</b><br><b>Mã yêu cầu: </b>`+ params[0].mayeucau + `<br>
+    var content = `<b>Phiếu yêu cầu</b><br><b>Mã yêu cầu: </b>`+ params[0].mayeucau + `<br>
 Bộ phận: <b>` + params[0].bophan + `</b> <br>
-Mô tả: <span style="color: blue">` + params[0].mota + `</span> <br>
+Mô tả: <b>` + params[0].mota + `</b> <br>
 Khẩn cấp: <b>` + params[0].khancap + `</b> <br>
-Trạng thái trưởng bộ phận : <span style="color: blue"> Duyệt </span>`
+Trạng thái : <span style="color: green"> Hoàn thành </span>`
     // console.log(params)
     // console.log(content)
     if(content != ''){
@@ -32,7 +32,7 @@ Trạng thái trưởng bộ phận : <span style="color: blue"> Duyệt </span>
             from: process.env.emailFrom,
             to: process.env.mailList,
             //bcc: 'it@diamondplace.com.vn',
-            subject: "THÔNG BÁO CÓ PHIẾU YÊU CẦU MỚI",
+            subject: "THÔNG BÁO HOÀN THÀNH PHIẾU YÊU CẦU",
             //text: 'Your text is here',//Thường thi mình không dùng cái này thay vào đó mình sử dụng html để dễ edit hơn
             html: content ,//Nội dung html mình đã tạo trên kia :)),
             

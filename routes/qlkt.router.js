@@ -5,7 +5,7 @@ const ycsc = require('../CRUD/xulyyeucau')
 const filemulter = require('../multer-upload/multer')
 const toolmongo = require('../tool_mongo/backup')
 const sendmailpkythuat = require('../sendmail/sendmailpyc')
-
+const sendmailhoanthanh = require('../sendmail/sendmailhoanthanh')
 
 var uridatabase = process.env.DATABASE_URL
 
@@ -272,6 +272,10 @@ router.post('/updatehoanthanh', async (req, res) => {
       let ma = req.body.code
       let trangthai = req.body.trangthai
       let result = await ycsc._updatetrangthai(ma, trangthai)
+      let doc = await ycsc.timyctheoma(ma)
+      if(doc){
+        sendmailhoanthanh.sendmail(doc)
+      }
       res.send(result)
     } catch (error) {
 
