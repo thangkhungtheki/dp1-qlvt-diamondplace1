@@ -21,13 +21,13 @@ router.get('/backupdatabase', async (req, res) => {
   await toolmongo.backupMongo(uridatabase, () => {
 
   })
-  res.send('ok done')
+  return res.send('ok done')
 })
 
 router.get('/rootyeucau', ruleroot, async (req, res) => {
 
   const successMessage = req.flash('success')[0];
-  res.render('rootadmin/main-yeucau', { data: req.user, successMessage })
+  return res.render('rootadmin/main-yeucau', { data: req.user, successMessage })
 })
 
 router.get('/', async (req, res) => {
@@ -47,18 +47,18 @@ router.get('/', async (req, res) => {
       case "tp":
         if (user.bp === 'house') {
           let doc = await ycsc.docyeucautheotrangthai('dangxuly', user.bp)
-          res.render('admin_house/main/dashboard', { data: doc })
+          return res.render('admin_house/main/dashboard', { data: doc })
           break;
         }
         let doc = await ycsc.docyeucautheotrangthai('dangxuly', user.bp)
-        res.render('layoutkythuat/main/dashboard', { data: doc })
+        return res.render('layoutkythuat/main/dashboard', { data: doc })
         break;
       case "nv":
         const successMessage = req.flash('success')[0];
-        res.render('layoutkythuat/user/dashboard', { data: user, successMessage })
+        return res.render('layoutkythuat/user/dashboard', { data: user, successMessage })
         break;
       default:
-        res.send('bạn đã Đăng ký thành công!!! <br\> Chào bạn: <b>' + user.username + ' </b>, vui lòng liên hệ admin và báo tên user, để được cấp quyền')
+        return res.send('bạn đã Đăng ký thành công!!! <br\> Chào bạn: <b>' + user.username + ' </b>, vui lòng liên hệ admin và báo tên user, để được cấp quyền')
     }
 
 
@@ -121,7 +121,7 @@ router.post('/taoyc', filemulter.upload.array('image', 4), filemulter.handleErro
       // console.log(fileName)
     } catch (error) {
       console.log(error)
-      res.send('Lỗi không xác định ')
+      return res.send('Lỗi không xác định ')
     }
 
     // }
@@ -155,7 +155,7 @@ router.post('/deletephongkythuat', ruleAdmin, async (req, res) => {
   console.log('đã xoá: ' + ma)
   await ycsc._deletephongkythuat(ma)
 
-  res.send(true)
+  return res.send(true)
 })
 
 router.get('/xemlichsu', authenticated, async (req, res) => {
@@ -171,19 +171,19 @@ router.get('/xemlichsu', authenticated, async (req, res) => {
       if (req.user.bp == 'house') {
         // const successMessage = req.flash('success')[0]
 
-        res.render('admin_house/main/viewxemlichsu', { data: doc })
+        return res.render('admin_house/main/viewxemlichsu', { data: doc })
         break;
       } else {
-        res.render('layoutkythuat/main/viewxemlichsu', { data: doc })
+        return res.render('layoutkythuat/main/viewxemlichsu', { data: doc })
         break;
       }
 
     case "nv":
       const successMessage = req.flash('success')[0];
-      res.render('layoutkythuat/user/dashboard', { data: req.user, successMessage })
+      return res.render('layoutkythuat/user/dashboard', { data: req.user, successMessage })
       break;
     default:
-      res.send('bạn đã Đăng ký thành công!!! <br\> Chào bạn: <b>' + user.username + ' </b>, vui lòng liên hệ admin và báo tên user, để được cấp quyền')
+      return res.send('bạn đã Đăng ký thành công!!! <br\> Chào bạn: <b>' + user.username + ' </b>, vui lòng liên hệ admin và báo tên user, để được cấp quyền')
   }
 
 })
@@ -199,9 +199,9 @@ router.get('/viewyeucau', authenticated, (req, res) => {
   if (req.user.bp == 'house') {
     // const successMessage = req.flash('success')[0]
 
-    res.render('admin_house/main/view_guiyc', { data: req.user, successMessage })
+    return res.render('admin_house/main/view_guiyc', { data: req.user, successMessage })
   } else {
-    res.render('layoutkythuat/main/view_guiyc', { data: req.user, successMessage })
+    return res.render('layoutkythuat/main/view_guiyc', { data: req.user, successMessage })
   }
 
   //const successMessage = req.flash('success')[0]
@@ -219,9 +219,9 @@ router.get('/info', authenticated, async (req, res) => {
   //console.log(datafile)
   if (doc) {
     if(req.user.bp == 'house'){
-      res.render('admin_house/main/view_info', { data: doc, user: req.user, myPathENV: process.env.myPathENV })
+      return res.render('admin_house/main/view_info', { data: doc, user: req.user, myPathENV: process.env.myPathENV })
     }else{
-      res.render('layoutkythuat/main/view_info', { data: doc, user: req.user, myPathENV: process.env.myPathENV })
+      return res.render('layoutkythuat/main/view_info', { data: doc, user: req.user, myPathENV: process.env.myPathENV })
     }
     
   }
@@ -233,20 +233,20 @@ router.get('/viewtheobophan_daduyet', ruleAdmin, async (req, res) => {
   let bp = req.query.bophan
   let doc = await ycsc.timyctheobophan(bp)
   if (doc) {
-    res.render('mainSbAdmin/viewsuachuatheophong', { data: doc, _username: '' })
+    return res.render('mainSbAdmin/viewsuachuatheophong', { data: doc, _username: '' })
   }
 })
 
 // test biểu đồ thống kê
 router.get('/bieudotron', ruleAdmin, async (req, res) => {
   let total = await tongsuachuaton()
-  res.render('rootadmin/bangduyetpyc', { _username: '', total: total },)
+  return res.render('rootadmin/bangduyetpyc', { _username: '', total: total },)
 })
 
 router.get('/tonghophoanthanh', ruleAdmin, async (req, res) => {
   let doc = await ycsc._doctatcayeucauhoanthanh('hoanthanh')
   if (doc) {
-    res.render('mainSbAdmin/viewsuachuatheophong', { data: doc, _username: '' })
+    return res.render('mainSbAdmin/viewsuachuatheophong', { data: doc, _username: '' })
   }
 })
 
@@ -259,7 +259,7 @@ router.post('/updatekythuat', filemulter.upload.array('image2', 4), filemulter.h
       let result = await ycsc.updatekythuat(ma, 'dangxuly', motacuakythuat, fileName)
       res.redirect('/qlkt/info?mayeucau=' + ma)
     } catch (e) {
-      res.send(e)
+      return res.send(e)
     }
   } else {
     res.redirect('/signin')
@@ -276,7 +276,7 @@ router.post('/updatehoanthanh', async (req, res) => {
       if(doc && trangthai == 'hoanthanh'){
         sendmailhoanthanh.sendmail(doc)
       }
-      res.send(result)
+      return res.send(result)
     } catch (error) {
 
     }
@@ -289,7 +289,7 @@ router.post('/updatefeedback', authenticated, async (req, res) => {
     let diem = req.body.diem
     let feedback = req.body.feedback
     let result = await ycsc._updatefeedback(ma, diem, feedback)
-    res.send(result)
+    return res.send(result)
   } catch (error) {
 
   }
@@ -297,7 +297,7 @@ router.post('/updatefeedback', authenticated, async (req, res) => {
 
 router.get('/tongsuachuaton', async (req, res) => {
   let total = await tongsuachuaton()
-  res.json({ total: total })
+  return res.json({ total: total })
 })
 
 async function tongsuachuaton() {
@@ -363,7 +363,7 @@ router.get('/printyeucau', async (req, res) => {
   //let datafile = doc[0].filename
   //console.log(datafile)
   if (doc) {
-    res.render('docformtoejs/phieuyeucau.ejs', { data: doc, user: user, myPathENV: process.env.myPathENV })
+    return res.render('docformtoejs/phieuyeucau.ejs', { data: doc, user: user, myPathENV: process.env.myPathENV })
   }
 
 

@@ -17,9 +17,9 @@ router.get('/cronjobsendmail', async (req, res) => {
     var newdata = await tinhngayconlai(data)
     if (newdata) {
         sendmail.sendmail(newdata)
-        res.status(200).send('ok');
+        return res.status(200).send('ok');
     } else {
-        res.status(200).send('ko gửi mail')
+        return res.status(200).send('ko gửi mail')
     }
 
 
@@ -32,7 +32,7 @@ router.get("/", (req, res, next) => {
 router.get("/signin", (req, res, next) => {
     // hien thi trang va truyen lai nhung tin nhan tu phia server neu co
     var messages = req.flash('error')
-    res.render("signin", {
+    return res.render("signin", {
         messages: messages,
         hasErrors: messages.length > 0
     })
@@ -66,7 +66,7 @@ router.get("/signin", (req, res, next) => {
 router
     .get('/createthietbi', (req, res) => {
         if (req.isAuthenticated()) {
-            res.render('mainSbAdmin/createthietbi', {
+            return res.render('mainSbAdmin/createthietbi', {
                 _username: req.user.username,
                 data: 'data',
                 activeuser: 'active',
@@ -103,7 +103,7 @@ router
                 res.redirect('/createthietbi')
             } catch {
                 e => {
-                    res.send(e)
+                    return res.send(e)
                 }
             }
         } else {
@@ -132,7 +132,7 @@ router
             //console.log(_adata)
             //console.log(data)
             //console.log(newdata)
-            res.render("mainSbAdmin/createthietbi-sua", {
+            return res.render("mainSbAdmin/createthietbi-sua", {
                 _username: req.user.username,
                 data: data,
                 activeuser: '',
@@ -170,7 +170,7 @@ router
                 res.redirect('/viewcreatethietbi')
             } catch {
                 e => {
-                    res.send(e)
+                    return res.send(e)
                 }
             }
         } else {
@@ -184,7 +184,7 @@ router.get('/viewcreatethietbi', async (req, res) => {
         var newdata = await tinhngayconlai(data)
         const daynow = moment().format('DD-MM-YYYY');
         //console.log(newdata)
-        res.render("mainSbAdmin/createthietbiview", {
+        return res.render("mainSbAdmin/createthietbiview", {
             _username: req.user.username,
             data: newdata,
             activeuser: '',
@@ -204,7 +204,7 @@ router
             var newdata = await tinhngayconlai(data)
             const daynow = moment().format('DD-MM-YYYY');
             //console.log(newdata)
-            res.render("mainSbAdmin/createthietbiview_baotridinhky", {
+            return res.render("mainSbAdmin/createthietbiview_baotridinhky", {
                 _username: req.user.username,
                 data: newdata,
                 activeuser: '',
@@ -242,7 +242,7 @@ router
                 res.redirect('/baotridinhky')
             } catch {
                 e => {
-                    res.send(e)
+                    return res.send(e)
                 }
             }
         } else {
@@ -285,7 +285,7 @@ router.post("/signup",
 router.get('/signup', function (req, res, next) {
     var messages = req.flash('error')
 
-    res.render('signup', {
+    return res.render('signup', {
         messages: messages,
         hasErrors: messages.length > 0,
     })
@@ -295,7 +295,7 @@ router.get('/dashboard', isadminroot, async (req, res) => {
 
     let data = await xulydb.docUser()
     //console.log(data)
-    res.render("mainSbAdmin/dashboard", {
+    return res.render("mainSbAdmin/dashboard", {
         _username: req.user.username,
         data: data,
         activeuser: 'active',
@@ -308,7 +308,7 @@ router.get('/dashboard', isadminroot, async (req, res) => {
 router.get('/thietbi', async (req, res) => {
     if (req.isAuthenticated()) {
         let data = await xulydb.docTb()
-        res.render("mainSbAdmin/dbthietbi", {
+        return res.render("mainSbAdmin/dbthietbi", {
             _username: req.user.username,
             data: data,
             activeuser: '',
@@ -336,7 +336,7 @@ var dat = {
     Vitri: "",
 }
 router.get('/editthietbi', async (req, res) => {
-    res.render("mainSbAdmin/dbthietbi-edit", {
+    return res.render("mainSbAdmin/dbthietbi-edit", {
         _username: req.user.username,
         activeuser: '',
         activetb: '',
@@ -349,7 +349,7 @@ router.get('/editthietbi', async (req, res) => {
 router.get('/thietbidp2', async (req, res) => {
     if (req.isAuthenticated()) {
         let data = await xulydb.docTbdp2()
-        res.render("mainSbAdmin/dbthietbidp2", {
+        return res.render("mainSbAdmin/dbthietbidp2", {
             _username: req.user.username,
             data: data,
             activeuser: '',
@@ -363,7 +363,7 @@ router.get('/thietbidp2', async (req, res) => {
 })
 
 router.post('/suatb', async (req, res) => {
-    res.render("mainSbAdmin/dbthietbi-edit", {
+    return res.render("mainSbAdmin/dbthietbi-edit", {
         _username: req.user.username,
         activeuser: '',
         activetb: '',
@@ -373,7 +373,7 @@ router.post('/suatb', async (req, res) => {
 })
 
 router.post('/suatbdp2', async (req, res) => {
-    res.render("mainSbAdmin/dbthietbi-edit-dp2", {
+    return res.render("mainSbAdmin/dbthietbi-edit-dp2", {
         _username: req.user.username,
         activeuser: '',
         activetb: '',
@@ -389,7 +389,7 @@ router.post('/delete', async (req, res) => {
         if (a == true) {
             res.redirect("/thietbi")
         } else {
-            res.send("Loi khong xoa duoc")
+            return res.send("Loi khong xoa duoc")
         }
 
 
@@ -405,7 +405,7 @@ router.post('/deletedp2', async (req, res) => {
         if (a == true) {
             res.redirect("/thietbidp2")
         } else {
-            res.send("Loi khong xoa duoc")
+            return res.send("Loi khong xoa duoc")
         }
 
 
@@ -420,7 +420,7 @@ router.post('/searchedit', async (req, res) => {
     let doc = await xulydb.timTb(req.body.txtsearch)
     if (doc) {
         //console.log(doc)
-        res.render("mainSbAdmin/dbthietbi-edit", {
+        return res.render("mainSbAdmin/dbthietbi-edit", {
             _username: req.user.username,
             activeuser: '',
             activetb: '',
@@ -429,7 +429,7 @@ router.post('/searchedit', async (req, res) => {
             data: doc,
         })
     } else {
-        res.render("mainSbAdmin/dbthietbi-edit", {
+        return res.render("mainSbAdmin/dbthietbi-edit", {
             _username: req.user.username,
             activeuser: '',
             activetb: '',
@@ -447,7 +447,7 @@ router.post('/searcheditdp2', async (req, res) => {
     let doc = await xulydb.timTbdp2(req.body.txtsearch)
     if (doc) {
         //console.log(doc)
-        res.render("mainSbAdmin/dbthietbi-edit-dp2", {
+        return res.render("mainSbAdmin/dbthietbi-edit-dp2", {
             _username: req.user.username,
             activeuser: '',
             activetb: '',
@@ -456,7 +456,7 @@ router.post('/searcheditdp2', async (req, res) => {
             data: doc,
         })
     } else {
-        res.render("mainSbAdmin/dbthietbi-edit-dp2", {
+        return res.render("mainSbAdmin/dbthietbi-edit-dp2", {
             _username: req.user.username,
             activeuser: '',
             activetb: '',
@@ -471,7 +471,7 @@ router.post('/searcheditdp2', async (req, res) => {
 
 router.get("/themthietbi", (req, res) => {
     if (req.isAuthenticated()) {
-        res.render("mainSbAdmin/themthietbi", {
+        return res.render("mainSbAdmin/themthietbi", {
             _username: req.user.username,
             activeuser: '',
             activetb: '',
@@ -486,7 +486,7 @@ router.get("/themthietbi", (req, res) => {
 
 router.get("/themthietbidp2", (req, res) => {
     if (req.isAuthenticated()) {
-        res.render("mainSbAdmin/themthietbidp2", {
+        return res.render("mainSbAdmin/themthietbidp2", {
             _username: req.user.username,
             activeuser: '',
             activetb: '',
@@ -590,7 +590,7 @@ router.post('/logout', (req, res) => {
 
 router.get('/vattutest', (req, res) => {
     if (req.isAuthenticated()) {
-        res.render("mainSbAdmin/vattu.ejs", {
+        return res.render("mainSbAdmin/vattu.ejs", {
 
             user: req.user,
             _username: req.user.username,
@@ -609,7 +609,7 @@ router.get('/vattutest', (req, res) => {
 router.post('/timvattubyloai', async (req, res) => {
     let Loaivt = req.body.loai
     let doc = await xulydb.timvattu(Loaivt)
-    res.send(doc)
+    return res.send(doc)
 })
 
 router.post('/luunhapvattu', async (req, res) => {
@@ -632,7 +632,7 @@ router.post('/luunhapvattu', async (req, res) => {
 router.get('/xuatvattutest', (req, res) => {
     // let slton = await 
     if (req.isAuthenticated()) {
-        res.render("mainSbAdmin/xuatvattu.ejs", {
+        return res.render("mainSbAdmin/xuatvattu.ejs", {
             user: req.user, //tạm mở user
             _username: req.user.username,
             activeuser: '',
@@ -664,7 +664,7 @@ router.post('/luuxuatvattu', async (req, res) => {
 
 router.get('/mavattutest', (req, res) => {
     if (req.isAuthenticated()) {
-        res.render("mainSbAdmin/themmavattu.ejs", {
+        return res.render("mainSbAdmin/themmavattu.ejs", {
 
             user: req.user, //tạm mở user
             _username: req.user.username,
@@ -695,7 +695,7 @@ router.post('/luumavattu', async (req, res) => {
 router.get('/timnhap', async (req, res) => {
     let soluong = await xulydb.timnhap('dl-04')
     console.log(soluong)
-    res.send(200, soluong)
+    return res.send(200, soluong)
 })
 
 router.get('/timton/:ma', async (req, res) => {
@@ -705,7 +705,7 @@ router.get('/timton/:ma', async (req, res) => {
     let slxuat = await xulydb.timxuat(ma)
     console.log('Số lượng xuất: ' + slxuat)
     let slton = slnhap - slxuat
-    res.send({
+    return res.send({
         slxuat: slxuat,
         slnhap: slnhap,
         slton: slton,
@@ -717,7 +717,7 @@ router.get('/baocaovattu', async (req, res) => {
     if (req.isAuthenticated()) {
         let data = await xulydb.baocaovattu()
         //console.log(data)
-        res.render("mainSbAdmin/baocaovattu.ejs", {
+        return res.render("mainSbAdmin/baocaovattu.ejs", {
 
             user: req.user, //tạm mở user
 
@@ -737,7 +737,7 @@ router.get('/baocaovattu', async (req, res) => {
 //---------------------------------------------------
 
 router.get('/chart', (req, res) => {
-    res.render("mainSbAdmin/main-chart.ejs", {
+    return res.render("mainSbAdmin/main-chart.ejs", {
         user: req.user, //tạm mở user
 
         activeuser: '',
@@ -753,7 +753,7 @@ router.get('/chitiettheoma', async (req, res) => {
     if (req.isAuthenticated()) {
         let data = await xulydb.baocaovattu()
         //console.log(data)
-        res.render("mainSbAdmin/chitiettheoma_tenuser", {
+        return res.render("mainSbAdmin/chitiettheoma_tenuser", {
             user: req.user, //tạm mở user
 
             activeuser: '',
@@ -771,14 +771,14 @@ router.get('/chitiettheoma', async (req, res) => {
 
 router.post('/timxuatvattu', async (req, res) => {
     let data = await xulydb.timxuatvattu(req.body.loai)
-    res.send(data)
+    return res.send(data)
 })
 
 router.get('/dathang', async (req, res) => {
     if (req.isAuthenticated()) {
         let data = await xulydb.baocaovattu()
         //console.log(data)
-        res.render("mainSbAdmin/themdathang", {
+        return res.render("mainSbAdmin/themdathang", {
             user: req.user, //tạm mở user
 
             activeuser: '',

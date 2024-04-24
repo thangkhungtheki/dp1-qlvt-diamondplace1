@@ -17,7 +17,7 @@ router.get('/', authenticated, async(req, res) => {
 let bp = req.user.bp
 //console.log(bp)
 let doc = await ycsc.timtatca_yctheobophan(bp)
-res.render("layoutkythuat/user/view_xemlichsu_user",{data: doc ? doc : [] ,_username:''})
+return res.render("layoutkythuat/user/view_xemlichsu_user",{data: doc ? doc : [] ,_username:''})
 })
 
 router.get('/userinfo', async(req, res) => {
@@ -28,8 +28,8 @@ let doc = await ycsc.timyctheoma(mayeucau)
 //let datafile = doc[0].filename
 //console.log(datafile)
 if (doc) {
-// res.render('docformtoejs/usr_bmphieuyeucau', { data: doc, user: user, myPathENV: process.env.myPathENV })
-res.render('docformtoejs/usr_bmphieuyeucau', { data: doc })
+// return res.render('docformtoejs/usr_bmphieuyeucau', { data: doc, user: user, myPathENV: process.env.myPathENV })
+return res.render('docformtoejs/usr_bmphieuyeucau', { data: doc })
 }
 })
 

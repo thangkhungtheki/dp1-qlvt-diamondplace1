@@ -53,7 +53,7 @@ router
   if(result){
     res.redirect('/house/xemcongviecdinhky')
   }else{
-    res.send('Lỗi không update được >>> check lại hệ thống')
+    return res.send('Lỗi không update được >>> check lại hệ thống')
   }
 })
 
@@ -76,10 +76,10 @@ router.post('/themhouse', async(req, res) => {
   }
   const result = await xulyhouse.them(doc)
   if(result){
-    // res.send('<script> alert("Thêm thành công !!!") ; window.location.href = "/house/themcvdinhky" </script>')
+    // return res.send('<script> alert("Thêm thành công !!!") ; window.location.href = "/house/themcvdinhky" </script>')
     res.redirect('/house/themcvdinhky')
   }else{
-    res.send('có lôĩ không thêm được')
+    return res.send('có lôĩ không thêm được')
   }
 })
 
@@ -90,7 +90,7 @@ router.post('/delcvdinhky', async(req, res) => {
   if(result){
     res.redirect('/house/xemcongviecdinhky')
   }else{
-    res.send('có lỗi không xoá >>> tải lại trang')
+    return res.send('có lỗi không xoá >>> tải lại trang')
   }
 })
 
