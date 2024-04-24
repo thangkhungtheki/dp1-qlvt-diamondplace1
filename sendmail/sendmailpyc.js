@@ -20,7 +20,8 @@ function sendmail(params){
         
 
     });
-    var content = `<b>Phiếu yêu cầu mới</b><br><b>Mã yêu cầu: </b>`+ params[0].mayeucau + `<br>
+    var content = 
+`<b>Phiếu yêu cầu mới</b><br><b>Mã yêu cầu: </b>`+ params[0].mayeucau + `<br>
 Bộ phận: <b>` + params[0].bophan + `</b> <br>
 Mô tả: <span style="color: blue">` + params[0].mota + `</span> <br>
 Khẩn cấp: <b>` + params[0].khancap + `</b> <br>

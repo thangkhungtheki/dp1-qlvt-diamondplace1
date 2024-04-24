@@ -273,7 +273,7 @@ router.post('/updatehoanthanh', async (req, res) => {
       let trangthai = req.body.trangthai
       let result = await ycsc._updatetrangthai(ma, trangthai)
       let doc = await ycsc.timyctheoma(ma)
-      if(doc){
+      if(doc && trangthai == 'hoanthanh'){
         sendmailhoanthanh.sendmail(doc)
       }
       res.send(result)
