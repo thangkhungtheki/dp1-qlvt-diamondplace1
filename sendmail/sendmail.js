@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer')
 var moment = require('moment')
 
 
-function sendmail(data){
+async function sendmail(data){
 
     var transporter =  nodemailer.createTransport({ // config mail server
         host: process.env.hostEmail,
@@ -61,15 +61,17 @@ function sendmail(data){
         transporter.sendMail(mainOptions, function(err, info){
             if (err) {
                 console.log(err);
-                
+                return err
             } else {
                 console.log('Message sent: ' +  'send mail Success');
+                return true
             }
         });
     }else{
         
         let daynow = moment().format('YYYY-MM-DD')
         console.log('Date: ' + daynow +'Ko có hết hạn')
+        return false
         // content = 'test mail'
         // var mainOptions = { // thiết lập đối tượng, nội dung gửi mail
         //     from: process.env.emailFrom,

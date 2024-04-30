@@ -16,7 +16,7 @@ router.get('/cronjobsendmail', async (req, res) => {
     var data = await xulydb.doc_createthietbi()
     var newdata = await tinhngayconlai(data)
     if (newdata) {
-        sendmail.sendmail(newdata)
+        await sendmail.sendmail(newdata)
         return res.status(200).send('ok');
     } else {
         return res.status(200).send('ko gửi mail')

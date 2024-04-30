@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer')
 var moment = require('moment')
 
 
-function sendmail(data){
+ function sendmail(data){
 
     var transporter =  nodemailer.createTransport({ // config mail server
         host: process.env.HouseHostMail,
@@ -62,7 +62,7 @@ function sendmail(data){
         
         
         console.log('Date: ' + daynow +'Ko có hết hạn')
-       
+        return null
     }
 
     
