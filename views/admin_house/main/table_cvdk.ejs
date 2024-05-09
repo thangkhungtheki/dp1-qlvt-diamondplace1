@@ -49,6 +49,10 @@
                 <i class="fas fa-trash">
                 </i>
               </div>
+              <div class="btn btn-success btn-circle btn-sm" data-toggle="modal" data-target="#idhoanthanh" onclick="sua('<%= bien %>')">
+                <i class="fa fa-check">
+                </i>
+              </div>
             </div>
             
           </td>
@@ -65,7 +69,7 @@
             <%= data.ngaybatdau %>
           </td>
           <td>
-            <%= data.timehethan %>
+            <%= data.ngayketthuc %>
           </td>
           <td>
             <%= data.ngayguimail %>
@@ -155,8 +159,40 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="idhoanthanh" tabindex="3" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel1">Thông Báo</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">Bạn muốn ghi database hoàn thành.</div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        <button class="btn btn-success" type="button" id="btnhoanthanh" onclick="fn_hoanthanh()">Hoàn Thành</button>
+      </div>
+    </div>
+  </div>
+</div>
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script>
+  function fn_hoanthanh(){
+    var mas = $('#btnhoanthanh').val()
+    //alert(mas)
+    $.ajax({
+        method: "POST",
+        url: "/house/hoanthanhcv",
+        data: {id: mas},
+      })
+      .done(function(msg) {
+        alert(msg)
+        window.location.href = "/house/xemcongviecdinhky"
+      });
+
+  }
+
   function btnclick(ma) {
 
     window.location.href = '/qlkt/info?mayeucau=' + ma
@@ -166,6 +202,7 @@
     var mass = ma
     $('#btnsuacv').val(mass)
     $('#btnxoacv').val(mass)
+    $('#btnhoanthanh').val(mass)
     //alert(mass)
   }
 

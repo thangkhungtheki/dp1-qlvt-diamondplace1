@@ -46,7 +46,8 @@ router
     ngayketthuc: ngayketthucFormat,
     ngayguimail: req.body.ngayguimail,
     ghichu: req.body.ghichu,
-    laplai: req.body.name_checkbox || "no"
+    laplai: req.body.name_checkbox || "no",
+    hoanthanh: req.body.hoanthanh
   }
   //console.log(doc)
   const result = await xulyhouse.sua(id, doc)
@@ -54,6 +55,16 @@ router
     res.redirect('/house/xemcongviecdinhky')
   }else{
     return res.send('Lỗi không update được >>> check lại hệ thống')
+  }
+})
+
+router.post('/hoanthanhcv', async(req, res)=>{
+  let id = req.body.id
+  let result = await xulyhouse.updatehoanthanh(id,'yes')
+  if(result){
+    return res.send('Thành công')
+  }else{
+    return res.send('Lỗi Hệ Thống vui lòng thử lại sau !!! Xin cảm ơn')
   }
 })
 

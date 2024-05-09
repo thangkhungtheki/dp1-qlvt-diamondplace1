@@ -123,15 +123,15 @@
     return ngayKetThuc;
   }
 
-  function TinhNgayKetThuc() {
-    var ngayBatDau = $('#txtngaybatdau').val() // Thay đổi ngày bắt đầu tại đây
-    var soNgayBuoc = $('#txttimehethan').val() * 1 // Thay đổi số ngày bước tại đây
-    //console.log(soNgayBuoc)
-    var ngayKetThuc = tinhNgayKetThuc(ngayBatDau, soNgayBuoc);
-    //console.log(ngayKetThuc)
-    $('#txtngaykethuc').val(ngayKetThuc)
-    fn_ngayconlai()
-  }
+  // function TinhNgayKetThuc() {
+  //   var ngayBatDau = $('#txtngaybatdau').val() // Thay đổi ngày bắt đầu tại đây
+  //   var soNgayBuoc = $('#txttimehethan').val() * 1 // Thay đổi số ngày bước tại đây
+  //   //console.log(soNgayBuoc)
+  //   var ngayKetThuc = tinhNgayKetThuc(ngayBatDau, soNgayBuoc);
+  //   //console.log(ngayKetThuc)
+  //   $('#txtngaykethuc').val(ngayKetThuc)
+  //   fn_ngayconlai()
+  // }
 
   function fn_ngayconlai() {
     var ngay1 = $('#txtngaykethuc').val(); // Định dạng: yyyy-mm-dd

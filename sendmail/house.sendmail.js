@@ -23,11 +23,14 @@ var moment = require('moment')
     var text = ''
     for (let i = 0; i < data.length; i++) {
         
-        if( (data[i].songayhethan * 1) <= (data[i].ngayguimail * 1) && (data[i].songayhethan * 1) > 0 ){
+        if( (data[i].songayhethan * 1) <= (data[i].ngayguimail * 1) && (data[i].songayhethan * 1) > 0 && (data[i].hoanthanh != 'yes') ){
            
             var string = '<b>.TênCV: ' + `</b><span style='color: blue'>` + data[i].tencv + ` </span>
                             <span>` + ` ngày đến hạn: </span>
-                            <span style="color: red">` + data[i].songayhethan + `</span> ngày <br>`
+                            <span style="color: red">` + data[i].songayhethan + `</span> ngày <br>
+                            ` + ` trạng thái hoàn thành: </span>
+                            <span style="color: red">` + data[i].hoanthanh + `</span> ngày <br>
+                            `
             text = text + string
            
         }
@@ -53,7 +56,7 @@ var moment = require('moment')
                 console.log(err);
                 return err
             } else {
-                console.log('Message sent: ' +  'send mail Success');
+                console.log('>>>house: Message sent: ' + daynow +  'send mail Success');
                 return null
             }
         });

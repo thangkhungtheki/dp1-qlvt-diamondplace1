@@ -4,7 +4,7 @@
 <% var ngay = ('0' + ngayHienTai.getDate()).slice(-2) %>
 <% var ngayHienTaiFormatted = nam + '-' + thang + '-' + ngay %>
 
-<div style="margin-bottom:20px; color: rgb(226, 14, 67); position: relative; bottom: auto;">
+<div style="margin-bottom:20px; color: rgb(6, 183, 236); position: relative; bottom: auto;">
   <h3>FORM SỬA CÔNG VIỆC ĐỊNH KỲ</h3>
 </div>
 <form action="/house/suacongviecdinhky" method="post">
@@ -92,6 +92,17 @@
           <input class="form-check-input" type="checkbox" id="idcheckbox" name="name_checkbox" value="yes">
         </div>
       <% } %>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label>Trạng Thái Hoàn Thành</label>
+      <select class="custom-select custom-select-lg mb-3" name="hoanthanh">
+        <option value='<%= data[0].hoanthanh %>' selected disabled hidden><%= data[0].hoanthanh %></option>
+        <option value="yes">yes</option>
+        <option value="no">no</option>
+      </select>
+      
     </div>
   </div>
   <div class="form-row">

@@ -28,6 +28,15 @@ async function sua(id, doc) {
     }
 }
 
+async function updatehoanthanh(id, trangthai) {
+    try{
+       await housemodem.findByIdAndUpdate(id, {$set:{hoanthanh: trangthai}})
+       return true
+   }catch(e){
+       return false
+   }
+}
+
 async function tim(){
     try{
         const docs = await housemodem.find()
@@ -54,5 +63,5 @@ module.exports = {
     sua,
     tim,
     timid,
-
+    updatehoanthanh
 }
