@@ -46,7 +46,7 @@ router
     ngayketthuc: ngayketthucFormat,
     ngayguimail: req.body.ngayguimail,
     ghichu: req.body.ghichu,
-    
+    laplai: req.body.name_checkbox || "no"
   }
   //console.log(doc)
   const result = await xulyhouse.sua(id, doc)
@@ -72,7 +72,7 @@ router.post('/themhouse', async(req, res) => {
     ngayketthuc: ngayketthucFormat,
     ngayguimail: req.body.ngayguimail,
     ghichu: req.body.ghichu,
-    
+    laplai: req.body.name_checkbox || "no"
   }
   const result = await xulyhouse.them(doc)
   if(result){

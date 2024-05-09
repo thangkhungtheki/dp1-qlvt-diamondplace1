@@ -8,7 +8,10 @@ const schema = new Schema({
     ngayketthuc: {type: String, require: false},
     ngayguimail: {type: String, require: false},
     ghichu: {type: String, required: false},
-    songayhethan: {type: String, require: false}
+    songayhethan: {type: String, require: false},
+    laplai: {type: String, require: false},
+    hoanthanh: {type: String, require: false},
+
 })
 
 

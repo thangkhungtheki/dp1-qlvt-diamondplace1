@@ -1,7 +1,7 @@
 <!-- Page Heading -->
 
 <div class="container-fluid">
-  <h1 class="h3 mb-2 text-gray-800">Bảng Yêu Cầu</h1>
+  <h1 class="h3 mb-2 text-gray-800">Xem Công Việc Định Kỳ</h1>
 
   <div class="table-responsive">
     <table class="table table-bordered table-striped" id="dataTable" width="100%" cellspacing="0">
@@ -10,12 +10,13 @@
           <th>Control</th>
           <th>STT</th>
           <th>Tên</th>
-          <th>Ngàybắtđầu</th>
-          <th>ngàyhethan</th>
+          <th>VịTrí</th>
+          <th>StartDay</th>
+          <th>EndDay</th>
           <th>chekemail</th>
+          <th>hoanthanh</th>
+          <th>laplai</th>
           <th>Ghichu</th>
-          
-
         </tr>
       </thead>
       <tfoot>
@@ -23,17 +24,21 @@
           <th>Control</th>
           <th>STT</th>
           <th>Tên</th>
+          <th>VịTrí</th>
           <th>Ngàybắtđầu</th>
           <th>ngàyhethan</th>
           <th>chekemail</th>
+          <th>hoanthanh</th>
+          <th>laplai</th>
           <th>Ghichu</th>
         </tr>
       </tfoot>
 
       <tbody>
+        <% var stt = 0 %>
         <% data.forEach((data)=>{ %>
         <% var bien = data._id %>
-        
+        <% stt += 1 %>
         <tr>
           <td>
             <div>
@@ -46,6 +51,9 @@
               </div>
             </div>
             
+          </td>
+          <td>
+            <%= stt %>
           </td>
           <td>
             <%= data.tencv %>
@@ -61,6 +69,12 @@
           </td>
           <td>
             <%= data.ngayguimail %>
+          </td>
+          <td>
+            <%= data.hoanthanh || 'no' %>
+          </td>
+          <td>
+            <%= data.laplai || 'no' %>
           </td>
           <td>
             <%= data.ghichu %>

@@ -48,18 +48,18 @@
   <div class="form-row">
     <div class="form-group col-md-6">
       <label>Ngày bắt đầu</label>
-      <input type="date" class="form-control" id="txtngaybatdau" placeholder="Ngày bắt đầu" name="ngaybatdau" onchange="TinhNgayKetThuc()" value="<%= data[0].ngaybatdau %>">
+      <input type="date" class="form-control" id="txtngaybatdau" placeholder="Ngày bắt đầu" name="ngaybatdau" onchange="fn_ngayconlai()" value="<%= data[0].ngaybatdau %>">
     </div>
     <div class="form-group col-md-6">
-      <label>Time hết hạn - số ngày</label>
-      <input type="number" class="form-control" id="txttimehethan" placeholder="Time hết hạn - số ngày" name="timehethan" onchange="TinhNgayKetThuc()" value="<%= data[0].timehethan %>">
+      <label>step begin-end - số ngày</label>
+      <input type="number" class="form-control" id="txttimehethan" placeholder="Time hết hạn - số ngày" name="timehethan"  value="<%= data[0].timehethan %>" readonly>
     </div>
 
   </div>
   <div class="form-row">
     <div class="form-group col-md-6">
       <label>Ngày kết thúc</label>
-      <input type="date" class="form-control" id="txtngaykethuc" placeholder="Ngày kết thúc" name="ngayketthuc" value="<%= data[0].ngayketthuc %>" readonly>
+      <input type="date" class="form-control" id="txtngaykethuc" placeholder="Ngày kết thúc" name="ngayketthuc" value="<%= data[0].ngayketthuc %>" onchange="fn_ngayconlai()">
     </div>
     <div class="form-group col-md-6">
       <label>Số ngày gửi mail</label>
@@ -78,8 +78,20 @@
   </div> -->
   <div class="form-row">
     <div class="form-group col-md-6">
-      <label>Số ngày còn lại</label>
+      <label>Số ngày còn lại-(tính từ ngày hiện tại)</label>
       <input type="number" class="form-control" id="txtsongayconlaitxt" name="ngayconlai" readonly>
+    </div>
+    <div class="form-group col-md-6">
+      <label>Lặp lại theo step begin-end</label>
+      <% if(data[0].laplai == 'yes') { %>
+      <div class="customdiv">
+        <input class="form-check-input" type="checkbox" id="idcheckbox" name="name_checkbox" value="yes" checked>
+      </div>
+      <% } else { %>
+        <div class="customdiv">
+          <input class="form-check-input" type="checkbox" id="idcheckbox" name="name_checkbox" value="yes">
+        </div>
+      <% } %>
     </div>
   </div>
   <div class="form-row">
@@ -129,15 +141,16 @@
     var ngayKetThuc = tinhNgayKetThuc(ngayBatDau, soNgayBuoc);
     //console.log(ngayKetThuc)
     $('#txtngaykethuc').val(ngayKetThuc)
-    ngayconlai()
+    fn_ngayconlai()
   }
 
-  function ngayconlai() {
+  function fn_ngayconlai() {
     var ngay1 = $('#txtngaykethuc').val(); // Định dạng: yyyy-mm-dd
     var ngay2 = $('#txtngayhientai').val(); // Định dạng: yyyy-mm-dd
     var soNgay = tinhSoNgay(ngay1, ngay2);
     //console.log(soNgay)
     $('#txtsongayconlaitxt').val(soNgay)
+    fn_tinhbuoctimehethan()
   }
   function tinhSoNgay(ngay1, ngay2) {
     // Chuyển hai ngày vào đối tượng Date
@@ -150,7 +163,27 @@
 
     return soNgay;
   }
+  function fn_tinhbuoctimehethan() {
+    var ngay1 = $('#txtngaykethuc').val(); // Định dạng: yyyy-mm-dd
+    var ngay2 = $('#txtngaybatdau').val(); // Định dạng: yyyy-mm-dd
+    var soNgay = tinhSoNgay(ngay1, ngay2);
+    // console.log(soNgay)
+    
+    $('#txttimehethan').val(soNgay)
+  }
   $('document').ready(()=>{
-    ngayconlai()
+    fn_ngayconlai()
   })
 </script>
+
+<style>
+  .form-check-input{
+
+    height: 1.5rem;
+    width: 1.5rem;
+  }
+  .customdiv{
+    margin-left: 1.5rem;
+    margin-bottom: 2rem;
+  }
+</style>
