@@ -18,29 +18,29 @@ var moment = require('moment')
             rejectUnauthorized: false
         },
         
-
     });
+    
     var text = ''
     for (let i = 0; i < data.length; i++) {
         
-        if( (data[i].songayhethan * 1) <= (data[i].ngayguimail * 1) && (data[i].songayhethan * 1) > 0 && (data[i].hoanthanh != 'yes') ){
+        if( (data[i].songayhethan * 1) >= 0 && (data[i].hoanthanh != 'yes') && data[i].flagguimail == "yes"){
            
             var string = '<b>.TênCV: ' + `</b><span style='color: blue'>` + data[i].tencv + ` </span>
                             <span>` + ` ngày đến hạn: </span>
                             <span style="color: red">` + data[i].songayhethan + `</span> ngày <br>
-                            ` + ` trạng thái hoàn thành: </span>
-                            <span style="color: red">` + data[i].hoanthanh + `</span> ngày <br>
                             `
+            // var string = data[i].tencv
             text = text + string
            
         }
         
          
     }
-    //console.log(text)
+    // console.log(text)
     const daynow = moment().format('DD-MM-YYYY')
     if(text != ''){
         text = `Hôm nay ngày: `+ daynow + ` <br>` + text
+
         var mainOptions = { 
             from: process.env.HouseFrom,
             to: process.env.HouseEmailTo,
@@ -50,7 +50,6 @@ var moment = require('moment')
             html: text ,
             
         }
-    
         transporter.sendMail(mainOptions, function(err, info){
             if (err) {
                 console.log(err);
@@ -60,6 +59,7 @@ var moment = require('moment')
                 return null
             }
         });
+
         // console.log('>>>sendmail: ', text)
     }else{
         

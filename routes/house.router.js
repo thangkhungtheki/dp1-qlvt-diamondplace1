@@ -112,6 +112,11 @@ router.get('/cronjobsendmail', async(req, res) => {
   return res.status(200).send('ok');
 })
 
+router.get('/cronjobcheckvasuadblaplai', async(req, res) => {
+ 
+  return res.status(200).send('ok');
+})
+
 function authenticated(req, res, next) {
     if (req.isAuthenticated()) {
       return next();
@@ -142,6 +147,10 @@ async function tinhngayconlai(data){
     for (let i = 0; i < data.length; i++) {
         
         let songay = moment(data[i].ngayketthuc).diff(daynow, 'days');
+        let songayconlaicuangaybatdau = moment(data[i].ngaybatdau).diff(daynow, 'days');
+        if(songayconlaicuangaybatdau * 1 <= data[i].ngayguimail * 1 ){
+          data[i].flagguimail = "yes"
+        }
         //console.log('Data số ngày: ',songay);
         data[i].songayhethan = songay
         newdata.push(data[i])
