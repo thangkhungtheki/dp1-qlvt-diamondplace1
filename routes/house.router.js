@@ -121,8 +121,8 @@ router.get('/cronjobchecklaplai', async(req, res) => {
     // console.log(">>>songaythehan: ",newdata[i].songayhethan)
     if(newdata[i].songayhethan * 1 <= 0 && newdata[i].laplai == 'yes'){
       // console.log('>>>songayhethan', newdata[i].songayhethan)
-      
-      const fixdaynow = moment(daynow).add(newdata[i].songayhethan, 'days')
+      let test2 = newdata[i].songayhethan * 1
+      const fixdaynow = moment(daynow).add(test2, 'days')
       let test = newdata[i].timehethan * 1
       //console.log(test)
       const nextDay = moment(fixdaynow).add(test, 'days');
@@ -133,10 +133,10 @@ router.get('/cronjobchecklaplai', async(req, res) => {
         hoanthanh: 'no',
         flagguimail: 'no'
       }
-      console.log(doc)
+      // console.log(doc)
       let result = await xulyhouse.xulycronjoblaplai(newdata[i]._id, doc)
       if(result){
-        console.log(result)
+        // console.log(result)
       }
     }
   }
