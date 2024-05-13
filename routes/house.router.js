@@ -3,7 +3,7 @@ var router = express.Router()
 var xulyhouse = require('../CRUD/xuly_house')
 var moment = require('moment')
 var sendmail = require('../sendmail/house.sendmail')
-
+moment.updateLocale('en', null);
 
 router.get('/cvdinhky', authenticated, (req, res) => {
     res.render('admin_house/main/view_cvdinhky')
@@ -112,6 +112,37 @@ router.get('/cronjobsendmail', async(req, res) => {
   return res.status(200).send('ok');
 })
 
+router.get('/cronjobchecklaplai', async(req, res) => {
+  const docs = await xulyhouse.tim()
+  const newdata = await tinhngayconlai(docs)
+  // console.log(newdata)
+  var daynow = moment().format('YYYY-MM-DD');
+  for (let i = 0 ; i < newdata.length; i++){
+    // console.log(">>>songaythehan: ",newdata[i].songayhethan)
+    if(newdata[i].songayhethan * 1 <= 0 && newdata[i].laplai == 'yes'){
+      // console.log('>>>songayhethan', newdata[i].songayhethan)
+      
+      const fixdaynow = moment(daynow).add(newdata[i].songayhethan, 'days')
+      let test = newdata[i].timehethan * 1
+      //console.log(test)
+      const nextDay = moment(fixdaynow).add(test, 'days');
+      const fixnextDay = moment(nextDay).format('YYYY-MM-DD')
+      const doc = {
+        ngaybatdau: moment(fixdaynow).format('YYYY-MM-DD'),
+        ngayketthuc: fixnextDay,
+        hoanthanh: 'no',
+        flagguimail: 'no'
+      }
+      console.log(doc)
+      let result = await xulyhouse.xulycronjoblaplai(newdata[i]._id, doc)
+      if(result){
+        console.log(result)
+      }
+    }
+  }
+  return res.send('done!!!')
+})
+
 router.get('/cronjobcheckvasuadblaplai', async(req, res) => {
  
   return res.status(200).send('ok');
@@ -143,12 +174,19 @@ async function tinhngayconlai(data){
     //     const update_e = {...e, ['songayconlai']: songay, i }
     //     return update_e
     // })
-    var daynow = moment().format('YYYY-MM-DD');
+    // const daynow = new Date();
+    // const outputDateFormat = 'YYYY-MM-DD';
+    // const fixdaynow = moment(daynow).format(outputDateFormat);
+    const daynow = moment().format('YYYY-MM-DD');
     for (let i = 0; i < data.length; i++) {
-        
-        let songay = moment(data[i].ngayketthuc).diff(daynow, 'days');
-        let songayconlaicuangaybatdau = moment(data[i].ngaybatdau).diff(daynow, 'days');
-        if(songayconlaicuangaybatdau * 1 <= data[i].ngayguimail * 1 ){
+        let ngayketthuc = moment(data[i].ngayketthuc).format('YYYY-MM-DD')
+        let ngaybatdau = moment(data[i].ngaybatdau).format('YYYY-MM-DD')
+        let songay = moment(ngayketthuc).diff(daynow, 'days');
+        let songayconlaicuangaybatdau = moment(ngaybatdau).diff(daynow, 'days');
+        // console.log('>>>tencv', data[i].tencv)
+        // console.log(">>>songay: ",songay)
+        // console.log(">>>songayconlaicua ngaybatdau: ",songayconlaicuangaybatdau)
+        if(songayconlaicuangaybatdau <= data[i].ngayguimail ){
           data[i].flagguimail = "yes"
         }
         //console.log('Data số ngày: ',songay);

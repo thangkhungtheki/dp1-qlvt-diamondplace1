@@ -37,6 +37,15 @@ async function updatehoanthanh(id, trangthai) {
    }
 }
 
+async function xulycronjoblaplai(id, doc) {
+    try{
+       await housemodem.findByIdAndUpdate(id, doc)
+       return true
+   }catch(e){
+       return false
+   }
+}
+
 async function tim(){
     try{
         const docs = await housemodem.find()
@@ -63,5 +72,6 @@ module.exports = {
     sua,
     tim,
     timid,
-    updatehoanthanh
+    updatehoanthanh,
+    xulycronjoblaplai
 }

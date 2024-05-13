@@ -73,7 +73,7 @@
   <div class="form-row">
     <div class="form-group col-md-6">
       <label>Số ngày còn lại-(tính từ ngày hiện tại)</label>
-      <input type="number" class="form-control" id="txtsongayconlai" name="ngayconlai" readonly>
+      <input type="text" class="form-control" id="txtsongayconlai" name="ngayconlai" readonly>
     </div>
     <div class="form-group col-md-6">
       <label>Lặp lại theo step begin-end</label>
@@ -136,9 +136,9 @@
   function fn_ngayconlai() {
     var ngay1 = $('#txtngaykethuc').val(); // Định dạng: yyyy-mm-dd
     var ngay2 = $('#txtngayhientai').val(); // Định dạng: yyyy-mm-dd
-    var soNgay = tinhSoNgay(ngay1, ngay2);
-    // console.log(soNgay)
-    $('#txtsongayconlai').val(soNgay)
+    var soNgay2 = tinhSoNgay(ngay1, ngay2);
+    //console.log(soNgay2)
+    $('#txtsongayconlai').val(soNgay2)
     fn_tinhbuoctimehethan()
     // $('#txttimehethan').val(soNgay)
   }
@@ -149,10 +149,10 @@
     var date2 = new Date(ngay2);
 
     // Tính số miligiây giữa hai ngày và chuyển thành số ngày
-    var soMiligiay = Math.abs(date2 - date1);
-    var soNgay = Math.ceil(soMiligiay / (1000 * 60 * 60 * 24));
-
-    return soNgay;
+    var soMiligiay = date1 - date2;
+    var soNgay1 = Math.floor(soMiligiay / (1000 * 60 * 60 * 24));
+    console.log('>>>somiligiay', soMiligiay)
+    return soNgay1;
   }
   function fn_tinhbuoctimehethan() {
     var ngay1 = $('#txtngaykethuc').val(); // Định dạng: yyyy-mm-dd
