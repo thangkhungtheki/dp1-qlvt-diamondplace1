@@ -174,7 +174,7 @@ router
                 }
             }
         } else {
-            res.redirect("/signin")
+            return res.redirect("/signin")
         }
     })
 
@@ -193,7 +193,7 @@ router.get('/viewcreatethietbi', async (req, res) => {
             daynow: daynow
         })
     } else {
-        res.redirect("/signin")
+        return res.redirect("/signin")
     }
 })
 
@@ -213,7 +213,7 @@ router
                 daynow: daynow
             })
         } else {
-            res.redirect("/signin")
+            return res.redirect("/signin")
         }
     })
     .post('/baotridinhky', async (req, res) => {
@@ -246,7 +246,7 @@ router
                 }
             }
         } else {
-            res.redirect("/signin")
+            return res.redirect("/signin")
         }
     })
 
@@ -316,7 +316,7 @@ router.get('/thietbi', async (req, res) => {
             activetbdp2: '',
         })
     } else {
-        res.redirect("/signin")
+        return res.redirect("/signin")
     }
 })
 var dat = {
@@ -387,14 +387,14 @@ router.post('/delete', async (req, res) => {
     if (req.isAuthenticated()) {
         let a = await xulydb.xoaTb(req.body.Ma)
         if (a == true) {
-            res.redirect("/thietbi")
+            return res.redirect("/thietbi")
         } else {
             return res.send("Loi khong xoa duoc")
         }
 
 
     } else {
-        res.redirect("/signin")
+        return res.redirect("/signin")
     }
 
 })
@@ -410,7 +410,7 @@ router.post('/deletedp2', async (req, res) => {
 
 
     } else {
-        res.redirect("/signin")
+        return res.redirect("/signin")
     }
 
 })
@@ -480,7 +480,7 @@ router.get("/themthietbi", (req, res) => {
             activethem: '',
         })
     } else {
-        res.redirect("/signin")
+        return res.redirect("/signin")
     }
 })
 
@@ -495,11 +495,11 @@ router.get("/themthietbidp2", (req, res) => {
 
         })
     } else {
-        res.redirect("/signin")
+        return res.redirect("/signin")
     }
 })
 
-router.post("/themtb", (req, res) => {
+router.post("/themtb", async (req, res) => {
     let doc = {
         Ma: req.body.txtma,
         Mainboard: req.body.txtmain,
@@ -516,8 +516,8 @@ router.post("/themtb", (req, res) => {
         Nguoidung: req.body.txtnguoidung,
         Vitri: req.body.txtvitri,
     }
-    xulydb.themtb(doc)
-    res.redirect("/themthietbi")
+    await xulydb.themtb(doc)
+    return res.redirect("/themthietbi")
 })
 
 router.post("/themtbdp2", (req, res) => {
@@ -602,7 +602,7 @@ router.get('/vattutest', (req, res) => {
 
         })
     } else {
-        res.redirect('signin')
+        return res.redirect('signin')
     }
 })
 
@@ -642,7 +642,7 @@ router.get('/xuatvattutest', (req, res) => {
 
         })
     } else {
-        res.redirect('signin')
+        return res.redirect('signin')
     }
 })
 
@@ -659,7 +659,7 @@ router.post('/luuxuatvattu', async (req, res) => {
     console.log(doc)
 
     await xulydb.luuxuatvattu(doc)
-    res.redirect('/xuatvattutest')
+    return res.redirect('/xuatvattutest')
 })
 
 router.get('/mavattutest', (req, res) => {
@@ -675,7 +675,7 @@ router.get('/mavattutest', (req, res) => {
 
         })
     } else {
-        res.redirect('signin')
+        return res.redirect('signin')
     }
 })
 
@@ -729,7 +729,7 @@ router.get('/baocaovattu', async (req, res) => {
 
         })
     } else {
-        res.redirect('signin')
+        return res.redirect('signin')
     }
 
 })

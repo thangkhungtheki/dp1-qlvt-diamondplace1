@@ -64,7 +64,7 @@ router.get('/', async (req, res) => {
 
 
   } else {
-    res.redirect('/signin')
+    return res.redirect('/signin')
   }
 
 })
@@ -113,10 +113,10 @@ router.post('/taoyc', filemulter.upload.array('image', 4), filemulter.handleErro
       // Lấy thông báo từ req.flash và truyền nó cho template
       if (result == true) {
         req.flash('success', 'Dữ liệu đã được lưu và gửi thành công!');
-        res.redirect('/qlkt')
+        return res.redirect('/qlkt')
       } else {
         req.flash('success', 'Chưa lưu, cần nhập đầy đủ thông tin vào !');
-        res.redirect('/qlkt')
+        return res.redirect('/qlkt')
       }
       // console.log(fileName)
     } catch (error) {
@@ -126,7 +126,7 @@ router.post('/taoyc', filemulter.upload.array('image', 4), filemulter.handleErro
 
     // }
   } else {
-    res.redirect('/signin')
+    return res.redirect('/signin')
   }
 })
 
@@ -139,7 +139,7 @@ router.post('/updatettbp', async (req, res) => {
   if(doc){
     sendmailpkythuat.sendmail(doc)
   }
-  res.end()
+  return res.end()
 })
 
 router.post('/deletettbp', async (req, res) => {
@@ -147,7 +147,7 @@ router.post('/deletettbp', async (req, res) => {
   console.log('đã xoá: ' + ma)
   await ycsc.deletettbp(ma)
 
-  res.end()
+  return res.end()
 })
 
 router.post('/deletephongkythuat', ruleAdmin, async (req, res) => {
@@ -164,7 +164,7 @@ router.get('/xemlichsu', authenticated, async (req, res) => {
   // console.log(user)
   switch (req.user.role) {
     case "admin":
-      res.redirect('/vattutest')
+      return res.redirect('/vattutest')
       break;
     case "tp":
       let doc = await ycsc.docyeucautheotrangthai('duyet', req.user.bp)
@@ -262,7 +262,7 @@ router.post('/updatekythuat', filemulter.upload.array('image2', 4), filemulter.h
       return res.send(e)
     }
   } else {
-    res.redirect('/signin')
+    return res.redirect('/signin')
   }
 })
 
@@ -330,7 +330,7 @@ function authenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   }
-  res.redirect('/login');
+  return res.redirect('/login');
 }
 
 function ruleAdmin(req, res, next) {
@@ -338,7 +338,7 @@ function ruleAdmin(req, res, next) {
     return next();
   }
 
-  res.redirect('/signin');
+  return res.redirect('/signin');
 }
 
 function ruleroot(req, res, next) {
@@ -346,11 +346,11 @@ function ruleroot(req, res, next) {
     if (req.user.role == 'root') {
       return next();
     } else {
-      res.redirect('/qlkt/bieudotron')
+      return res.redirect('/qlkt/bieudotron')
     }
 
   }
-  res.redirect('/signin');
+  return res.redirect('/signin');
 }
 
 router.get('/printyeucau', async (req, res) => {

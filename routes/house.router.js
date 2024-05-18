@@ -52,7 +52,7 @@ router
   //console.log(doc)
   const result = await xulyhouse.sua(id, doc)
   if(result){
-    res.redirect('/house/xemcongviecdinhky')
+    return res.redirect('/house/xemcongviecdinhky')
   }else{
     return res.send('Lỗi không update được >>> check lại hệ thống')
   }
@@ -88,7 +88,7 @@ router.post('/themhouse', async(req, res) => {
   const result = await xulyhouse.them(doc)
   if(result){
     // return res.send('<script> alert("Thêm thành công !!!") ; window.location.href = "/house/themcvdinhky" </script>')
-    res.redirect('/house/themcvdinhky')
+    return res.redirect('/house/themcvdinhky')
   }else{
     return res.send('có lôĩ không thêm được')
   }
@@ -99,7 +99,7 @@ router.post('/delcvdinhky', async(req, res) => {
   // console.log(id)
   const result = await xulyhouse.xoa(id)
   if(result){
-    res.redirect('/house/xemcongviecdinhky')
+    return res.redirect('/house/xemcongviecdinhky')
   }else{
     return res.send('có lỗi không xoá >>> tải lại trang')
   }
