@@ -3,7 +3,38 @@ var moment = require('moment')
 
 
 function sendmail(params){
-
+    var emailpb = ""
+    switch (params[0].bophan) {
+        case "bep":
+            emailpb = " , nt.tu@diamondplace.com.vn"
+            break;
+        case "sales":
+            emailpb = " , sales.manager@diamondplace.com.vn"
+            break;
+        case "fb":
+            emailpb = " , vq.nam@diamondplace.com.vn"
+            break;
+        case "ketoan":
+            emailpb = " , ln.quan@diamondplace.com.vn"
+            break;
+        case "marketing":
+            emailpb = " , Marketing.Ma@diamondplace.com.vn"
+            break;
+        case "avtrangtri":
+            emailpb = " , nv.hieu@diamondplace.com.vn"
+            break;
+        case "house":
+            emailpb = " , House.Keeper@diamondplace.com.vn"
+            break;
+        case "baove":
+            emailpb = " , sec.manager@diamondplace.com.vn"
+            break;
+        case "nhansu":
+            emailpb = " , hr@diamondplace.com.vn"
+            break;        
+        default:
+            break;
+    }
     var transporter =  nodemailer.createTransport({ // config mail server
         host: process.env.hostEmail,
         port: process.env.portEmail,
@@ -28,9 +59,10 @@ Trạng thái : <span style="color: green"> Hoàn thành </span>`
     // console.log(params)
     // console.log(content)
     if(content != ''){
+        var senttoemail = process.env.mailList + emailpb
         var mainOptions = { // thiết lập đối tượng, nội dung gửi mail
             from: process.env.emailFrom,
-            to: process.env.mailList,
+            to: senttoemail,
             //bcc: 'it@diamondplace.com.vn',
             subject: "THÔNG BÁO HOÀN THÀNH PHIẾU YÊU CẦU",
             //text: 'Your text is here',//Thường thi mình không dùng cái này thay vào đó mình sử dụng html để dễ edit hơn
