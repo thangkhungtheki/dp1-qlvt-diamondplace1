@@ -255,7 +255,14 @@ router.post('/updatekythuat', filemulter.upload.array('image2', 4), filemulter.h
     try {
       let fileName = req.files
       let ma = req.body.code
-      let motacuakythuat = req.body.motacuakythuat
+      var motacuakythuat = ''
+      if(req.body.readonlymotacuakythuat){
+        motacuakythuat = req.body.readonlymotacuakythuat + '\n' + req.body.motacuakythuat
+        // console.log('>>> có mota readlonly ', motacuakythuat)
+      }else{
+        motacuakythuat = req.body.motacuakythuat
+        // console.log('>>> ko ', motacuakythuat)
+      }
       let result = await ycsc.updatekythuat(ma, 'dangxuly', motacuakythuat, fileName)
       res.redirect('/qlkt/info?mayeucau=' + ma)
     } catch (e) {

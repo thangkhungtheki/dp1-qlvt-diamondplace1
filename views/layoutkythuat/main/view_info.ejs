@@ -202,7 +202,11 @@
 
             <div class="form-row">
               <label for="exampleFormControlTextarea1">Mô tả công việc thực hiện kỹ thuật:</label>
-              <textarea class="form-control" id="exampleFormControlTextarea2" rows="5" name='motacuakythuat'><%= data[0].motakythuat %></textarea>
+              <textarea class="form-control" id="exampleFormControlTextarea2" rows="5" name='readonlymotacuakythuat' readonly><%= data[0].motakythuat %></textarea>
+            </div>
+            <div class="form-row">
+              <label for="exampleFormControlTextarea1"></label>
+              <textarea class="form-control" id="exampleFormControlTextarea3" rows="5" name='motacuakythuat'></textarea>
             </div>
             <div>Hình ảnh đơn hàng có chữ ký: </div>
             <div class="mx-auto text-center">

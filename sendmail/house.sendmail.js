@@ -26,7 +26,7 @@ var moment = require('moment')
         if( (data[i].songayhethan * 1) >= 0 && (data[i].hoanthanh != 'yes') && data[i].flagguimail == "yes"){
            
             var string = '<b>.TênCV: ' + `</b><span style='color: blue'>` + data[i].tencv + ` </span>` + 
-                            `Vị trí: ` + `<span style='color: green'>` + data[i].vitricv + `</span>` +
+                            `Vị trí/Ngày thực hiện: ` + `<span style='color: green'>` + data[i].vitricv + `</span>` +
                             `<span>` + ` ngày đến hạn: </span>
                             <span style="color: red">` + data[i].songayhethan + `</span> ngày <br>
                             `
