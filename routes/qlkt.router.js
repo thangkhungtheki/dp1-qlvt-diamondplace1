@@ -130,7 +130,7 @@ router.post('/taoyc', filemulter.upload.array('image', 4), filemulter.handleErro
   }
 })
 
-router.post('/updatettbp', async (req, res) => {
+router.post('/updatettbp', authenticated, async (req, res) => {
   //let doc = await ycsc.timyctheoma(req.body.mayeucau)
   let ma = req.body.mayeucau
   //console.log(ma)
@@ -142,7 +142,7 @@ router.post('/updatettbp', async (req, res) => {
   return res.end()
 })
 
-router.post('/deletettbp', async (req, res) => {
+router.post('/deletettbp', authenticated ,async (req, res) => {
   let ma = req.body.mayeucau
   console.log('đã xoá: ' + ma)
   await ycsc.deletettbp(ma)
@@ -360,7 +360,7 @@ function ruleroot(req, res, next) {
   return res.redirect('/signin');
 }
 
-router.get('/printyeucau', async (req, res) => {
+router.get('/printyeucau',authenticated, async (req, res) => {
 
   var user = await xulydb.timUser(req.user.username)
   let mayeucau = req.query.mayeucau
