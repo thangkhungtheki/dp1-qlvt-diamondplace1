@@ -399,8 +399,11 @@ router.get('/printyeucau',authenticated, async (req, res) => {
   //console.log(doc)
   //let datafile = doc[0].filename
   //console.log(datafile)
+  
   if (doc) {
-    return res.render('docformtoejs/phieuyeucau.ejs', { data: doc, user: user, tentruongphong: tentruongphong, myPathENV: process.env.myPathENV })
+    let fixmota = doc[0].mota.replace(/\n/g, '<br>')
+    let fixmotakythuat = doc[0].motakythuat.replace(/\n/g, '<br>')
+    return res.render('docformtoejs/phieuyeucau.ejs', { data: doc, user: user, tentruongphong: tentruongphong, mota: fixmota, motakythuat : fixmotakythuat, myPathENV: process.env.myPathENV })
   }
 
 
