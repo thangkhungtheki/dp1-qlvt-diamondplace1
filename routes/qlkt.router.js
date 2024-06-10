@@ -363,14 +363,44 @@ function ruleroot(req, res, next) {
 router.get('/printyeucau',authenticated, async (req, res) => {
 
   var user = await xulydb.timUser(req.user.username)
+  
   let mayeucau = req.query.mayeucau
   //console.log(mayeucau)
   let doc = await ycsc.timyctheoma(mayeucau)
+  var tentruongphong = ''
+  switch (doc[0].bophan) {
+    case "fb":
+      tentruongphong = 'Văn Quốc Nam'
+      break;
+    case "bep":
+      tentruongphong = 'Nguyễn Thanh Tú'
+      break;
+    case "sales":
+      tentruongphong = 'Phạm Nhật Thịnh'
+      break;
+    case "mar":
+      tentruongphong = 'Phạm Anh Tuấn'
+      break;
+    case "ketoan":
+      tentruongphong = 'Lê Nhựt Quan'
+      break;
+    case "house":
+      tentruongphong = 'Phạm Khắc Quy'
+      break;
+    case "nhansu":  
+      tentruongphong = 'Nguyễn Thị Kim Ngân'
+      break;
+    case "baove":
+      tentruongphong = 'Nguyễn Lý Quốc Khánh'
+      break;  
+    default:
+      break;
+  }
   //console.log(doc)
   //let datafile = doc[0].filename
   //console.log(datafile)
   if (doc) {
-    return res.render('docformtoejs/phieuyeucau.ejs', { data: doc, user: user, myPathENV: process.env.myPathENV })
+    return res.render('docformtoejs/phieuyeucau.ejs', { data: doc, user: user, tentruongphong: tentruongphong, myPathENV: process.env.myPathENV })
   }
 
 
