@@ -6,7 +6,7 @@ function sendmail(params){
     var emailpb = ""
     switch (params[0].bophan) {
         case "bep":
-            emailpb = " , nt.tu@diamondplace.com.vn , Bepdp@diamondplace.com.vn"
+            emailpb = " , nt.tu@diamondplace.com.vn , Bepdp@diamondplace.com.vn , bepdp01@diamondplace.com.vn"
             break;
         case "sales":
             emailpb = " , sales.manager@diamondplace.com.vn"
