@@ -392,6 +392,9 @@ router.get('/printyeucau',authenticated, async (req, res) => {
       break;
     case "baove":
       tentruongphong = 'Nguyễn Lý Quốc Khánh'
+      break;
+    case "avtrangtri":
+      tentruongphong = 'Nguyễn Văn Hiếu'
       break;  
     default:
       break;
