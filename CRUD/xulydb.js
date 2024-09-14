@@ -17,7 +17,7 @@ async function doc_createthietbi(){
     let docs = await _createthietbi.find()
     return docs
 }
-
+ 
 async function them_createthietbi(doc){
     //console.log(doc)
     try{

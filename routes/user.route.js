@@ -30,7 +30,7 @@ router.get("/", (req, res, next) => {
 })
 
 router.get("/signin", (req, res, next) => {
-    // hien thi trang va truyen lai nhung tin nhan tu phia server neu co
+    // hien thi trang va truyen lai nhung tin nhan tu phia server neu co 
     var messages = req.flash('error')
     return res.render("signin", {
         messages: messages,
