@@ -240,7 +240,7 @@ router.get('/viewtheobophan_daduyet', ruleAdmin, async (req, res) => {
 // test biểu đồ thống kê
 router.get('/bieudotron', ruleAdmin, async (req, res) => {
   let total = await tongsuachuaton()
-  return res.render('rootadmin/bangduyetpyc', { _username: '', total: total },)
+  return res.render('rootadmin/bangduyetpyc', { _username: req.user.username, total: total },)
 })
 
 router.get('/tonghophoanthanh', ruleAdmin, async (req, res) => {
