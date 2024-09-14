@@ -378,7 +378,7 @@ router.get('/printyeucau',authenticated, async (req, res) => {
     case "sales":
       tentruongphong = 'Phạm Nhật Thịnh'
       break;
-    case "mar":
+    case "marketing":
       tentruongphong = 'Phạm Anh Tuấn'
       break;
     case "ketoan":
@@ -392,6 +392,9 @@ router.get('/printyeucau',authenticated, async (req, res) => {
       break;
     case "baove":
       tentruongphong = 'Nguyễn Lý Quốc Khánh'
+      break;
+    case "avtrangtri":
+      tentruongphong = 'Nguyễn Văn Hiếu'
       break;  
     default:
       break;
