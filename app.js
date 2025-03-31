@@ -16,6 +16,8 @@ var qltkRouter = require('./routes/qlkt.router')
 var userktRouter = require('./routes/user.kt')
 // dùng router house
 var houseRouter = require('./routes/house.router')
+var routerdongco = require('./routes/dongco.router')
+
 // path database
 mongoose.connect(process.env.DATABASE_URL,{useNewUrlParser:true, useUnifiedTopology: true });
 require('./config/passport'); //vượt qua passport để config trang đăng nhâp/đăng ký
@@ -49,6 +51,7 @@ app.use('/', indexRouter);
 app.use('/qlkt/', qltkRouter);
 app.use('/user/' ,userktRouter )
 app.use('/house/', houseRouter)
+app.use('/dongco/', routerdongco)
 
 app.use((req, res, next) => {
   res.status(404).redirect("/signin");
