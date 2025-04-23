@@ -179,7 +179,9 @@
             <img src="/<%= file.filename %>" atl="..." class="rounded custom-img clickable-image " onclick="showFullSize(this)">
             <% }) %>
           </div>
-
+          <div class="form-group">
+              <button type="button" class="btn btn btn-primary " id="btninyc" onclick="inyeucau()">In yêu cầu</button>
+            </div>
           <% if (data[0].trangthai == 'hoanthanh' && data[0].diem == undefined) { %>
           <%- include('danhgiasao') %>
           <% } else { %>
