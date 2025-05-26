@@ -295,6 +295,16 @@ async function timxuatvattu(__loai){
     return __xuatvattu
 }
 
+async function docUseremail(email){
+    let docs = await _user.findOne({email: email})
+    if(docs){
+        return docs
+    }else{
+        return false
+    }
+    
+}
+
 module.exports = {
     docUser,
     find,
@@ -324,5 +334,6 @@ module.exports = {
     tim_createthietbi,
     sua_createthietbi,
     timUser,
-    tim_createthietbi_baotridinhky
+    tim_createthietbi_baotridinhky,
+    docUseremail
 }
