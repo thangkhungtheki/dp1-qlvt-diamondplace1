@@ -288,6 +288,12 @@ router.get('/updatedongco/app', async(req, res) => {
   
 })
 
+router.get('/dongcoapi', async(req, res) => {
+  let id = req.query.id 
+  let result = await xulydongco.timdongcotheoID(id)
+  res.json(result)
+})
+
 router.get('/checkuser', async (req, res) => {
   let email = req.query.email
   let result = await xulydbuser.docUseremail(email)
