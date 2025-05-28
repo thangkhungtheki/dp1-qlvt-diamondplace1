@@ -48,11 +48,24 @@ async function timdongcotheoID(id){
     }
 }
 
+async function suadatabase(){
+    try {
+        let doc = await _dongco.updateMany(
+            { "ghichu": { "$exists": true } },
+            { "$rename": { "ghichu": "mota" } }
+        )
+        return true
+    } catch (e) {
+        return false
+    }
+}
+
 module.exports = {
     doc_dongco,
     tao_dongco,
     update_dongco,
     delete_dongco,
     timdongcotheoID,
-    loai_dongco
+    loai_dongco,
+    suadatabase
 }

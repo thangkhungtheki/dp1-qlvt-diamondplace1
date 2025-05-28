@@ -79,7 +79,8 @@ router.post('/taodongco', async(req, res) => {
         congsuat: req.body.congsuat,
         model: req.body.model,
         dienap: req.body.dienap,
-        ghichu: req.body.ghichu
+        mota: document.mota,
+        lichsu: document.lichsu,
     }
     console.log(doc)
     let result = await xulydongco.tao_dongco(doc)
@@ -132,7 +133,8 @@ router
         congsuat: req.body.congsuat,
         model: req.body.model,
         dienap: req.body.dienap,
-        ghichu: req.body.ghichu
+        mota: document.mota,
+        lichsu: document.lichsu,
     }
     let id = req.body.id
     let result = await xulydongco.update_dongco(id,doc)
@@ -165,7 +167,8 @@ router.get('/xuatexceldongco', async(req, res) => {
           { header: 'Công Suất', key: 'congsuat', width: 15 },
           { header: 'Model', key: 'model', width: 20 },
           { header: 'Điện Áp', key: 'dienap', width: 15 },
-          { header: 'Ghi Chú', key: 'ghichu', width: 30 },
+          { header: 'Mô tả', key: 'mota', width: 30 },
+          { header: 'Lịch sử', key: 'lichsu', width: 30 },
           { header: 'QR Code', key: 'qrcode', width: 20, style: { alignment: { vertical: 'middle', horizontal: 'center' } } },
         ];
         worksheet.columns = columns;
@@ -187,7 +190,8 @@ router.get('/xuatexceldongco', async(req, res) => {
             congsuat: document.congsuat,
             model: document.model,
             dienap: document.dienap,
-            ghichu: document.ghichu,
+            mota: document.mota,
+            lichsu: document.lichsu,
             qrcode: '',
           });
     
@@ -272,7 +276,8 @@ router.get('/api/capnhatmaqr', async(req, res) => {
                 congsuat: document.congsuat,
                 model: document.model,
                 dienap: document.dienap,
-                ghichu: document.ghichu,
+                mota: document.mota,
+                lichsu: document.lichsu,
                 maqr: base64Image
             }
             let result = await xulydongco.update_dongco(document.id ,docss)
@@ -307,5 +312,9 @@ router.get('/checkuser', async (req, res) => {
   }else{
     res.send(false)
   }
+})
+router.get('/api/suadongcomany', async (req, res) => {
+  let result = await xulydongco.suadatabase()
+  res.send(result)
 })
 module.exports = router
