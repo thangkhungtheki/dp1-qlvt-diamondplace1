@@ -50,13 +50,15 @@ async function timdongcotheoID(id){
 
 async function suadatabase(){
     try {
-        let doc = await _dongco.updateMany(
+        let result = await _dongco.updateMany(
             { "ghichu": { "$exists": true } },
             { "$rename": { "ghichu": "mota" } }
-        )
-        return true
+        );
+        console.log('Update result:', result); // In ra kết quả từ updateMany
+        return true;
     } catch (e) {
-        return false
+        console.error('Update failed:', e); // In ra lỗi nếu có
+        return false;
     }
 }
 
