@@ -79,8 +79,8 @@ router.post('/taodongco', async(req, res) => {
         congsuat: req.body.congsuat,
         model: req.body.model,
         dienap: req.body.dienap,
-        mota: document.mota,
-        lichsu: document.lichsu,
+        mota: req.body.mota,
+        lichsu: req.body.lichsu,
     }
     console.log(doc)
     let result = await xulydongco.tao_dongco(doc)
@@ -133,8 +133,8 @@ router
         congsuat: req.body.congsuat,
         model: req.body.model,
         dienap: req.body.dienap,
-        mota: document.mota,
-        lichsu: document.lichsu,
+        mota: req.body.mota,
+        lichsu: req.body.lichsu,
     }
     let id = req.body.id
     let result = await xulydongco.update_dongco(id,doc)
