@@ -7,6 +7,7 @@ const fs = require('fs')
 const ycsc = require('../CRUD/xulyyeucau')
 const axios = require('axios');
 var xulydbuser = require("../CRUD/xulydb")
+const path = require('path')
 
 // Middleware để thiết lập dữ liệu trong res.locals
 router.use(async (req, res, next) => {
@@ -316,5 +317,57 @@ router.get('/checkuser', async (req, res) => {
 router.get('/api/suadongcomany', async (req, res) => {
   let result = await xulydongco.suadatabase()
   res.send(result)
+})
+router.get('/api/anh1',(req,res) => {
+  const imagePath =path.join(__dirname,'/img/anhdau.jpg'); // Giả sử có 1 ảnh lớn
+
+  // Đảm bảo file tồn tại
+  if (!fs.existsSync(imagePath)) {
+    console.log(imagePath)
+    return res.status(404).send('Image not found');
+  }
+
+  const stat = fs.statSync(imagePath);
+  res.setHeader('Content-Type', 'image/jpeg'); // Hoặc image/png, image/gif
+  res.setHeader('Content-Length', stat.size); // Tùy chọn: giúp client biết kích thước file
+
+  const readStream = fs.createReadStream(imagePath);
+
+  // Pipe stream dữ liệu ảnh trực tiếp đến response
+  readStream.pipe(res);
+
+  readStream.on('error', (err) => {
+    console.error('Error streaming image:', err);
+    res.status(500).send('Error serving image');
+  });
+
+  readStream.on('end', () => {
+    // console.log('Image streamed successfully.'); // Không cần thiết, nhưng có thể dùng để debug
+  });
+})
+router.get('/api/anh2',(req,res) => {
+  const imagePath1 = path.join(__dirname,'img/anhcuoi.jpg'); 
+  // Đảm bảo file tồn tại
+  if (!fs.existsSync(imagePath1)) {
+    return res.status(404).send('khong có ảnh');
+  }
+
+  const stat = fs.statSync(imagePath1);
+  res.setHeader('Content-Type', 'image/jpeg'); // Hoặc image/png, image/gif
+  res.setHeader('Content-Length', stat.size); // Tùy chọn: giúp client biết kích thước file
+
+  const readStream = fs.createReadStream(imagePath1);
+
+  // Pipe stream dữ liệu ảnh trực tiếp đến response
+  readStream.pipe(res);
+
+  readStream.on('error', (err) => {
+    console.error('Error streaming image:', err);
+    res.status(500).send('Error serving image');
+  });
+
+  readStream.on('end', () => {
+    // console.log('Image streamed successfully.'); // Không cần thiết, nhưng có thể dùng để debug
+  });
 })
 module.exports = router
