@@ -389,10 +389,13 @@ router.put('/update-lichsu-string', async (req, res) => {
 
       // Tạo dòng lịch sử mới (thêm dấu ngắt dòng hoặc phân cách nếu muốn)
       let updatedLichsu;
+      const daynow1 = moment().format('DD-MM-YYYY');
+      newHistoryEntry = daynow1 + " " + newHistoryEntry
       if (dongcoToUpdate.lichsu) {
           // Nối chuỗi, thêm dấu phẩy và khoảng trắng để phân cách các mục lịch sử
           // updatedLichsu = `${dongcoToUpdate.lichsu}, ${newHistoryEntry}`;
           // Hoặc nếu muốn xuống dòng (trong text area chẳng hạn):
+         
           updatedLichsu = `${dongcoToUpdate.lichsu}\n${newHistoryEntry}`;
       } else {
           // Nếu lichsu chưa có gì, thì đây là dòng đầu tiên
