@@ -372,8 +372,8 @@ router.get('/api/anh2',(req,res) => {
 // Cập nhật thêm lịch sử (nối chuỗi) cho một thiết bị dựa trên ID, dùng query parameter
 router.put('/update-lichsu-string', async (req, res) => {
   try {
-      let  id  = req.query.id; // Lấy ID của thiết bị từ URL params
-      let  newHistoryEntry  = req.query.lichsu; // Lấy dòng lịch sử mới từ query parameters
+      let  id  = req.body.id; // Lấy ID của thiết bị từ URL params
+      let  newHistoryEntry  = req.body.lichsu; // Lấy dòng lịch sử mới từ query parameters
 
       // Kiểm tra xem có dòng lịch sử mới được gửi lên không
       if (!newHistoryEntry) {
