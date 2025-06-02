@@ -69,7 +69,7 @@ async function xulyupdale_lichsu(id, lichsu){
             { lichsu: lichsu }, // Ghi đè lichsu cũ bằng chuỗi mới đã nối
             { new: true } // Trả về document đã được cập nhật
         );
-        return true
+        return updatedDongco
     }catch(e){
         return false
     }
