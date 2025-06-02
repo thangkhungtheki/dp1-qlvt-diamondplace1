@@ -62,6 +62,19 @@ async function suadatabase(){
     }
 }
 
+async function xulyupdale_lichsu(id, lichsu){
+    try{
+        const updatedDongco = await _dongco.findByIdAndUpdate(
+            id,
+            { lichsu: lichsu }, // Ghi đè lichsu cũ bằng chuỗi mới đã nối
+            { new: true } // Trả về document đã được cập nhật
+        );
+        return true
+    }catch(e){
+        return false
+    }
+}
+
 module.exports = {
     doc_dongco,
     tao_dongco,
@@ -69,5 +82,6 @@ module.exports = {
     delete_dongco,
     timdongcotheoID,
     loai_dongco,
-    suadatabase
+    suadatabase,
+    xulyupdale_lichsu
 }
