@@ -296,7 +296,7 @@ async function timxuatvattu(__loai){
 }
 
 async function docUseremail(email){
-    let docs = await _user.findOne({email: email})
+    let docs = await _user.findOne({mail: email})
     if(docs){
         return docs
     }else{
