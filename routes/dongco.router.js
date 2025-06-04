@@ -304,7 +304,7 @@ router.get('/checkuser', async (req, res) => {
     res.json({
       ten: result.ten,
       congty: result.congty,
-      phong: result.bp,
+      phong: result.bp || null,
       email: result.mail
     })
   }else{
