@@ -48,11 +48,40 @@ async function timdongcotheoID(id){
     }
 }
 
+async function suadatabase(){
+    try {
+        let result = await _dongco.updateMany(
+            { "ghichu": { "$exists": true } },
+            { "$rename": { "ghichu": "mota" } }
+        );
+        console.log('Update result:', result); // In ra kết quả từ updateMany
+        return true;
+    } catch (e) {
+        console.error('Update failed:', e); // In ra lỗi nếu có
+        return false;
+    }
+}
+
+async function xulyupdale_lichsu(id, lichsu){
+    try{
+        const updatedDongco = await _dongco.findByIdAndUpdate(
+            id,
+            { lichsu: lichsu }, // Ghi đè lichsu cũ bằng chuỗi mới đã nối
+            { new: true } // Trả về document đã được cập nhật
+        );
+        return updatedDongco
+    }catch(e){
+        return false
+    }
+}
+
 module.exports = {
     doc_dongco,
     tao_dongco,
     update_dongco,
     delete_dongco,
     timdongcotheoID,
-    loai_dongco
+    loai_dongco,
+    suadatabase,
+    xulyupdale_lichsu
 }

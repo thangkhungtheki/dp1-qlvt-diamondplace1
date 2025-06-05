@@ -7,6 +7,7 @@ const fs = require('fs')
 const ycsc = require('../CRUD/xulyyeucau')
 const axios = require('axios');
 var xulydbuser = require("../CRUD/xulydb")
+const path = require('path')
 
 // Middleware để thiết lập dữ liệu trong res.locals
 router.use(async (req, res, next) => {
@@ -79,7 +80,8 @@ router.post('/taodongco', async(req, res) => {
         congsuat: req.body.congsuat,
         model: req.body.model,
         dienap: req.body.dienap,
-        ghichu: req.body.ghichu
+        mota: req.body.mota,
+        lichsu: req.body.lichsu,
     }
     console.log(doc)
     let result = await xulydongco.tao_dongco(doc)
@@ -132,7 +134,8 @@ router
         congsuat: req.body.congsuat,
         model: req.body.model,
         dienap: req.body.dienap,
-        ghichu: req.body.ghichu
+        mota: req.body.mota,
+        lichsu: req.body.lichsu,
     }
     let id = req.body.id
     let result = await xulydongco.update_dongco(id,doc)
@@ -165,7 +168,8 @@ router.get('/xuatexceldongco', async(req, res) => {
           { header: 'Công Suất', key: 'congsuat', width: 15 },
           { header: 'Model', key: 'model', width: 20 },
           { header: 'Điện Áp', key: 'dienap', width: 15 },
-          { header: 'Ghi Chú', key: 'ghichu', width: 30 },
+          { header: 'Mô tả', key: 'mota', width: 30 },
+          { header: 'Lịch sử', key: 'lichsu', width: 30 },
           { header: 'QR Code', key: 'qrcode', width: 20, style: { alignment: { vertical: 'middle', horizontal: 'center' } } },
         ];
         worksheet.columns = columns;
@@ -187,7 +191,8 @@ router.get('/xuatexceldongco', async(req, res) => {
             congsuat: document.congsuat,
             model: document.model,
             dienap: document.dienap,
-            ghichu: document.ghichu,
+            mota: document.mota,
+            lichsu: document.lichsu,
             qrcode: '',
           });
     
@@ -272,7 +277,8 @@ router.get('/api/capnhatmaqr', async(req, res) => {
                 congsuat: document.congsuat,
                 model: document.model,
                 dienap: document.dienap,
-                ghichu: document.ghichu,
+                mota: document.mota,
+                lichsu: document.lichsu,
                 maqr: base64Image
             }
             let result = await xulydongco.update_dongco(document.id ,docss)
@@ -284,9 +290,6 @@ router.get('/api/capnhatmaqr', async(req, res) => {
     res.send('make by thang khung the ki')
 })
 
-router.get('/updatedongco/app', async(req, res) => {
-  
-})
 
 router.get('/dongcoapi', async(req, res) => {
   let id = req.query.id 
@@ -301,11 +304,115 @@ router.get('/checkuser', async (req, res) => {
     res.json({
       ten: result.ten,
       congty: result.congty,
-      phong: result.bp,
+      phong: result.bp || null,
       email: result.mail
     })
   }else{
     res.send(false)
   }
 })
+router.get('/api/suadongcomany', async (req, res) => {
+  let result = await xulydongco.suadatabase()
+  res.send(result)
+})
+router.get('/api/anh1',(req,res) => {
+  const imagePath =path.join(__dirname,'/img/anhdau.jpg'); // Giả sử có 1 ảnh lớn
+
+  // Đảm bảo file tồn tại
+  if (!fs.existsSync(imagePath)) {
+    console.log(imagePath)
+    return res.status(404).send('Image not found');
+  }
+
+  const stat = fs.statSync(imagePath);
+  res.setHeader('Content-Type', 'image/jpeg'); // Hoặc image/png, image/gif
+  res.setHeader('Content-Length', stat.size); // Tùy chọn: giúp client biết kích thước file
+
+  const readStream = fs.createReadStream(imagePath);
+
+  // Pipe stream dữ liệu ảnh trực tiếp đến response
+  readStream.pipe(res);
+
+  readStream.on('error', (err) => {
+    console.error('Error streaming image:', err);
+    res.status(500).send('Error serving image');
+  });
+
+  readStream.on('end', () => {
+    // console.log('Image streamed successfully.'); // Không cần thiết, nhưng có thể dùng để debug
+  });
+})
+router.get('/api/anh2',(req,res) => {
+  const imagePath1 = path.join(__dirname,'img/anhcuoi.jpg'); 
+  // Đảm bảo file tồn tại
+  if (!fs.existsSync(imagePath1)) {
+    return res.status(404).send('khong có ảnh');
+  }
+
+  const stat = fs.statSync(imagePath1);
+  res.setHeader('Content-Type', 'image/jpeg'); // Hoặc image/png, image/gif
+  res.setHeader('Content-Length', stat.size); // Tùy chọn: giúp client biết kích thước file
+
+  const readStream = fs.createReadStream(imagePath1);
+
+  // Pipe stream dữ liệu ảnh trực tiếp đến response
+  readStream.pipe(res);
+
+  readStream.on('error', (err) => {
+    console.error('Error streaming image:', err);
+    res.status(500).send('Error serving image');
+  });
+
+  readStream.on('end', () => {
+    // console.log('Image streamed successfully.'); // Không cần thiết, nhưng có thể dùng để debug
+  });
+})
+// PUT /api/dongco/update-lichsu/:id
+// Cập nhật thêm lịch sử cho một thiết bị dựa trên ID
+// Cập nhật thêm lịch sử (nối chuỗi) cho một thiết bị dựa trên ID, dùng query parameter
+router.put('/update-lichsu-string', async (req, res) => {
+  try {
+      let  id  = req.body.id; // Lấy ID của thiết bị từ URL params
+      let  newHistoryEntry  = req.body.lichsu; // Lấy dòng lịch sử mới từ query parameters
+
+      // Kiểm tra xem có dòng lịch sử mới được gửi lên không
+      if (!newHistoryEntry) {
+          return res.status(400).json({ message: 'Dữ liệu lịch sử mới không được cung cấp trong query parameter (newHistoryEntry).' });
+      }
+
+      // Tìm thiết bị để lấy lịch sử cũ
+      const dongcoToUpdate = await xulydongco.timdongcotheoID(id);
+
+      if (!dongcoToUpdate) {
+          return res.status(404).json({ message: 'Không tìm thấy thiết bị với ID này.' });
+      }
+
+      // Tạo dòng lịch sử mới (thêm dấu ngắt dòng hoặc phân cách nếu muốn)
+      let updatedLichsu;
+      const daynow1 = moment().format('DD-MM-YYYY');
+      newHistoryEntry = daynow1 + " " + newHistoryEntry
+      if (dongcoToUpdate.lichsu) {
+          // Nối chuỗi, thêm dấu phẩy và khoảng trắng để phân cách các mục lịch sử
+          // updatedLichsu = `${dongcoToUpdate.lichsu}, ${newHistoryEntry}`;
+          // Hoặc nếu muốn xuống dòng (trong text area chẳng hạn):
+         
+          updatedLichsu = `${dongcoToUpdate.lichsu}\n${newHistoryEntry}`;
+      } else {
+          // Nếu lichsu chưa có gì, thì đây là dòng đầu tiên
+          updatedLichsu = newHistoryEntry;
+      }
+
+      // Cập nhật trường lichsu
+      let updatedDongco = await xulydongco.xulyupdale_lichsu(id, updatedLichsu);
+
+      res.status(200).json({
+          message: 'Cập nhật lịch sử (nối chuỗi) thành công!',
+          dongco: updatedDongco
+      });
+
+  } catch (error) {
+      console.error('Lỗi khi cập nhật lịch sử (nối chuỗi):', error);
+      res.status(500).json({ message: 'Lỗi server nội bộ.', error: error.message });
+  }
+});
 module.exports = router
