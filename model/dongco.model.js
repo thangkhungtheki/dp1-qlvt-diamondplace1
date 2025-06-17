@@ -11,7 +11,8 @@ const schema = new Schema({
     dienap: {type: String, required: false},
     mota: {type: String, required: false},
     lichsu: {type: String, required: false},
-    maqr: {type: String, require: false}
+    maqr: {type: String, require: false},
+    maqrcochu: {type: String, require: false}
 })
 
 

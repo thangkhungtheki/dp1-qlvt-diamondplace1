@@ -8,6 +8,8 @@ const ycsc = require('../CRUD/xulyyeucau')
 const axios = require('axios');
 var xulydbuser = require("../CRUD/xulydb")
 const path = require('path')
+const sharp = require('sharp');
+const { createCanvas, loadImage, registerFont } = require('canvas');
 
 // Middleware để thiết lập dữ liệu trong res.locals
 router.use(async (req, res, next) => {
@@ -196,9 +198,9 @@ router.get('/xuatexceldongco', async(req, res) => {
             qrcode: '',
           });
     
-          if (document.maqr) {
+          if (document.maqrcochu) {
             try {
-              const base64Data = document.maqr.replace(/^data:image\/\w+;base64,/, '');
+              const base64Data = document.maqrcochu.replace(/^data:image\/\w+;base64,/, '');
               const imageBuffer = Buffer.from(base64Data, 'base64');
     
               const imageId = workbook.addImage({
@@ -415,4 +417,323 @@ router.put('/update-lichsu-string', async (req, res) => {
       res.status(500).json({ message: 'Lỗi server nội bộ.', error: error.message });
   }
 });
+
+// Hàm tiện ích để escape các ký tự đặc biệt trong XML
+function escapeXml(unsafe) {
+    if (typeof unsafe !== 'string') {
+        unsafe = String(unsafe); // Đảm bảo chuyển đổi thành chuỗi để xử lý
+    }
+    return unsafe.replace(/[<>&'"]/g, function (c) {
+        switch (c) {
+            case '<': return '&lt;';
+            case '>': return '&gt;';
+            case '&': return '&amp;';
+            case '\'': return '&apos;';
+            case '"': return '&quot;';
+            default: return c; // Trường hợp không khớp, trả về ký tự gốc
+        }
+    });
+}
+
+// Route API để tạo ảnh composite
+// router.get('/generate-device-report', async (req, res) => {
+//     try {
+//         // Giả sử xulydongco.doc_dongco() trả về một mảng các documents từ MongoDB
+//         const documents = await xulydongco.doc_dongco(); // Giữ nguyên hàm lấy dữ liệu của bạn
+        
+//         if (!documents || documents.length === 0) {
+//             return res.status(404).json({ message: 'No device documents found.' });
+//         }
+
+//         const docss = documents[0]; // Lấy document đầu tiên
+
+//         // --- Đường dẫn và đọc ảnh nền mặc định ---
+//         // Đảm bảo đường dẫn này đúng. Ví dụ:
+//         // Nếu default-background.png nằm trong thư mục 'img' ngang hàng với file route này
+//         const defaultImagePath = path.join(__dirname, 'img', 'default-background.png');
+        
+//         let initialImageBuffer;
+//         try {
+//             // fs.readFileSync sẽ trả về Buffer trực tiếp, không cần chuyển đổi Base64
+//             initialImageBuffer = fs.readFileSync(defaultImagePath);
+//             console.log('Successfully read default background image:', defaultImagePath);
+//         } catch (readError) {
+//             console.error('Error reading default background image at path:', defaultImagePath, readError);
+//             return res.status(500).json({ message: 'Default background image not found or unreadable. Please check the path and file existence.' });
+//         }
+//         // --- Kết thúc đọc ảnh mặc định ---
+
+//         // Kiểm tra dữ liệu cần thiết
+//         if (!docss || !initialImageBuffer || !docss.maqr) {
+//             // initialImageBuffer đã là Buffer, không phải Base64 string
+//             return res.status(400).json({ message: 'Missing required data (device data, background image, or QR code).' });
+//         }
+
+//         // Lấy dữ liệu từ docss và escape các ký tự đặc biệt cho SVG
+//         const deviceName = escapeXml(docss.tenthietbi); // ÁP DỤNG ESCAPE Ở ĐÂY
+//         const location = escapeXml(docss.vitri);       // ÁP DỤNG ESCAPE Ở ĐÂY
+//         const qrCodeImageBase64 = docss.maqr;
+
+//         console.log('Device Name:', deviceName); // Log tên thiết bị đã được escape
+
+//         // --- 1. Xử lý ảnh với Sharp ---
+//         // initialImageBuffer đã là Buffer, không cần Buffer.from(..., 'base64') nữa
+//         const qrCodeImageBuffer = Buffer.from(qrCodeImageBase64, 'base64');
+
+//         const metadata = await sharp(initialImageBuffer).metadata();
+//         const initialWidth = metadata.width;
+//         const initialHeight = metadata.height;
+
+//         const qrSize = 200; // Kích thước QR code đã có sẵn là 200px
+//         const qrLeft = Math.max(0, (initialWidth - qrSize) / 2);
+//         const qrTop = Math.max(0, (initialHeight - qrSize) / 2);
+
+//         const resizedQrCodeBuffer = qrCodeImageBuffer; // Dùng trực tiếp vì kích thước đã 200px
+
+//         // Ghép QR code lên ảnh nền
+//         const compositeImageBuffer = await sharp(initialImageBuffer)
+//             .composite([
+//                 {
+//                     input: resizedQrCodeBuffer,
+//                     left: Math.round(qrLeft),
+//                     top: Math.round(qrTop),
+//                 },
+//             ])
+//             .toBuffer();
+
+//         // --- 2. Thêm text vào ảnh (Sử dụng Sharp với SVG overlay)---
+//         // Tính toán kích thước font chữ và vị trí dựa trên kích thước ảnh gốc
+//         const deviceNameFontSize = Math.round(initialWidth * 0.05); // Tùy chỉnh hệ số để thay đổi kích thước chữ
+//         const deviceNameY = Math.round(initialHeight * 0.05);        // Vị trí Y của tên thiết bị (10% từ trên)
+
+//         const locationFontSize = Math.round(initialWidth * 0.05);  // Đặt cùng kích thước với tên thiết bị hoặc tùy chỉnh
+//         const locationY = Math.round(initialHeight * 0.7);         // Vị trí Y của vị trí (90% từ trên)
+
+//         // Tạo SVG cho phần tên thiết bị
+//         const svgTextTop = `
+//             <svg >
+//                 <style>
+//                      .device-name-text {
+//                         font-family: Arial, sans-serif;
+//                         font-size: ${deviceNameFontSize}px;
+//                         fill: yellow;      /* Màu chữ: Vàng sáng */
+//                         stroke: black;     /* Viền chữ: Đen */
+//                         stroke-width: 2px; /* Độ dày viền: 2px (có thể điều chỉnh) */
+//                         text-anchor: middle;
+//                         font-weight: bold;
+//                     }
+//                 </style>
+//                 <text x="${initialWidth / 2}" y="${deviceNameY}" class="device-name-text">Đây là dòng test trên</text>
+//             </svg>
+//         `;
+
+//         // Tạo SVG cho phần vị trí
+//         const svgTextBottom = `
+//             <svg >
+//                 <style>
+//                     .location-text { font-family: Arial, sans-serif;
+//                         font-size: ${locationFontSize}px;
+//                         fill: yellow;      /* Màu chữ: Vàng sáng */
+//                         stroke: black;     /* Viền chữ: Đen */
+//                         stroke-width: 2px; /* Độ dày viền: 2px (có thể điều chỉnh) */
+//                         text-anchor: middle; 
+//                         }
+//                 </style>
+//                 <text x="${initialWidth / 2}" y="${locationY}" class="location-text">Đây là dòng text dưới</text>
+//             </svg>
+//         `;
+
+//         // Ghép các lớp SVG text lên ảnh composite
+//         const finalImageBuffer = await sharp(compositeImageBuffer)
+//             .composite([
+//                 { input: Buffer.from("svgTextTop"),  top: 0, left: 0, blend: 'overlay' },
+//                 { input: Buffer.from("svgTextBottom"), top: 0, left: 0, blend: 'overlay' },
+//             ])
+//             .png() // Quan trọng: Xuất ra PNG để giữ chất lượng và hỗ trợ trong suốt
+//             .toBuffer()
+           
+//         // --- 3. Trả về chuỗi base64 của ảnh ---
+//         const finalImageBase64 = finalImageBuffer.toString('base64');
+//         res.status(200).json({ imageBase64: finalImageBase64 });
+
+//     } catch (error) {
+//         console.error('Error generating composite image:', error);
+//         res.status(500).json({ message: 'Failed to generate composite image.', error: error.message });
+//     }
+// });
+
+router.get('/generate-device-maqrcochu', async (req, res) => {
+    try {
+        const documents = await xulydongco.doc_dongco();
+        if (!documents || documents.length === 0) {
+            return res.status(404).json({ message: 'No device documents found.' });
+        }
+
+        const docss = documents[0];
+        const defaultImagePath = path.join(__dirname, 'img', 'default-background.png');
+
+        let backgroundImage;
+        try {
+            backgroundImage = await loadImage(defaultImagePath);
+        } catch (err) {
+            console.error('Failed to load background image', err);
+            return res.status(500).json({ message: 'Failed to load background image' });
+        }
+
+        if (!docss || !docss.maqr) {
+            return res.status(400).json({ message: 'Missing QR code or device data.' });
+        }
+
+        const deviceName = docss.tenthietbi || 'Tên thiết bị';
+        const location = docss.vitri || 'Vị trí thiết bị';
+        const qrCodeImageBuffer = Buffer.from(docss.maqr, 'base64');
+        const qrImage = await loadImage(qrCodeImageBuffer);
+
+        // Tạo canvas với kích thước ảnh nền
+        const canvas = createCanvas(backgroundImage.width, backgroundImage.height);
+        const ctx = canvas.getContext('2d');
+
+        // Vẽ nền
+        ctx.drawImage(backgroundImage, 0, 0);
+
+        // Tính vị trí và vẽ QR
+        const qrSize = 200;
+        const qrLeft = (backgroundImage.width - qrSize) / 2;
+        const qrTop = (backgroundImage.height - qrSize) / 2;
+        ctx.drawImage(qrImage, qrLeft, qrTop, qrSize, qrSize);
+
+        // Vẽ TÊN THIẾT BỊ (dòng trên)
+        const fontSizeTop = Math.round(backgroundImage.width * 0.05);
+        ctx.font = `bold ${fontSizeTop}px Arial`;
+        ctx.fillStyle = 'yellow';
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 2;
+        const deviceNameY = Math.round(backgroundImage.height * 0.1);
+        ctx.textAlign = 'center';
+        ctx.strokeText(deviceName, backgroundImage.width / 2, deviceNameY);
+        ctx.fillText(deviceName, backgroundImage.width / 2, deviceNameY);
+
+        // Vẽ VỊ TRÍ (dòng dưới)
+        const fontSizeBottom = Math.round(backgroundImage.width * 0.05);
+        ctx.font = `bold ${fontSizeBottom}px Arial`;
+        ctx.fillStyle = 'yellow';
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 2;
+        const locationY = Math.round(backgroundImage.height * 0.95);
+        ctx.strokeText(location, backgroundImage.width / 2, locationY);
+        ctx.fillText(location, backgroundImage.width / 2, locationY);
+
+        // Xuất ra base64
+        const finalBuffer = canvas.toBuffer('image/png');
+        const finalBase64 = finalBuffer.toString('base64');
+        res.status(200).json({ imageBase64: finalBase64 });
+
+    } catch (error) {
+        console.error('Lỗi xử lý canvas:', error);
+        res.status(500).json({ message: 'Lỗi tạo ảnh bằng canvas.', error: error.message });
+    }
+    
+})
+
+router.get('/api/capnhatmaqrcochu', async(req, res) => {
+    // Lấy dữ liệu từ MongoDB
+    const documents = await xulydongco.doc_dongco();
+            // Thêm dữ liệu vào worksheet
+    documents.forEach(async(document) => {
+    //console.log(document)
+        let resultmaqrcochu = await maqrcochu(document)
+        try {
+            const docss = {
+                tenthietbi: document.tenthietbi,
+                loai: document.loai,
+                ngaymua: document.ngaymua,
+                ngayhethan: document.ngayhethan,
+                vitri: document.vitri,
+                congsuat: document.congsuat,
+                model: document.model,
+                dienap: document.dienap,
+                mota: document.mota,
+                lichsu: document.lichsu,
+                maqr: document.maqr,
+                maqrcochu: resultmaqrcochu
+                
+            }
+            let result = await xulydongco.update_dongco(document.id ,docss)
+            console.log('Success')
+        }catch(e){
+            console.log("Loi: ", document.id)
+        }
+    });
+    res.send('make by thang khung the ki maqrcochu')
+})
+async function maqrcochu(docs) {
+  try {
+        const documents = docs
+        if (!documents || documents.length === 0) {
+            return res.status(404).json({ message: 'No device documents found.' });
+        }
+
+        const docss = documents
+        const defaultImagePath = path.join(__dirname, 'img', 'default-background.png');
+
+        let backgroundImage;
+        try {
+            backgroundImage = await loadImage(defaultImagePath);
+        } catch (err) {
+            console.log('Failed to load background image', err);
+            // return res.status(500).json({ message: 'Failed to load background image' });
+        }
+
+        if (!docss || !docss.maqr) {
+             console.log('ko co data maqr');
+        }
+        // console.log(docss)
+        const deviceName = docss.tenthietbi || 'Tên thiết bị';
+        const location = docss.vitri || 'Vị trí thiết bị';
+        const qrCodeImageBuffer = Buffer.from(docss.maqr, 'base64');
+        const qrImage = await loadImage(qrCodeImageBuffer);
+
+        // Tạo canvas với kích thước ảnh nền
+        const canvas = createCanvas(backgroundImage.width, backgroundImage.height);
+        const ctx = canvas.getContext('2d');
+
+        // Vẽ nền
+        ctx.drawImage(backgroundImage, 0, 0);
+
+        // Tính vị trí và vẽ QR
+        const qrSize = 200;
+        const qrLeft = (backgroundImage.width - qrSize) / 2;
+        const qrTop = (backgroundImage.height - qrSize) / 2;
+        ctx.drawImage(qrImage, qrLeft, qrTop, qrSize, qrSize);
+
+        // Vẽ TÊN THIẾT BỊ (dòng trên)
+        const fontSizeTop = Math.round(backgroundImage.width * 0.05);
+        ctx.font = `bold ${fontSizeTop}px Arial`;
+        ctx.fillStyle = 'yellow';
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 2;
+        const deviceNameY = Math.round(backgroundImage.height * 0.1);
+        ctx.textAlign = 'center';
+        ctx.strokeText(deviceName, backgroundImage.width / 2, deviceNameY);
+        ctx.fillText(deviceName, backgroundImage.width / 2, deviceNameY);
+
+        // Vẽ VỊ TRÍ (dòng dưới)
+        const fontSizeBottom = Math.round(backgroundImage.width * 0.05);
+        ctx.font = `bold ${fontSizeBottom}px Arial`;
+        ctx.fillStyle = 'yellow';
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 2;
+        const locationY = Math.round(backgroundImage.height * 0.95);
+        ctx.strokeText(location, backgroundImage.width / 2, locationY);
+        ctx.fillText(location, backgroundImage.width / 2, locationY);
+
+        // Xuất ra base64
+        const finalBuffer = canvas.toBuffer('image/png');
+        const finalBase64 = finalBuffer.toString('base64');
+        return finalBase64
+    } catch (error) {
+        console.log('Lỗi xử lý canvas: ', error);
+        
+    }
+}
 module.exports = router
