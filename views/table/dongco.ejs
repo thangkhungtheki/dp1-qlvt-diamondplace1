@@ -17,7 +17,7 @@
     <div class="card-body">
 
       <div class="table-responsive">
-        <table class="table table-bordered table-striped" id="dataTable" width="100%" cellspacing="0">
+        <table class="table table-bordered table-striped lopchongtranform" id="dataTable" width="100%" cellspacing="0">
           <thead>
             <tr class="table">
               <th>STT</th>
@@ -29,7 +29,7 @@
               <th>Công suất</th>
               <th>Model</th>
               <th>Điện áp</th>
-              <th>Mô tả</th>
+              <!-- <th>Mô tả</th> -->
               <th>Control</th>
             </tr>
           </thead> 
@@ -44,7 +44,7 @@
               <th>Công suất</th>
               <th>Model</th>
               <th>Điện áp</th>
-              <th>Mô tả</th>
+              <!-- <th>Mô tả</th> -->
               <th>Control</th>
             </tr>
           </tfoot>
@@ -82,9 +82,9 @@
             <td>
               <%= value.dienap %>
             </td>
-            <td>
-              <%= value.mota %>
-            </td>
+            <!-- <td>
+              mota
+            </td> -->
             <td>
 
               <div class="btn btn-info btn-circle btn-sm" onclick="Sua('<%= id %>', '<%= bien %>')" data-toggle="modal" data-target="#suamodal">
@@ -166,4 +166,6 @@
   .blue-text {
     color: blue;
   }
+  
+</style>
 </style>
