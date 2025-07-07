@@ -406,7 +406,7 @@ router.put('/update-lichsu-string', async (req, res) => {
 
       // Cập nhật trường lichsu
       let updatedDongco = await xulydongco.xulyupdale_lichsu(id, updatedLichsu);
-
+      
       res.status(200).json({
           message: 'Cập nhật lịch sử (nối chuỗi) thành công!',
           dongco: updatedDongco
