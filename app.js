@@ -18,6 +18,7 @@ var userktRouter = require('./routes/user.kt')
 var houseRouter = require('./routes/house.router')
 var routerdongco = require('./routes/dongco.router')
 
+const cors = require('cors');
 // path database
 mongoose.connect(process.env.DATABASE_URL,{useNewUrlParser:true, useUnifiedTopology: true });
 require('./config/passport'); //vượt qua passport để config trang đăng nhâp/đăng ký
@@ -28,7 +29,11 @@ app.use(session({
 }))
 
 // backup mongodb 
+app.use(cors())
 
+app.use(cors({
+  origin: ['https://h5.zdn.vn', 'zbrowser://h5.zdn.vn']
+  }));
 
 
 app.use(flash());
