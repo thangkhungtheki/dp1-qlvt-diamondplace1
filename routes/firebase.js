@@ -116,5 +116,16 @@ router.get('/qr-review/:id', async(req, res) => {
   // Render file EJS và truyền dữ liệu vào
   res.render('firebases/qr-review', { itemThietbi, itemUser });
 });
+router.get('/webview', (req, res) => {
+  res.render('firebases/qr-review', {
+    itemThietbi: {} ,
+    itemUser: {
+      ten: 'Nguyễn Văn B',
+      congty: 'Diamondplace',
+      phong: 'KYTHUAT',
+      email: ''
+    }
+  });
+})
 
 module.exports = router;
