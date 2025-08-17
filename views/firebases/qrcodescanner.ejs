@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quét Mã QR</title>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        #qr-reader {
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+        }
+        #qr-result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 8px;
+            font-size: 1.2em;
+            word-wrap: break-word; /* Đảm bảo text không bị tràn */
+        }
+        .loading-text {
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Quét Mã QR & Barcode</h1>
+
+    <div id="qr-reader"></div>
+
+    <div id="qr-result" class="loading-text">
+        <p>Vui lòng đợi, camera đang khởi động...</p>
+    </div>
+
+    <script>
+        // Khởi tạo đối tượng Html5Qrcode
+        const html5QrCode = new Html5Qrcode("qr-reader");
+        const qrResultDiv = document.getElementById("qr-result");
+        
+        // Cấu hình quét
+        const qrCodeConfig = {
+            fps: 10, // Frames per second
+            qrbox: { width: 250, height: 250 }, // Kích thước khung quét
+            facingMode: "environment" // Mặc định sử dụng camera sau của thiết bị
+        };
+
+        // Bắt đầu quét
+        html5QrCode.start(
+            qrCodeConfig,
+            (decodedText, decodedResult) => {
+                // Xử lý khi quét thành công
+                console.log(`Mã đã quét: ${decodedText}`);
+                qrResultDiv.innerHTML = `Mã đã quét: <strong>${decodedText}</strong>`;
+                
+                // Dừng camera sau khi quét thành công
+                html5QrCode.stop().then(() => {
+                    console.log("Camera đã dừng.");
+                }).catch(err => {
+                    console.log("Lỗi khi dừng camera:", err);
+                });
+            },
+            (errorMessage) => {
+                // Xử lý lỗi, không cần hiển thị trên UI
+                // console.warn(`Lỗi khi quét: ${errorMessage}`);
+            }
+        ).catch((err) => {
+            // Xử lý lỗi khi khởi động camera (ví dụ: không có quyền)
+            qrResultDiv.innerHTML = `<p style="color: red;">Lỗi: Không thể khởi động camera. Vui lòng cấp quyền truy cập camera cho trình duyệt.</p>`;
+            console.error("Lỗi khi khởi động camera:", err);
+        });
+    </script>
+</body>
+</html>

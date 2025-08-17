@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Review</title>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; }
+        .layout { padding: 10px; margin: auto; max-width: 600px; }
+        .main-content { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
+        .title, .title1 { font-size: 14px; font-weight: bold; margin-bottom: 5px; text-align: left; }
+        .title1 { font-size: 12px; font-weight: normal; white-space: pre-wrap; }
+        .titlecty { font-size: 18px; text-align: center; color: darkgoldenrod; margin-bottom: 20px; }
+        .mota-button { background-color: #007bff; color: white; font-size: 16px; padding: 10px; border-radius: 8px; text-align: center; border: none; cursor: pointer; width: 100px; margin: auto; display: block; }
+        .history-divider { margin: 20px 0; border-top: 1px solid #ccc; }
+        .scroll-history { max-height: 150px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; border-radius: 4px; }
+        .buttons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .luunoidung, .scan-button { background-color: #00e1ff; color: white; font-size: 18px; border-radius: 10px; padding: 10px; text-align: center; border: none; cursor: pointer; }
+        .scan-button { background-color: #fc0606; }
+        .not-found-message { text-align: center; padding: 50px; color: #777; }
+        #qr-reader {
+            width: 100%;
+            display: none; /* Ẩn vùng quét ban đầu */
+            margin: 20px auto;
+        }
+        #qr-result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 8px;
+            font-size: 1.2em;
+            word-wrap: break-word;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <div class="main-content">
+            <div id="qr-reader"></div>
+
+            <div id="qr-result"></div>
+
+            <% if (itemThietbi) { %>
+                <h2 class="titlecty">Sites: <%= itemUser.congty %></h2>
+                <button class="mota-button">Mô tả</button>
+                <p class="title">Tên: <%= itemThietbi.tenthietbi %></p>
+                <p class="title">Loại: <%= itemThietbi.loai %></p>
+                <p class="title">Ngày mua: <%= itemThietbi.ngaymua %></p>
+                <p class="title">Ngày hết hạn: <%= itemThietbi.ngayhethan %></p>
+                <p class="title">Vị trí: <%= itemThietbi.vitri %></p>
+                <p class="title">Công suất: <%= itemThietbi.congsuat %></p>
+                <p class="title">Model: <%= itemThietbi.model %></p>
+                <p class="title">Điện áp: <%= itemThietbi.dienap %></p>
+                <p class="history-divider">Lịch sử: --------------</p>
+                <div class="scroll-history">
+                    <p class="title1"><%= itemThietbi.lichsu %></p>
+                </div>
+                <div class="buttons-grid">
+                    <button class="luunoidung">Sửa chữa</button>
+                    <button class="scan-button">Quét mã</button>
+                </div>
+            <% } else { %>
+                <div class="not-found-message">
+                    <p>Hãy Quét mã</p>
+                    <button class="scan-button">Quét mã</button>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <script>
+        const qrCode = new Html5Qrcode("qr-reader");
+        const qrReaderDiv = document.getElementById("qr-reader");
+        const qrResultDiv = document.getElementById("qr-result");
+        const mainContentDiv = document.querySelector('.main-content');
+        
+        // Sử dụng Event Delegation để lắng nghe sự kiện click trên toàn bộ body
+        document.body.addEventListener('click', (event) => {
+            // Kiểm tra xem phần tử được click có class 'scan-button' không
+            if (event.target.classList.contains('scan-button')) {
+                startScanning();
+            }
+        });
+
+        async function startScanning() {
+            // Ẩn nội dung chính và hiển thị vùng quét
+            mainContentDiv.style.display = 'none';
+            qrReaderDiv.style.display = 'block';
+
+            const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+            
+            try {
+                await qrCode.start(
+                    { facingMode: "environment" },
+                    config,
+                    (decodedText, decodedResult) => {
+                        // Xử lý khi quét thành công
+                        qrResultDiv.innerHTML = `Mã đã quét: <strong>${decodedText}</strong>`;
+                        
+                        // Dừng camera và hiển thị lại nội dung chính
+                        qrCode.stop().then(() => {
+                            qrReaderDiv.style.display = 'none';
+                            qrResultDiv.style.display = 'block';
+                            mainContentDiv.style.display = 'block';
+                        });
+
+                        // Tại đây, bạn sẽ gọi một hàm để xử lý dữ liệu
+                        // ví dụ: handleScannedData(decodedText);
+                    },
+                    (errorMessage) => {
+                        // Bỏ qua lỗi để tránh spam console
+                    }
+                );
+            } catch (err) {
+                // Hiển thị lỗi nếu không khởi động được camera
+                qrResultDiv.innerHTML = `<p style="color: red;">Lỗi: Không thể khởi động camera. Vui lòng cấp quyền truy cập.</p>`;
+                qrResultDiv.style.display = 'block';
+                qrReaderDiv.style.display = 'none';
+                mainContentDiv.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

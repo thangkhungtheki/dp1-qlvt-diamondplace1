@@ -1,0 +1,90 @@
+<div style="margin-bottom:20px; color: rgba(47, 7, 225, 0.925); position: relative; bottom: auto;">
+  <h3>FORM SỬA ĐỘNG CƠ / MÁY LẠNH</h3>
+</div>
+<div>
+  <% if (typeof msg != 'undefined') { %>
+    <div style="color: green; align-items: center;">
+      <%= msg %>
+    </div>
+  <% } else if (typeof msge != 'undefined') { %>
+    <div style="color: rgb(239, 5, 28); align-items: center;">
+      <%= msge %>
+    </div>
+  <% } else { %>
+
+  <% } %>
+</div>
+<form action="/dongco/suadongco" method="post">
+  <div class="form-group col-md-6">
+    
+    <input type="text" class="form-control" value="<%= data.id %>" name="id" hidden>
+  </div>
+  <div class="form-row col-md-12">
+    <img src="data:image/png;base64,<%= data.maqrcochu %>" class="rounded mx-auto d-block" alt="QR code thiet bi">
+  </div>
+  <div class="form-row col-md-12">
+    <div class="form-group col-md-6">
+      <label>0.Loại</label>
+      <select class="custom-select" id="inputGroupSelectheadcount" name="selectloai" required>
+        <option value="Động Cơ" <%= data.loai == 'Động Cơ' ? 'selected' : '' %>>Động cơ</option>
+        <option value="Máy Lạnh" <%= data.loai == 'Máy Lạnh' ? 'selected' : '' %>>Máy Lạnh</option>
+        <option value="Thiết bị" <%= data.loai == 'Thiết bị' ? 'selected' : '' %>>Thiết bị</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-row col-md-12">
+    <div class="form-group col-md-6">
+      <label>1.Tên Thiết Bị</label>
+      <input type="text" class="form-control" id="txttentb" value="<%= data.tenthietbi %>" name="tentb" required>
+    </div>
+    <div class="form-group col-md-6">
+      <label>2.Vị trí</label>
+      <input type="text" class="form-control" id="txtvitri" value="<%= data.vitri %>" name="vitri" required>
+    </div>
+  </div>
+  <div class="form-row col-md-12">
+    <div class="form-group col-md-6">
+      <label>3.Công suất</label>
+      <input type="text" class="form-control" id="txtcongsuat" value="<%= data.congsuat %>" name="congsuat" required>
+    </div>
+    <div class="form-group col-md-6">
+      <label>4.Model</label>
+      <input type="text" class="form-control" id="txtmodel" value="<%= data.model %>" name="model" required>
+    </div>
+  </div>
+  <div class="form-row col-md-12">
+    <div class="form-group col-md-6">
+      <label>5.Điện áp</label>
+      <input type="text" class="form-control" id="txtdienap" value="<%= data.dienap %>" name="dienap" required>
+    </div>
+    <div class="form-group col-md-6">
+      <label>6.Mô tả</label>
+      <textarea class="form-control" rows="8" cols="50" id="areaghichu" name="mota"><%= data.mota %></textarea>
+    </div>
+    <div class="form-group col-md-6">
+      <label>7.Lịch sử</label>
+      <textarea class="form-control" rows="8" cols="50" id="areaghichu" name="lichsu"><%= data.lichsu %></textarea>
+    </div>
+  </div>
+  <div class="form-row col-md-12">
+    <div class="form-group col-md-6">
+      <label>8.Ngày mua</label>
+      <input type="date" class="form-control" name="ngaymua" value="<%= data.ngaymua %>" required>
+    </div>
+    <div class="form-group col-md-6">
+      <label>9.Ngày hết hạn</label>
+      <input type="date" class="form-control" name="ngayhethan" value="<%= data.ngayhethan %>" required>
+    </div>
+  </div>
+  <div class="form-row col-md-12">
+    <div class="form-group col-md-12">
+      <button type="submit" class="btn btn-primary" id="btncreatetb">UPDATE ĐỘNG CƠ</button>
+      <button type="button" class="btn btn-success float-right" onclick="xembang()">XEM BẢNG</button>
+    </div>
+  </div>
+</form>
+<script>
+  function xembang(){
+    window.location.href = "/dongco/view"
+  }
+</script>

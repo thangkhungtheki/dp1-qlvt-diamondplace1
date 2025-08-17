@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng nhập Firebase</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #555;
+    }
+    input[type="email"], input[type="password"] {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: #007bff;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .error-message {
+      color: #d9534f;
+      text-align: center;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Đăng nhập</h2>
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Mật khẩu:</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      <button type="submit">Đăng nhập</button>
+    </form>
+    <p id="error-message" class="error-message"></p>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+  
+  <script>
+    // Cấu hình Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyBnllkjZw9d5e4xTiHoX08rILDOUw15jMw",
+      authDomain: "app-android-d725f.firebaseapp.com",
+      projectId: "app-android-d725f",
+      storageBucket: "app-android-d725f.firebasestorage.app",
+      messagingSenderId: "1090967383605",
+      appId: "1:1090967383605:web:1f6bb6ab89c7854edbcb7c"
+    };
+
+    // Khởi tạo Firebase App
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = app.auth();
+
+    const loginForm = document.getElementById('loginForm');
+    const errorMessage = document.getElementById('error-message');
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const email = loginForm.email.value;
+      const password = loginForm.password.value;
+
+      try {
+        let viewconsole = await auth.signInWithEmailAndPassword(email, password);
+        // Đăng nhập thành công
+        console.log('Đăng nhập thành công!');
+        console.log(viewconsole)
+        // Chuyển hướng người dùng hoặc hiển thị thông báo
+        window.location.href = '/app/qr-review'; 
+      } catch (error) {
+        // Xử lý lỗi đăng nhập
+        console.error('Lỗi đăng nhập:', error.code, error.message);
+        errorMessage.textContent = getErrorMessage(error.code);
+      }
+    });
+
+    // Hàm hiển thị thông báo lỗi
+    function getErrorMessage(errorCode) {
+      switch (errorCode) {
+        case 'auth/user-not-found':
+          return 'Không tìm thấy người dùng. Vui lòng kiểm tra lại email.';
+        case 'auth/wrong-password':
+          return 'Mật khẩu không đúng. Vui lòng thử lại.';
+        case 'auth/invalid-email':
+          return 'Email không hợp lệ.';
+        default:
+          return 'Đã có lỗi xảy ra. Vui lòng thử lại sau.';
+      }
+    }
+  </script>
+</body>
+</html>

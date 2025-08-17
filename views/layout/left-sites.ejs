@@ -1,0 +1,183 @@
+<li class="nav-item ">
+  <a class="nav-link" href="/dashboard">
+    <i class="fa fa-id-badge"></i>
+    <span>Users</span></a>
+</li>
+<li class="nav-item ">
+  <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilities2" aria-expanded="true" aria-controls="collapseUtilities">
+    <i class="fas fa-fw fa-wrench"></i>
+    <span>DP1-DEVICES</span>
+  </a>
+  <div id="collapseUtilities2" class="collapse hide" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+    <div class="bg-white py-2 collapse-inner rounded">
+      <!-- <h6 class="collapse-header">DEVICES-DP2</h6>
+      <a class="collapse-item " href="/thietbidp2">TB-DP2</a>
+      <a class="collapse-item " href="/viewdevices">Devices-DP2</a> -->
+      <h6 class="collapse-header">Động Cơ & Máy Lạnh</h6>
+      <a class="collapse-item " href="/dongco/view">Toàn Bộ</a>
+      <a class="collapse-item " href="/dongco/phanloai?loai=Động%20Cơ">Động cơ</a>
+      <a class="collapse-item " href="/dongco/phanloai?loai=Máy%20Lạnh">Máy Lạnh</a>
+      <a class="collapse-item " href="/dongco/phanloai?loai=Thiết%20bị">Thiết bị</a>
+      <!-- <a class="collapse-item active" href="utilities-other.html">Other</a> -->
+    </div>
+  </div>
+</li>
+<li class="nav-item ">
+    <a class="nav-link" href="/thietbi">
+        <i class="fas fa-fw fa-cog"></i>
+        <span>Thiết Bị DP1</span></a>
+</li> 
+
+<!-- <li class="nav-item ">
+    <a class="nav-link" href="/thietbidp2">
+        <i class="fas fa-fw fa-table"></i>
+        <span>TB-DP2</span></a>
+</li> -->
+
+<li class="nav-item ">
+  <a class="nav-link" href="/vattutest" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
+    <i class="fas fa-fw fa-table"></i>
+    <span>Diamondplace1</span>
+  </a>
+  <div id="collapseUtilities" class="collapse hide" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+    <div class="bg-white py-2 collapse-inner rounded">
+      <h6 class="collapse-header">Vật Tư DP1</h6>
+      <a class="collapse-item " href="/baotridinhky">Bảo trì định kỳ</a>
+      <a class="collapse-item " href="/createthietbi">Thêm Thiết Bị</a>
+      <a class="collapse-item " href="/mavattutest">Thêm Mã Vật Tư</a>
+      <a class="collapse-item " href="/vattutest">Nhập</a>
+      <a class="collapse-item" href="/xuatvattutest">Xuất</a>
+
+      <h6 class="collapse-header"><span>Thống Kê</span></h6>
+
+      <a class="collapse-item" href="/baocaovattu">Tổng Vật Tư</a>
+      <a class="collapse-item" href="/chitiettheoma">Chi Tiết Xuất</a>
+      <!-- <a class="collapse-item active" href="utilities-other.html">Other</a> -->
+    </div>
+  </div>
+</li>
+
+<li class="nav-item ">
+  <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilities1" aria-expanded="true" aria-controls="collapseUtilities">
+    <i class="fas fa-fw fa-wrench"></i>
+    <span>Sửa Chữa</span>
+  </a>
+  <div id="collapseUtilities1" class="collapse hide" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+    <div class="bg-white py-2 collapse-inner rounded">
+      <h6 class="collapse-header">Kiểm tra sửa chữa DP1</h6>
+
+      <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=bep">
+        <% if (arrayTong.bep != 0){ %>
+          <span id="sbep" class="circle-badge"><%= arrayTong.bep %></span>
+        <% } %>
+        Bếp</a>
+      <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=sales">
+        <% if (arrayTong.sales != 0){ %>
+          <span id="ssales" class="circle-badge"><%= arrayTong.sales %></span>
+        <% } %>
+        Sales</a>
+      <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=fb">
+        <% if (arrayTong.fb != 0){ %>
+          <span id="sfb" class="circle-badge"><%= arrayTong.fb %></span>
+        <% } %>
+        F&B</a>
+      <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=ketoan">
+        <% if (arrayTong.ketoan != 0){ %>
+          <span id="sketoan" class="circle-badge"><%= arrayTong.ketoan %></span>
+        <% } %>
+        Kế toán</a>
+      <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=marketing">
+        <% if (arrayTong.mar != 0){ %>
+          <span id="smar" class="circle-badge"><%= arrayTong.mar %></span>
+        <% } %>
+        Marketing</a>
+      <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=avtrangtri">
+        <% if (arrayTong.av != 0){ %>
+          <span id="sav" class="circle-badge"><%= arrayTong.av %></span>
+        <% } %>
+        AV-TrangTri</a>
+      <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=house">
+        <% if (arrayTong.house != 0){ %>
+          <span id="shouse" class="circle-badge"><%= arrayTong.house %></span>
+        <% } %>
+        House</a>
+      <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=nhansu">
+        <% if (arrayTong.nhansu != 0){ %>
+          <span id="snhansu" class="circle-badge"><%= arrayTong.nhansu %></span>
+        <% } %>
+        Nhân Sự</a>
+        <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=baove">
+          <% if (arrayTong.baove != 0){ %>
+            <span id="sbaove" class="circle-badge"><%= arrayTong.baove %></span>
+          <% } %>
+        Bảo vệ</a>
+      <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=khac">
+        <% if (arrayTong.khac != 0){ %>
+          <span id="skhac" class="circle-badge"><%= arrayTong.khac %></span>
+        <% } %>
+        Khác</a>
+
+      <!-- <a class="collapse-item " href="/qlkt/viewtheobophan_daduyet?bophan=bep">Bếp</a>
+        <a class="collapse-item " href="/qlkt/viewtheobophan_daduyet?bophan=sales">Sales</a>
+        <a class="collapse-item " href="/qlkt/viewtheobophan_daduyet?bophan=fb">F&B</a>
+        <a class="collapse-item" href="/qlkt/viewtheobophan_daduyet?bophan=ketoan">Kế toán</a>
+        <a class="collapse-item " href="/qlkt/viewtheobophan_daduyet?bophan=marketing">Marketing</a>
+        <a class="collapse-item " href="/qlkt/viewtheobophan_daduyet?bophan=avtrangtri">AV-TrangTri</a>
+        <a class="collapse-item " href="/qlkt/viewtheobophan_daduyet?bophan=house">House</a>
+        <a class="collapse-item " href="/qlkt/viewtheobophan_daduyet?bophan=nhansu">Nhân Sự</a>
+        <a class="collapse-item " href="/qlkt/viewtheobophan_daduyet?bophan=nhansu">Khác</a> -->
+      <h6 class="collapse-header"><span>Thống Kê</span></h6>
+
+      <a class="collapse-item" href="/qlkt/bieudotron">Biểu đồ</a>
+      <a class="collapse-item" href="/qlkt/tonghophoanthanh">Lịch sử</a>
+
+
+    </div>
+
+
+
+</li>
+<li class="nav-item ">
+  <a class="nav-link" href="/qlkt/rootyeucau">
+    <i class="fa fa-edit"> </i>
+    <span>Yêu Cầu</span></a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="http://file.diamondplace.vn:82/" target="_blank">
+        <i class="fa fa-folder"></i>
+        <span>File-DiamondPlace1</span>
+    </a>
+</li>
+
+
+<style>
+  .circle-badge {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    color: white;
+    text-align: center;
+    line-height: 20px;
+    border-radius: 50%;
+    margin-right: 5px;
+  }
+</style>
+<script src="/vendor/jquery/jquery.min.js"></script>
+
+<script>
+  // $('document').ready(()=>{
+
+  // $.ajax({
+  //     method: "get",
+  //     url: "/qlkt/tongsuachuaton",
+
+  //   })
+  //   .done(function(data) {
+
+  //    $('#sbep').html() = data.bep
+  //    console.log(data)
+  //   });
+  // })
+</script>
