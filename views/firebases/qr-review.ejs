@@ -6,7 +6,6 @@
   <title>QR Review</title>
   <script src="https://unpkg.com/html5-qrcode"></script>
   <style>
-    /* CSS của bạn ở đây */
     body { font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 0; }
     .layout { padding: 10px; margin: auto; max-width: 600px; }
     .main-content { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
@@ -35,7 +34,7 @@
   <div class="layout">
     <div id="content-display">
       <% if (itemThietbi) { %>
-        <div class="main-content" id="thietbi-info-display">
+        <div class="main-content">
           <h2 class="titlecty">Sites: <%= itemUser.congty %></h2>
           <button class="mota-button">Mô tả</button>
           <p class="title">Tên: <%= itemThietbi.tenthietbi %></p>
@@ -95,7 +94,6 @@
         attachScanButtonEvents();
     }
 
-    // Hàm để xử lý logic gọi API
     async function fetchDataFromApi(id) {
         const contentDisplay = document.getElementById('content-display');
         contentDisplay.innerHTML = `<div class="loading">Đang tìm kiếm thông tin thiết bị...</div>`;
@@ -105,10 +103,8 @@
             const data = await response.json();
             
             if (response.ok) {
-                // Nếu tìm thấy thiết bị, cập nhật giao diện
                 updateContent(data.thietbi);
             } else {
-                // Nếu không tìm thấy, hiển thị thông báo lỗi
                 contentDisplay.innerHTML = `<div class="not-found-message"><p>Không tìm thấy thiết bị với mã này.</p><button class="scan-button">Quét mã lại</button></div>`;
                 attachScanButtonEvents();
             }
@@ -119,7 +115,6 @@
         }
     }
 
-    // Gắn sự kiện click cho các nút 'Quét mã'
     function attachScanButtonEvents() {
         const scanButtons = document.querySelectorAll('.scan-button');
         scanButtons.forEach(button => {
@@ -129,35 +124,38 @@
 
     const readerDiv = document.getElementById('reader');
     const contentDiv = document.getElementById('content-display');
-    const html5QrcodeScanner = new Html5QrcodeScanner(
-        "reader", {
-            fps: 10,
-            qrbox: { width: 250, height: 250 },
-            aspectRatio: 1.0, 
-            disableFlip: false // Tùy chọn để không cho người dùng lật camera trước
-        }, false // Tham số này để tránh việc scanner tự động render UI
-    );
+    const html5QrCode = new Html5Qrcode("reader"); // Sử dụng API cấp thấp hơn
 
-    // Bắt đầu scanner
-    function startScanner() {
+    async function startScanner() {
         contentDiv.style.display = 'none';
         readerDiv.style.display = 'block';
 
-        html5QrcodeScanner.render(
+        const qrCodeConfig = {
+            fps: 10,
+            qrbox: { width: 250, height: 250 },
+            facingMode: "environment" // Chỉ sử dụng camera sau
+        };
+
+        html5QrCode.start(
+            qrCodeConfig.facingMode,
+            qrCodeConfig,
             (decodedText, decodedResult) => {
-                html5QrcodeScanner.clear().then(() => {
+                html5QrCode.stop().then(() => {
                     fetchDataFromApi(decodedText);
                     readerDiv.style.display = 'none';
                     contentDiv.style.display = 'block';
-                });
+                }).catch(err => console.error("Lỗi khi dừng camera:", err));
             },
             (errorMessage) => {
-                // Không làm gì để tránh spam console
+                // Bỏ qua lỗi để tránh spam console
             }
-        );
+        ).catch(err => {
+            console.error("Lỗi khi khởi động camera:", err);
+            contentDiv.style.display = 'block';
+            readerDiv.style.display = 'none';
+        });
     }
     
-    // Gắn sự kiện ban đầu khi DOM đã tải
     document.addEventListener('DOMContentLoaded', attachScanButtonEvents);
   </script>
 </body>
