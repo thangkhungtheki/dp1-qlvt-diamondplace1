@@ -1,4 +1,8 @@
 node_modules/
 .env
+<<<<<<< HEAD
 multer-upload/uploads/
 routes/key.json
+=======
+multer-upload/uploads/
+>>>>>>> 438e43dbee58cebdbbad6b78a410d5defe8d6f75
