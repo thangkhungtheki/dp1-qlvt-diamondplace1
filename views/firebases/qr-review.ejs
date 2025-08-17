@@ -99,22 +99,23 @@
         const contentDisplay = document.getElementById('content-display');
         contentDisplay.innerHTML = `<div class="loading">Đang tìm kiếm thông tin thiết bị...</div>`;
         
-        try {
-            const response = await fetch(`https://files.diamondplace.org/app/qr-review/${id}`);
-            const data = await response.json();
+        // try {
+        //     const response = await fetch(`https://files.diamondplace.org/app/qr-review/${id}`);
+        //     const data = await response.json();
             
-            if (data.tenthietbi) {
-                updateContent(data);
-            }
-            else {
-               contentDisplay.innerHTML = `<div class="not-found-message"><p>Không tìm thấy thiết bị với mã này.</p><button class="scan-button">Quét mã lại</button></div>`;
-                attachScanButtonEvents();
-            }
-        } catch (error) {
-            console.error('Lỗi khi gọi API:', error);
-            contentDisplay.innerHTML = `<div class="not-found-message"><p>Có lỗi xảy ra. Vui lòng thử lại.</p><button class="scan-button">Quét mã lại</button></div>`;
-            attachScanButtonEvents();
-        }
+        //     if (data.tenthietbi) {
+        //         updateContent(data);
+        //     }
+        //     else {
+        //        contentDisplay.innerHTML = `<div class="not-found-message"><p>Không tìm thấy thiết bị với mã này.</p><button class="scan-button">Quét mã lại</button></div>`;
+        //         attachScanButtonEvents();
+        //     }
+        // } catch (error) {
+        //     console.error('Lỗi khi gọi API:', error);
+        //     contentDisplay.innerHTML = `<div class="not-found-message"><p>Có lỗi xảy ra. Vui lòng thử lại.</p><button class="scan-button">Quét mã lại</button></div>`;
+        //     attachScanButtonEvents();
+        // }
+        Window.location.href = `/app/qr-review/${id}`;
     }
 
     function attachScanButtonEvents() {
