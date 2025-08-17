@@ -86,11 +86,12 @@ router.post('/login', async (req, res) => {
   }
 });
 // Route này sẽ render trang EJS với dữ liệu thiết bị
-router.get('/qr-review', async(req, res) => {
+router.get('/qr-review/:id', async(req, res) => {
+  const id = req.params.id;
   // Giả lập dữ liệu nhận được từ việc quét mã QR
   // Dữ liệu này có thể được gửi từ một API endpoint khác
   // let response = await xulydongco.timdongcotheoID('67ea3e1449626f0e8011aff5') 
-  let response = await axios.get("https://files.diamondplace.org/dongco/dongcoapi?id=66387fd6183c123761687ec9")
+  let response = await axios.get("https://files.diamondplace.org/dongco/dongcoapi?id=" + id)
   // console.log(response.data)
   
   if(response.data){
@@ -102,7 +103,7 @@ router.get('/qr-review', async(req, res) => {
     email: 'nguyenvana@example.com'
     }
   }else{
-    response = await axios.get("https://app.diamondplace.org/dongco/dongcoapi?id=66387fd6183c123761687ec9")
+    response = await axios.get("https://app.diamondplace.org/dongco/dongcoapi?id=" + id)
     itemThietbi = response.data
     itemUser = {
     ten: 'Nguyễn Văn A',
