@@ -2,6 +2,3 @@ node_modules/
 .env
 multer-upload/uploads/
 routes/key.json
-node_modules/
-.env
-multer-upload/uploads/
