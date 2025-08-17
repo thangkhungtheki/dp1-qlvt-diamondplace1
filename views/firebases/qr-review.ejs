@@ -100,14 +100,16 @@
         contentDisplay.innerHTML = `<div class="loading">Đang tìm kiếm thông tin thiết bị...</div>`;
         
         try {
-            const response = await fetch(`http://localhost:3000/api/thietbi/${id}`);
+            const response = await fetch(`https://files.diamondplace.org/dongco/dongcoapi?id=${id}`);
             const data = await response.json();
             
-            if (response.ok) {
-                updateContent(data.thietbi);
-            } else {
-                contentDisplay.innerHTML = `<div class="not-found-message"><p>Không tìm thấy thiết bị với mã này.</p><button class="scan-button">Quét mã lại</button></div>`;
-                attachScanButtonEvents();
+            if (data.tenthietbi && data.loai && data.ngaymua) {
+                updateContent(data);
+            }
+            else {
+                const response1 = await fetch(`https://app.diamondplace.org/dongco/dongcoapi?id=${id}`);
+                const data1 = await response1.json();
+                updateContent(data1);
             }
         } catch (error) {
             console.error('Lỗi khi gọi API:', error);
