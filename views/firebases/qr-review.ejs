@@ -6,6 +6,7 @@
   <title>QR Review</title>
   <script src="https://unpkg.com/html5-qrcode"></script>
   <style>
+    /* CSS của bạn ở đây */
     body { font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 0; }
     .layout { padding: 10px; margin: auto; max-width: 600px; }
     .main-content { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
@@ -124,36 +125,42 @@
 
     const readerDiv = document.getElementById('reader');
     const contentDiv = document.getElementById('content-display');
-    const html5QrCode = new Html5Qrcode("reader"); // Sử dụng API cấp thấp hơn
+    const html5QrCode = new Html5Qrcode("reader");
 
     async function startScanner() {
-        contentDiv.style.display = 'none';
-        readerDiv.style.display = 'block';
+      // Ẩn nội dung chính và hiển thị vùng quét
+      contentDiv.style.display = 'none';
+      readerDiv.style.display = 'block';
 
-        const qrCodeConfig = {
-            fps: 10,
-            qrbox: { width: 250, height: 250 },
-            facingMode: "environment" // Chỉ sử dụng camera sau
-        };
-
-        html5QrCode.start(
-            qrCodeConfig.facingMode,
-            qrCodeConfig,
-            (decodedText, decodedResult) => {
-                html5QrCode.stop().then(() => {
-                    fetchDataFromApi(decodedText);
-                    readerDiv.style.display = 'none';
-                    contentDiv.style.display = 'block';
-                }).catch(err => console.error("Lỗi khi dừng camera:", err));
-            },
-            (errorMessage) => {
-                // Bỏ qua lỗi để tránh spam console
-            }
-        ).catch(err => {
-            console.error("Lỗi khi khởi động camera:", err);
-            contentDiv.style.display = 'block';
-            readerDiv.style.display = 'none';
-        });
+      try {
+        await html5QrCode.start(
+          { facingMode: "environment" },
+          { fps: 10, qrbox: { width: 250, height: 250 } },
+          (decodedText, decodedResult) => {
+            // Xử lý khi quét thành công
+            html5QrCode.stop().then(() => {
+                fetchDataFromApi(decodedText);
+                readerDiv.style.display = 'none';
+            }).catch(err => console.error("Lỗi khi dừng camera:", err));
+          },
+          (errorMessage) => {
+            // Không làm gì để tránh spam console
+          }
+        );
+      } catch (err) {
+        // Hiển thị lỗi nếu không khởi động được camera
+        console.error("Lỗi khi khởi động camera:", err);
+        contentDiv.style.display = 'block';
+        readerDiv.style.display = 'none';
+        
+        // Hiển thị thông báo lỗi thân thiện với người dùng
+        const errorHtml = `<div class="not-found-message">
+            <p style="color:red;">Lỗi: Không thể khởi động camera. Vui lòng kiểm tra quyền truy cập và thử lại.</p>
+            <button class="scan-button">Thử lại</button>
+        </div>`;
+        document.getElementById('content-display').innerHTML = errorHtml;
+        attachScanButtonEvents();
+      }
     }
     
     document.addEventListener('DOMContentLoaded', attachScanButtonEvents);
