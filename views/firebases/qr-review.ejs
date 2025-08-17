@@ -6,6 +6,7 @@
   <title>QR Review</title>
   <script src="https://unpkg.com/html5-qrcode"></script>
   <style>
+    /* CSS của bạn ở đây */
     body { font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 0; }
     .layout { padding: 10px; margin: auto; max-width: 600px; }
     .main-content { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
@@ -19,9 +20,14 @@
     .luunoidung, .scan-button { background-color: #00e1ff; color: white; font-size: 18px; border-radius: 10px; padding: 10px; text-align: center; border: none; cursor: pointer; }
     .scan-button { background-color: #fc0606; }
     .not-found-message { text-align: center; padding: 50px; color: #777; }
-    #qr-reader {
+    #reader {
       width: 100%;
-      display: none; /* Ẩn vùng quét ban đầu */
+      display: none;
+    }
+    .loading {
+      text-align: center;
+      color: #007bff;
+      font-size: 1.2em;
     }
   </style>
 </head>
@@ -29,7 +35,7 @@
   <div class="layout">
     <div id="content-display">
       <% if (itemThietbi) { %>
-        <div class="main-content">
+        <div class="main-content" id="thietbi-info-display">
           <h2 class="titlecty">Sites: <%= itemUser.congty %></h2>
           <button class="mota-button">Mô tả</button>
           <p class="title">Tên: <%= itemThietbi.tenthietbi %></p>
@@ -57,64 +63,102 @@
       <% } %>
     </div>
     
-    <div id="reader" style="width: 100%; display: none;"></div>
+    <div id="reader" style="width: 100%;"></div>
   </div>
 
   <script>
-    // Lắng nghe khi toàn bộ DOM đã được tải
-    document.addEventListener('DOMContentLoaded', () => {
-      // Tìm tất cả các nút có class 'scan-button'
-      const scanButtons = document.querySelectorAll('.scan-button');
-      
-      // Lặp qua từng nút và thêm sự kiện click
-      scanButtons.forEach(button => {
-        button.addEventListener('click', startScanner);
-      });
-    });
+    // Hàm để cập nhật nội dung HTML với dữ liệu mới
+    function updateContent(thietbi) {
+        let html = `
+            <div class="main-content">
+                <h2 class="titlecty">Sites: TNHH Công ty ABC</h2>
+                <button class="mota-button">Mô tả</button>
+                <p class="title">Tên: ${thietbi.tenthietbi}</p>
+                <p class="title">Loại: ${thietbi.loai}</p>
+                <p class="title">Ngày mua: ${thietbi.ngaymua}</p>
+                <p class="title">Ngày hết hạn: ${thietbi.ngayhethan}</p>
+                <p class="title">Vị trí: ${thietbi.vitri}</p>
+                <p class="title">Công suất: ${thietbi.congsuat}</p>
+                <p class="title">Model: ${thietbi.model}</p>
+                <p class="title">Điện áp: ${thietbi.dienap}</p>
+                <p class="history-divider">Lịch sử: --------------</p>
+                <div class="scroll-history">
+                    <p class="title1">${thietbi.lichsu}</p>
+                </div>
+                <div class="buttons-grid">
+                    <button class="luunoidung">Sửa chữa</button>
+                    <button class="scan-button">Quét mã</button>
+                </div>
+            </div>
+        `;
+        document.getElementById('content-display').innerHTML = html;
+        attachScanButtonEvents();
+    }
+
+    // Hàm để xử lý logic gọi API
+    async function fetchDataFromApi(id) {
+        const contentDisplay = document.getElementById('content-display');
+        contentDisplay.innerHTML = `<div class="loading">Đang tìm kiếm thông tin thiết bị...</div>`;
+        
+        try {
+            const response = await fetch(`http://localhost:3000/api/thietbi/${id}`);
+            const data = await response.json();
+            
+            if (response.ok) {
+                // Nếu tìm thấy thiết bị, cập nhật giao diện
+                updateContent(data.thietbi);
+            } else {
+                // Nếu không tìm thấy, hiển thị thông báo lỗi
+                contentDisplay.innerHTML = `<div class="not-found-message"><p>Không tìm thấy thiết bị với mã này.</p><button class="scan-button">Quét mã lại</button></div>`;
+                attachScanButtonEvents();
+            }
+        } catch (error) {
+            console.error('Lỗi khi gọi API:', error);
+            contentDisplay.innerHTML = `<div class="not-found-message"><p>Có lỗi xảy ra. Vui lòng thử lại.</p><button class="scan-button">Quét mã lại</button></div>`;
+            attachScanButtonEvents();
+        }
+    }
+
+    // Gắn sự kiện click cho các nút 'Quét mã'
+    function attachScanButtonEvents() {
+        const scanButtons = document.querySelectorAll('.scan-button');
+        scanButtons.forEach(button => {
+            button.addEventListener('click', startScanner);
+        });
+    }
 
     const readerDiv = document.getElementById('reader');
     const contentDiv = document.getElementById('content-display');
-
-    function startScanner() {
-      // Ẩn nội dung chính và hiển thị vùng quét
-      contentDiv.style.display = 'none';
-      readerDiv.style.display = 'block';
-
-      // Khởi tạo và render scanner
-      const html5QrcodeScanner = new Html5QrcodeScanner(
+    const html5QrcodeScanner = new Html5QrcodeScanner(
         "reader", {
-          fps: 10,
-          qrbox: { width: 250, height: 250 },
-          // Tùy chọn để ưu tiên camera sau
-          aspectRatio: 1.0, 
-        }
-      );
+            fps: 10,
+            qrbox: { width: 250, height: 250 },
+            aspectRatio: 1.0, 
+            disableFlip: false // Tùy chọn để không cho người dùng lật camera trước
+        }, false // Tham số này để tránh việc scanner tự động render UI
+    );
 
-      // Hàm xử lý khi quét thành công
-      function onScanSuccess(decodedText, decodedResult) {
-        // Dừng scanner sau khi quét
-        html5QrcodeScanner.clear();
-        
-        // Hiển thị lại nội dung chính
-        contentDiv.style.display = 'block';
-        
-        // Cập nhật URL hoặc gọi API để hiển thị thông tin thiết bị
-        // Ví dụ: window.location.href = `/qr-review?id=${decodedText}`;
-        console.log("Mã đã quét:", decodedText);
-        alert(`Đã quét mã: ${decodedText}`);
+    // Bắt đầu scanner
+    function startScanner() {
+        contentDiv.style.display = 'none';
+        readerDiv.style.display = 'block';
 
-        // Gửi dữ liệu lên server để lấy thông tin thiết bị
-        // sendScannedIdToServer(decodedText);
-      }
-      
-      // Hàm xử lý lỗi
-      function onScanError(errorMessage) {
-        // Có thể để trống để tránh spam console
-      }
-
-      // Render scanner
-      html5QrcodeScanner.render(onScanSuccess, onScanError);
+        html5QrcodeScanner.render(
+            (decodedText, decodedResult) => {
+                html5QrcodeScanner.clear().then(() => {
+                    fetchDataFromApi(decodedText);
+                    readerDiv.style.display = 'none';
+                    contentDiv.style.display = 'block';
+                });
+            },
+            (errorMessage) => {
+                // Không làm gì để tránh spam console
+            }
+        );
     }
+    
+    // Gắn sự kiện ban đầu khi DOM đã tải
+    document.addEventListener('DOMContentLoaded', attachScanButtonEvents);
   </script>
 </body>
 </html>
