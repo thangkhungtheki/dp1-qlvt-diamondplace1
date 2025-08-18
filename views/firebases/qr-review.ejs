@@ -115,7 +115,7 @@
         //     contentDisplay.innerHTML = `<div class="not-found-message"><p>Có lỗi xảy ra. Vui lòng thử lại.</p><button class="scan-button">Quét mã lại</button></div>`;
         //     attachScanButtonEvents();
         // }
-        Window.location.href = `/app/qr-review/${id}`;
+        window.location.href = `/app/qr-review?id=${id}`;
     }
 
     function attachScanButtonEvents() {
@@ -141,6 +141,7 @@
           (decodedText, decodedResult) => {
             // Xử lý khi quét thành công
             html5QrCode.stop().then(() => {
+                alert("Đã quét thành công: " + decodedText);
                 fetchDataFromApi(decodedText);
                 readerDiv.style.display = 'none';
             }).catch(err => console.error("Lỗi khi dừng camera:", err));
