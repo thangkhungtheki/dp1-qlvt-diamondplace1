@@ -51,7 +51,7 @@
             <p class="title1"><%= itemThietbi.lichsu %></p>
           </div>
           <div class="buttons-grid">
-            <button class="luunoidung">Sửa chữa</button>
+            <button class="luunoidung" onclick="luunoidung()">Sửa chữa</button>
             <button class="scan-button">Quét mã</button>
           </div>
         </div>
@@ -67,12 +67,28 @@
   </div>
 
   <script>
+    function luunoidung() {
+        $('#capnhat').modal('show');
+    }
+    function capnhatdatabase() {
+      const capnhat = document.getElementById('idcapnhat'); 
+        
+      window.location.href = `/app/qr-review?id=<%= itemThietbi.id %>`;
+      $('#capnhat').modal('hide');
+    }
+    function HienThiMoTa() {
+        const mota = document.getElementById('idmota'); 
+        mota.value = `
+        <%= itemThietbi.mota %>
+        `;
+        $('#mota').modal('show');
+    }
     // Hàm để cập nhật nội dung HTML với dữ liệu mới
     function updateContent(thietbi) {
         let html = `
             <div class="main-content">
                 <h2 class="titlecty">Sites: TNHH Công ty ABC</h2>
-                <button class="mota-button">Mô tả</button>
+                <button class="mota-button" onClick="HienThiMoTa()">Mô tả</button>
                 <p class="title">Tên: ${thietbi.tenthietbi}</p>
                 <p class="title">Loại: ${thietbi.loai}</p>
                 <p class="title">Ngày mua: ${thietbi.ngaymua}</p>
@@ -168,5 +184,59 @@
     
     document.addEventListener('DOMContentLoaded', attachScanButtonEvents);
   </script>
+<!-- Mota----------------------------------------------------- -->
+<div class="modal fade" id="mota" tabindex="5" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Mô tả</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="#">
+          <div class="form-group">
+            <label class="col-form-label">Chi tiết</label>
+            <textarea type="text" class="form-control" id="idmota" name="idhopdong" readonly />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <!-- <button type="button" class="btn btn-primary" onclick="suadatabase()">Sửa Database</button> -->
+      </div>
+   
+    </div>
+  </div>
+</div>
+<!------------------------------------------------------- -->
+ <!-- Mota----------------------------------------------------- -->
+<div class="modal fade" id="capnhat" tabindex="4" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Cập nhật Sửa chữa </h5>
+        <button type="button" class="close" data-dismiss="modalcapnhat" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="#">
+          <div class="form-group">
+            <label class="col-form-label">Chi tiết</label>
+            <textarea type="text" class="form-control" id="idcapnhat" name="namecapnhat" readonly rows="3"/>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modalcapnhat">Close</button>
+        <button type="button" class="btn btn-primary" onclick="capnhatdatabase()">Cập nhật</button>
+      </div>
+   
+    </div>
+  </div>
+</div>
+<!------------------------------------------------------- --> 
 </body>
 </html>
