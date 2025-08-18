@@ -50,6 +50,8 @@
   </style>
 </head>
 <body>
+  <% if (isIphone) { %>
+  
   <div class="layout">
     <div id="content-display">
       <% if (itemThietbi) { %>
@@ -83,7 +85,9 @@
     
     <div id="reader" style="width: 100%;"></div>
   </div>
-
+   <% } else { %>
+    <h1 style="color:red" > Bạn không dùng iphone, vui lòng cài đặt app android </h1>
+   <% } %>
   <script>
     function luunoidung() {
         $('#capnhat').modal('show');

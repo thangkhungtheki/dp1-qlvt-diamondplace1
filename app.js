@@ -52,6 +52,23 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'multer-upload/uploads')));
 app.use(express.static(path.join(__dirname, 'uploads')));
 
+// check iphone
+const checkIsIphone = (req, res, next) => {
+    // Lấy chuỗi User-Agent từ header của request
+    const userAgent = req.headers['user-agent'];
+
+    // Biểu thức chính quy để tìm "iPhone" hoặc "iPod" trong chuỗi
+    const isIphone = /iPhone|iPod/.test(userAgent);
+
+    // Lưu kết quả vào đối tượng req để các route sau có thể sử dụng
+    req.isIphone = isIphone;
+
+    // Chuyển sang middleware hoặc route tiếp theo
+    next();
+};
+
+// Sử dụng middleware cho tất cả các request
+app.use(checkIsIphone);
 // sử dụng router 
 app.use('/', indexRouter);
 app.use('/qlkt/', qltkRouter);

@@ -87,6 +87,7 @@ router.post('/login', async (req, res) => {
 });
 // Route này sẽ render trang EJS với dữ liệu thiết bị
 router.get('/qr-review/', async(req, res) => {
+  const isIphone = req.isIphone;
   const id = req.query.id;
   // Giả lập dữ liệu nhận được từ việc quét mã QR
   // Dữ liệu này có thể được gửi từ một API endpoint khác
@@ -119,9 +120,10 @@ router.get('/qr-review/', async(req, res) => {
   }
   
   // Render file EJS và truyền dữ liệu vào
-  res.render('firebases/qr-review', { itemThietbi, itemUser });
+  res.render('firebases/qr-review', { itemThietbi, itemUser , isIphone});
 });
 router.get('/webview', (req, res) => {
+  const isIphone = req.isIphone;
   res.render('firebases/qr-review', {
     itemThietbi: {} ,
     itemUser: {
@@ -129,7 +131,8 @@ router.get('/webview', (req, res) => {
       congty: 'Diamondplace',
       phong: 'KYTHUAT',
       email: ''
-    }
+    },
+    isIphone
   });
 })
 
