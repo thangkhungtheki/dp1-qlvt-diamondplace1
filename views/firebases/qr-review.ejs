@@ -30,13 +30,17 @@
     .main-content { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
     .title, .title1 { font-size: 14px; font-weight: bold; margin-bottom: 5px; text-align: left; }
     .title1 { font-size: 12px; font-weight: normal; white-space: pre-wrap; }
-    .titlecty { font-size: 18px; text-align: center; color: darkgoldenrod; margin-bottom: 20px; }
+    .titlecty { font-size: 18px; text-align: center; color: darkgoldenrod; margin-bottom: 10px; }
+    .title3 { font-size: 14px; text-align: center; color: rgb(10, 211, 37); margin-bottom: 10px; }
+    .title2 { font-size: 14px; text-align: center; color: rgb(0, 0, 0); margin-bottom: 10px; }
+    .title4 { font-size: 14px; text-align: center; color: rgb(79, 43, 243); margin-bottom: 10px; }
     .mota-button { background-color: #007bff; color: white; font-size: 16px; padding: 10px; border-radius: 8px; text-align: center; border: none; cursor: pointer; width: 100px; margin: auto; display: block; }
     .history-divider { margin: 20px 0; border-top: 1px solid #ccc; }
     .scroll-history { max-height: 150px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; border-radius: 4px; }
     .buttons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
-    .luunoidung, .scan-button { background-color: #00e1ff; color: white; font-size: 18px; border-radius: 10px; padding: 10px; text-align: center; border: none; cursor: pointer; }
+    .luunoidung, .scan-button, .logout-button { background-color: #00e1ff; color: white; font-size: 18px; border-radius: 10px; padding: 10px; text-align: center; border: none; cursor: pointer; }
     .scan-button { background-color: #fc0606; }
+    .logout-button { background-color: #8d8a8a; }
     .not-found-message { text-align: center; padding: 50px; color: #777; }
     #reader {
       width: 100%;
@@ -77,8 +81,16 @@
         </div>
       <% } else { %>
         <div class="not-found-message">
+          <hr/>
+          <p class="title2">Tên: <%= itemUser.ten %></p>
+          <p class="title3">Phòng: <%= itemUser.phong %></p>
+          <p class="titlecty">Công ty: <%= itemUser.congty %></p>
+          <p class="title4">Email: <%= itemUser.email %></p>
+          <hr/>
           <p>Hãy Quét mã</p>
           <button class="scan-button">Quét mã</button>
+          <hr/>
+          <button class="logout-button" onclick="dangxuat()">Logout</button>
         </div>
       <% } %>
     </div>
@@ -89,6 +101,9 @@
     <h1 style="color:red" > Bạn không dùng iphone, vui lòng cài đặt app android </h1>
    <% } %>
   <script>
+    function dangxuat() {
+      window.location.href = '/app/sessionLogout';
+    }
     function luunoidung() {
         $('#capnhat').modal('show');
     }
@@ -179,7 +194,7 @@
           (decodedText, decodedResult) => {
             // Xử lý khi quét thành công
             html5QrCode.stop().then(() => {
-                alert("Đã quét thành công: " + decodedText);
+                // alert("Đã quét thành công: " + decodedText);
                 fetchDataFromApi(decodedText);
                 readerDiv.style.display = 'none';
             }).catch(err => console.error("Lỗi khi dừng camera:", err));

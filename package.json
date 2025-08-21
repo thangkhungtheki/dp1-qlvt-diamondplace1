@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "obfuscate": "javascript-obfuscator ./app.js ./index.js ./routes/* ./config/* ./CRUD/* ./Excel/* ./FileProcess/* ./model/* ./sendmail/* ./views/* -o ./dist --compact true --control-flow-flattening true --control-flow-flattening-threshold 0.75 --dead-code-injection true --dead-code-injection-threshold 0.4 --disable-console-output true --identifier-names-generator hexadecimal --log false --self-defending true --string-array true --string-array-encoding base64 --string-array-threshold 0.75 --transform-object-keys true --unicode-escape-sequence false"
   },
   "author": "tktk",
   "license": "ISC",
