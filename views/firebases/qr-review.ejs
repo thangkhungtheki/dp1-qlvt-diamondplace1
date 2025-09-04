@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Review</title>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  <script src="/vendor/jquery/jquery.min.js"></script>
+  <!-- Bootstrap core JavaScript-->
+  <script src="/vendor/jquery/jquery.min.js"></script>
+  <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for all pages-->
+  
+  <!-- Page level plugins -->
+  <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+  <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+  <!-- Page level custom scripts -->
+  <script src="/js/sb-admin-2.min.js"></script>
+  <link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+  <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+  <style>
+    /* CSS của bạn ở đây */
+    body { font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 0; }
+    .layout { padding: 10px; margin: auto; max-width: 600px; }
+    .main-content { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
+    .title, .title1 { font-size: 14px; font-weight: bold; margin-bottom: 5px; text-align: left; }
+    .title1 { font-size: 12px; font-weight: normal; white-space: pre-wrap; }
+    .titlecty { font-size: 18px; text-align: center; color: darkgoldenrod; margin-bottom: 10px; }
+    .title3 { font-size: 14px; text-align: center; color: rgb(10, 211, 37); margin-bottom: 10px; }
+    .title2 { font-size: 14px; text-align: center; color: rgb(0, 0, 0); margin-bottom: 10px; }
+    .title4 { font-size: 14px; text-align: center; color: rgb(79, 43, 243); margin-bottom: 10px; }
+    .mota-button { background-color: #007bff; color: white; font-size: 16px; padding: 10px; border-radius: 8px; text-align: center; border: none; cursor: pointer; width: 100px; margin: auto; display: block; }
+    .history-divider { margin: 20px 0; border-top: 1px solid #ccc; }
+    .scroll-history { max-height: 150px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; border-radius: 4px; }
+    .buttons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+    .luunoidung, .scan-button, .logout-button { background-color: #00e1ff; color: white; font-size: 18px; border-radius: 10px; padding: 10px; text-align: center; border: none; cursor: pointer; }
+    .scan-button { background-color: #fc0606; }
+    .logout-button { background-color: #8d8a8a; }
+    .not-found-message { text-align: center; padding: 50px; color: #777; }
+    #reader {
+      width: 100%;
+      display: none;
+    }
+    .loading {
+      text-align: center;
+      color: #007bff;
+      font-size: 1.2em;
+    }
+  </style>
+</head>
+<body>
+  <% if (isIphone) { %>
+  
+  <div class="layout">
+    <div id="content-display">
+      <% if (itemThietbi) { %>
+        <div class="main-content">
+          <h2 class="titlecty">Sites: <%= itemUser.congty %></h2>
+          <button class="mota-button" onclick="HienThiMoTa()">Mô tả</button>
+          <p class="title">Tên: <%= itemThietbi.tenthietbi %></p>
+          <p class="title">Loại: <%= itemThietbi.loai %></p>
+          <p class="title">Ngày mua: <%= itemThietbi.ngaymua %></p>
+          <p class="title">Ngày hết hạn: <%= itemThietbi.ngayhethan %></p>
+          <p class="title">Vị trí: <%= itemThietbi.vitri %></p>
+          <p class="title">Công suất: <%= itemThietbi.congsuat %></p>
+          <p class="title">Model: <%= itemThietbi.model %></p>
+          <p class="title">Điện áp: <%= itemThietbi.dienap %></p>
+          <p class="history-divider">Lịch sử: --------------</p>
+          <div class="scroll-history">
+            <p class="title1"><%= itemThietbi.lichsu %></p>
+          </div>
+          <div class="buttons-grid">
+            <button class="luunoidung" onclick="luunoidung()">Sửa chữa</button>
+            <button class="scan-button">Quét mã</button>
+          </div>
+        </div>
+      <% } else { %>
+        <div class="not-found-message">
+          <hr/>
+          <p class="title2">Tên: <%= itemUser.ten %></p>
+          <p class="title3">Phòng: <%= itemUser.phong %></p>
+          <p class="titlecty">Công ty: <%= itemUser.congty %></p>
+          <p class="title4">Email: <%= itemUser.email %></p>
+          <hr/>
+          <p>Hãy Quét mã</p>
+          <button class="scan-button">Quét mã</button>
+          <hr/>
+          <button class="logout-button" onclick="dangxuat()">Logout</button>
+        </div>
+      <% } %>
+    </div>
+    
+    <div id="reader" style="width: 100%;"></div>
+  </div>
+   <% } else { %>
+    <h1 style="color:red" > Bạn không dùng iphone, vui lòng cài đặt app android </h1>
+   <% } %>
+  <script>
+    function dangxuat() {
+      window.location.href = '/app/sessionLogout';
+    }
+    function luunoidung() {
+        $('#capnhat').modal('show');
+    }
+    function capnhatdatabase() {
+      const capnhat = document.getElementById('idcapnhat'); 
+        
+      window.location.href = `/app/qr-review?id=<%= itemThietbi._id %>`;
+      $('#capnhat').modal('hide');
+    }
+    function HienThiMoTa() {
+        const mota = document.getElementById('idmota'); 
+        mota.value = `
+        <%= itemThietbi.mota %>
+        `;
+        $('#mota').modal('show');
+    }
+    // Hàm để cập nhật nội dung HTML với dữ liệu mới
+    function updateContent(thietbi) {
+        let html = `
+            <div class="main-content">
+                <h2 class="titlecty">Sites: TNHH Công ty ABC</h2>
+                <button class="mota-button" onClick="HienThiMoTa()">Mô tả</button>
+                <p class="title">Tên: ${thietbi.tenthietbi}</p>
+                <p class="title">Loại: ${thietbi.loai}</p>
+                <p class="title">Ngày mua: ${thietbi.ngaymua}</p>
+                <p class="title">Ngày hết hạn: ${thietbi.ngayhethan}</p>
+                <p class="title">Vị trí: ${thietbi.vitri}</p>
+                <p class="title">Công suất: ${thietbi.congsuat}</p>
+                <p class="title">Model: ${thietbi.model}</p>
+                <p class="title">Điện áp: ${thietbi.dienap}</p>
+                <p class="history-divider">Lịch sử: --------------</p>
+                <div class="scroll-history">
+                    <p class="title1">${thietbi.lichsu}</p>
+                </div>
+                <div class="buttons-grid">
+                    <button class="luunoidung">Sửa chữa</button>
+                    <button class="scan-button">Quét mã</button>
+                </div>
+            </div>
+        `;
+        document.getElementById('content-display').innerHTML = html;
+        attachScanButtonEvents();
+    }
+
+    async function fetchDataFromApi(id) {
+        const contentDisplay = document.getElementById('content-display');
+        contentDisplay.innerHTML = `<div class="loading">Đang tìm kiếm thông tin thiết bị...</div>`;
+        
+        // try {
+        //     const response = await fetch(`https://files.diamondplace.org/app/qr-review/${id}`);
+        //     const data = await response.json();
+            
+        //     if (data.tenthietbi) {
+        //         updateContent(data);
+        //     }
+        //     else {
+        //        contentDisplay.innerHTML = `<div class="not-found-message"><p>Không tìm thấy thiết bị với mã này.</p><button class="scan-button">Quét mã lại</button></div>`;
+        //         attachScanButtonEvents();
+        //     }
+        // } catch (error) {
+        //     console.error('Lỗi khi gọi API:', error);
+        //     contentDisplay.innerHTML = `<div class="not-found-message"><p>Có lỗi xảy ra. Vui lòng thử lại.</p><button class="scan-button">Quét mã lại</button></div>`;
+        //     attachScanButtonEvents();
+        // }
+        window.location.href = `/app/qr-review?id=${id}`;
+    }
+
+    function attachScanButtonEvents() {
+        const scanButtons = document.querySelectorAll('.scan-button');
+        scanButtons.forEach(button => {
+            button.addEventListener('click', startScanner);
+        });
+    }
+
+    const readerDiv = document.getElementById('reader');
+    const contentDiv = document.getElementById('content-display');
+    const html5QrCode = new Html5Qrcode("reader");
+
+    async function startScanner() {
+      // Ẩn nội dung chính và hiển thị vùng quét
+      contentDiv.style.display = 'none';
+      readerDiv.style.display = 'block';
+
+      try {
+        await html5QrCode.start(
+          { facingMode: "environment" },
+          { fps: 10, qrbox: { width: 250, height: 250 } },
+          (decodedText, decodedResult) => {
+            // Xử lý khi quét thành công
+            html5QrCode.stop().then(() => {
+                // alert("Đã quét thành công: " + decodedText);
+                fetchDataFromApi(decodedText);
+                readerDiv.style.display = 'none';
+            }).catch(err => console.error("Lỗi khi dừng camera:", err));
+          },
+          (errorMessage) => {
+            // Không làm gì để tránh spam console
+          }
+        );
+      } catch (err) {
+        // Hiển thị lỗi nếu không khởi động được camera
+        console.error("Lỗi khi khởi động camera:", err);
+        contentDiv.style.display = 'block';
+        readerDiv.style.display = 'none';
+        
+        // Hiển thị thông báo lỗi thân thiện với người dùng
+        const errorHtml = `<div class="not-found-message">
+            <p style="color:red;">Lỗi: Không thể khởi động camera. Vui lòng kiểm tra quyền truy cập và thử lại.</p>
+            <button class="scan-button">Thử lại</button>
+        </div>`;
+        document.getElementById('content-display').innerHTML = errorHtml;
+        attachScanButtonEvents();
+      }
+    }
+    
+    document.addEventListener('DOMContentLoaded', attachScanButtonEvents);
+  </script>
+<div class="modal fade" id="mota" tabindex="-1" aria-labelledby="motaModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="motaModalLabel">Mô tả</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="idmota" class="col-form-label">Chi tiết</label>
+                        <textarea class="form-control" id="idmota" name="namemota" rows="15" readonly ></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                
+            </div>
+        </div>
+    </div>
+</div>
+<!------------------------------------------------------- -->
+  <div class="modal fade" id="capnhat" tabindex="1" aria-labelledby="motaModalLabel1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="motaModalLabel1">Cập nhật</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="idmota" class="col-form-label">Chi tiết</label>
+                        <textarea class="form-control" id="idcapnhat" name="namecapnhat" rows="15"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" onclick="capnhatdatabase()">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!------------------------------------------------------- --> 
+</body>
+
+
+</html>
