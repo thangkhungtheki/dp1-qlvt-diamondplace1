@@ -58,7 +58,7 @@ const checkIsIphone = (req, res, next) => {
     const userAgent = req.headers['user-agent'];
 
     // Biểu thức chính quy để tìm "iPhone" hoặc "iPod" trong chuỗi
-    const isIphone = /iPhone|iPod/.test(userAgent);
+    const isIphone = /iPhone|iPod|iPad/.test(userAgent);
 
     // Lưu kết quả vào đối tượng req để các route sau có thể sử dụng
     req.isIphone = isIphone;
