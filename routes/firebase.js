@@ -76,7 +76,7 @@ router.post('/sessionLogin', async (req, res) => {
     // Kiểm tra môi trường để quyết định đặt thuộc tính 'secure'
     // 'secure: true' chỉ hoạt động với HTTPS.
     // Đối với môi trường local (HTTP), nên đặt 'secure: false' hoặc bỏ qua.
-    const isLocalhost = req.hostname === 'localhost' || req.hostname === '127.0.0.1';
+    const isLocalhost = req.hostname === 'localhost' || req.hostname === '127.0.0.1' || req.hostname === '172.16.1.84';
     const cookieOptions = {
         maxAge: expiresIn,
         httpOnly: true,
