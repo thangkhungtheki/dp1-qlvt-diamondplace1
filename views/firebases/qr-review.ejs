@@ -107,7 +107,7 @@
     function luunoidung() {
         $('#capnhat').modal('show');
     }
-    function capnhatdatabase(site, id) {
+    function capnhatdatabase(site, id , userten) {
     // Lấy giá trị từ phần tử có id='idcapnhat'
     const capnhat = document.getElementById('idcapnhat').value;
     // alert(site);
@@ -132,7 +132,7 @@
         contentType: 'application/json',
         data: JSON.stringify({
             id: id,
-            lichsu: capnhat
+            lichsu: userten + ': ' + capnhat
         }),
         success: function(response) {
             console.log('Cập nhật lịch sử thành công:', response);
@@ -297,7 +297,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                <button type="button" class="btn btn-primary" onclick="capnhatdatabase('<%= itemThietbi.site %>', '<%= itemThietbi.data._id %>')">Cập nhật</button>
+                <button type="button" class="btn btn-primary" onclick="capnhatdatabase('<%= itemThietbi.site %>', '<%= itemThietbi.data._id %>' , '<%= itemUser.ten %>')">Cập nhật</button>
             </div>
         </div>
     </div>
