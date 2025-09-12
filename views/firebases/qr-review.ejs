@@ -108,34 +108,46 @@
         $('#capnhat').modal('show');
     }
     function capnhatdatabase() {
-      const capnhat = document.getElementById('idcapnhat');
-      let uri = ""
-      if (itemThietbi.site == "Diamond Place II") {
-        uri = "https://app.diamondplace.org/"
-      } else {
-        uri = "https://files.diamondplace.org/"
-      }
-        $.ajax({
-          url: uri + 'dongco/update-lichsu-string',
-          type: 'PUT',
-          contentType: 'application/json',
-          data: JSON.stringify({
-              id: itemThietbi.data._id,
-              lichsu: capnhat
-          }),
-          success: function(response) {
-              console.log('Cập nhật lịch sử thành công:', response);
-              alert('Cập nhật lịch sử thành công!');
-              $('#capnhat').modal('hide');
-          },
-          error: function(xhr, status, error) {
-              console.error('Lỗi khi gửi request:', xhr.responseText);
-              alert('Lỗi khi cập nhật: ' + xhr.responseText);
-          }
-    });  
-      window.location.href = `/app/qr-review?id=<%= itemThietbi.data._id %>`;
-      $('#capnhat').modal('hide');
+    // Lấy giá trị từ phần tử có id='idcapnhat'
+    const capnhat = document.getElementById('idcapnhat').value;
+
+    if (!capnhat) {
+        alert('Vui lòng nhập nội dung cập nhật.');
+        return; // Dừng hàm nếu không có dữ liệu
     }
+
+    let uri = "";
+    // Lỗi: itemThietbi không có trong phạm vi của hàm
+    // Giả sử itemThietbi đã được định nghĩa ở ngoài scope của hàm này
+    if (typeof itemThietbi !== 'undefined' && itemThietbi.site == "Diamond Place II") {
+        uri = "https://app.diamondplace.org/";
+    } else {
+        uri = "https://files.diamondplace.org/";
+    }
+
+    $.ajax({
+        url: uri + 'dongco/update-lichsu-string',
+        type: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            id: itemThietbi.data._id,
+            lichsu: capnhat
+        }),
+        success: function(response) {
+            console.log('Cập nhật lịch sử thành công:', response);
+            alert('Cập nhật lịch sử thành công!');
+            // Chuyển hướng trang chỉ khi đã cập nhật xong
+            window.location.href = `/app/qr-review?id=${itemThietbi.data._id}`;
+            // Đóng modal, mặc dù chuyển hướng trang sẽ tự động đóng
+            $('#capnhat').modal('hide');
+        },
+        error: function(xhr, status, error) {
+            console.error('Lỗi khi gửi request:', xhr.responseText);
+            alert('Lỗi khi cập nhật: ' + xhr.responseText);
+        }
+    });
+    // Loại bỏ dòng window.location.href ở đây
+}
     function HienThiMoTa() {
         const mota = document.getElementById('idmota'); 
         mota.value = `
@@ -278,7 +290,7 @@
                 <form>
                     <div class="mb-3">
                         <label for="idmota" class="col-form-label">Chi tiết</label>
-                        <textarea class="form-control" id="idcapnhat" name="namecapnhat" rows="15"></textarea>
+                        <textarea class="form-control" id="idcapnhat" name="namecapnhat" rows="10"></textarea>
                     </div>
                 </form>
             </div>
