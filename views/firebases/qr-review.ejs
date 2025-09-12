@@ -58,21 +58,21 @@
   
   <div class="layout">
     <div id="content-display">
-      <% if (itemThietbi) { %>
+      <% if (itemThietbi.data) { %>
         <div class="main-content">
-          <h2 class="titlecty">Sites: <%= itemUser.congty %></h2>
+          <h2 class="titlecty">Sites: <%= itemThietbi.site %></h2>
           <button class="mota-button" onclick="HienThiMoTa()">Mô tả</button>
-          <p class="title">Tên: <%= itemThietbi.tenthietbi %></p>
-          <p class="title">Loại: <%= itemThietbi.loai %></p>
-          <p class="title">Ngày mua: <%= itemThietbi.ngaymua %></p>
-          <p class="title">Ngày hết hạn: <%= itemThietbi.ngayhethan %></p>
-          <p class="title">Vị trí: <%= itemThietbi.vitri %></p>
-          <p class="title">Công suất: <%= itemThietbi.congsuat %></p>
-          <p class="title">Model: <%= itemThietbi.model %></p>
-          <p class="title">Điện áp: <%= itemThietbi.dienap %></p>
+          <p class="title">Tên: <%= itemThietbi.data.tenthietbi %></p>
+          <p class="title">Loại: <%= itemThietbi.data.loai %></p>
+          <p class="title">Ngày mua: <%= itemThietbi.data.ngaymua %></p>
+          <p class="title">Ngày hết hạn: <%= itemThietbi.data.ngayhethan %></p>
+          <p class="title">Vị trí: <%= itemThietbi.data.vitri %></p>
+          <p class="title">Công suất: <%= itemThietbi.data.congsuat %></p>
+          <p class="title">Model: <%= itemThietbi.data.model %></p>
+          <p class="title">Điện áp: <%= itemThietbi.data.dienap %></p>
           <p class="history-divider">Lịch sử: --------------</p>
           <div class="scroll-history">
-            <p class="title1"><%= itemThietbi.lichsu %></p>
+            <p class="title1"><%= itemThietbi.data.lichsu %></p>
           </div>
           <div class="buttons-grid">
             <button class="luunoidung" onclick="luunoidung()">Sửa chữa</button>
@@ -110,13 +110,13 @@
     function capnhatdatabase() {
       const capnhat = document.getElementById('idcapnhat'); 
         
-      window.location.href = `/app/qr-review?id=<%= itemThietbi._id %>`;
+      window.location.href = `/app/qr-review?id=<%= itemThietbi.data._id %>`;
       $('#capnhat').modal('hide');
     }
     function HienThiMoTa() {
         const mota = document.getElementById('idmota'); 
         mota.value = `
-        <%= itemThietbi.mota %>
+        <%= itemThietbi.data.mota %>
         `;
         $('#mota').modal('show');
     }

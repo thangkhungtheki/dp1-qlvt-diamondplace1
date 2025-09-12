@@ -159,11 +159,17 @@ router.get('/qr-review/',authenticateCookie , async(req, res) => {
   };
   var itemUser = await laythongtinuser(req.user);
   if(response.data){
-    itemThietbi = response.data
+    itemThietbi = {
+      data: response.data,
+      site: "Diamond Place I",
+    }
     
   }else{
     response = await axios.get("https://app.diamondplace.org/dongco/dongcoapi?id=" + id)
-    itemThietbi = response.data
+    itemThietbi = {
+      data: response.data,
+      site: "Diamond Place II",
+    }
   }
   
   // Render file EJS và truyền dữ liệu vào
