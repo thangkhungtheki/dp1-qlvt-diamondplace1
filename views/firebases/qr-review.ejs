@@ -107,11 +107,11 @@
     function luunoidung() {
         $('#capnhat').modal('show');
     }
-    function capnhatdatabase() {
+    function capnhatdatabase(site, id) {
     // Lấy giá trị từ phần tử có id='idcapnhat'
     const capnhat = document.getElementById('idcapnhat').value;
-    alert(itemThietbi.site);
-    alert(itemThietbi.data._id);
+    alert(site);
+    alert(id);
     if (!capnhat) {
         alert('Vui lòng nhập nội dung cập nhật.');
         return; // Dừng hàm nếu không có dữ liệu
@@ -120,7 +120,7 @@
     let uri = "";
     // Lỗi: itemThietbi không có trong phạm vi của hàm
     // Giả sử itemThietbi đã được định nghĩa ở ngoài scope của hàm này
-    if (typeof itemThietbi !== 'undefined' && itemThietbi.site == "Diamond Place II") {
+    if (site == "Diamond Place II") {
         uri = "https://app.diamondplace.org/";
     } else {
         uri = "https://files.diamondplace.org/";
@@ -131,14 +131,14 @@
         type: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify({
-            id: itemThietbi.data._id,
+            id: id,
             lichsu: capnhat
         }),
         success: function(response) {
             console.log('Cập nhật lịch sử thành công:', response);
             alert('Cập nhật lịch sử thành công!');
             // Chuyển hướng trang chỉ khi đã cập nhật xong
-            window.location.href = `/app/qr-review?id=${itemThietbi.data._id}`;
+            window.location.href = `/app/qr-review?id=${id}`;
             // Đóng modal, mặc dù chuyển hướng trang sẽ tự động đóng
             $('#capnhat').modal('hide');
         },
@@ -297,7 +297,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                <button type="button" class="btn btn-primary" onclick="capnhatdatabase()">Cập nhật</button>
+                <button type="button" class="btn btn-primary" onclick="capnhatdatabase('<%= itemThietbi.site %>', '<%= itemThietbi.data._id %>')">Cập nhật</button>
             </div>
         </div>
     </div>
