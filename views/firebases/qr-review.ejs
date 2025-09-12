@@ -108,8 +108,31 @@
         $('#capnhat').modal('show');
     }
     function capnhatdatabase() {
-      const capnhat = document.getElementById('idcapnhat'); 
-        
+      const capnhat = document.getElementById('idcapnhat');
+      let uri = ""
+      if (itemThietbi.site == "Diamond Place II") {
+        uri = "https://app.diamondplace.org/"
+      } else {
+        uri = "https://files.diamondplace.org/"
+      }
+        $.ajax({
+          url: uri + 'dongco/update-lichsu-string',
+          type: 'PUT',
+          contentType: 'application/json',
+          data: JSON.stringify({
+              id: itemThietbi.data._id,
+              lichsu: capnhat
+          }),
+          success: function(response) {
+              console.log('Cập nhật lịch sử thành công:', response);
+              alert('Cập nhật lịch sử thành công!');
+              $('#capnhat').modal('hide');
+          },
+          error: function(xhr, status, error) {
+              console.error('Lỗi khi gửi request:', xhr.responseText);
+              alert('Lỗi khi cập nhật: ' + xhr.responseText);
+          }
+    });  
       window.location.href = `/app/qr-review?id=<%= itemThietbi.data._id %>`;
       $('#capnhat').modal('hide');
     }
