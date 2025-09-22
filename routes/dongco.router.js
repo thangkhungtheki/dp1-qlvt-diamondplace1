@@ -409,16 +409,18 @@ router.put('/update-lichsu-string', async (req, res) => {
       // Cập nhật trường lichsu
       let updatedDongco = await xulydongco.xulyupdale_lichsu(id, updatedLichsu);
       // Ghi lại lịch sử vào collection bảo trì sửa chữa
-      const re = /^\d{2}-\d{2}-\d{4}\s+([\p{L}\s]+?):/;
-      const m = newHistoryEntry.match(re);
+      let re = /^\d{2}-\d{2}-\d{4}\s+([\p{L}\s]+?):/u
+      let m = newHistoryEntry.match(re);
       let baotri = {
         ngay: moment().format('DD-MM-YYYY'),
         idthietbi: id,
         phong: 'KYTHUAT',
         noidung: newHistoryEntry,
-        nguoithuchien: m[0] || '',
+        nguoithuchien: m ? m[1] : "Không tìm thấy tên",
       }
-      await baotrisuachua.create_suachua(baotri)
+      console.log(nguoithuchien)
+      let kq = await baotrisuachua.create_suachua(baotri)
+      console.log('ket qua them lich su bao tri: ', kq)
       // Trả về phản hồi thành công
       res.status(200).json({
           message: 'Cập nhật lịch sử (nối chuỗi) thành công!',
