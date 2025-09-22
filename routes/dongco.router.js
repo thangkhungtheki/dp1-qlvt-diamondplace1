@@ -416,7 +416,7 @@ router.put('/update-lichsu-string', async (req, res) => {
         idthietbi: id,
         phong: 'KYTHUAT',
         noidung: newHistoryEntry,
-        nguoithuchien: m ? m[1] : "Không tìm thấy tên",
+        nguoithuchien:  m[1] || '',
       }
       console.log(nguoithuchien)
       let kq = await baotrisuachua.create_suachua(baotri)
