@@ -7,7 +7,7 @@ const schema = new Schema({
     noidung: {type: String, required: false},
     nguoithuchien: {type: String, required: false},
     anh: {type: Array, required: false},
-    
+    noidunglaychonhanh: {type: String, required: false},
 })
 
 
