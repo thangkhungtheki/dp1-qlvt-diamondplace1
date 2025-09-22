@@ -11,6 +11,8 @@ const path = require('path')
 const sharp = require('sharp');
 const { createCanvas, loadImage, registerFont } = require('canvas');
 
+const baotrisuachua = require("../CRUD/baotrisuachua")
+
 // Middleware để thiết lập dữ liệu trong res.locals
 router.use(async (req, res, next) => {
   let total = await tongsuachuaton()
@@ -376,7 +378,7 @@ router.put('/update-lichsu-string', async (req, res) => {
   try {
       let  id  = req.body.id; // Lấy ID của thiết bị từ URL params
       let  newHistoryEntry  = req.body.lichsu; // Lấy dòng lịch sử mới từ query parameters
-
+      
       // Kiểm tra xem có dòng lịch sử mới được gửi lên không
       if (!newHistoryEntry) {
           return res.status(400).json({ message: 'Dữ liệu lịch sử mới không được cung cấp trong query parameter (newHistoryEntry).' });
@@ -406,7 +408,18 @@ router.put('/update-lichsu-string', async (req, res) => {
 
       // Cập nhật trường lichsu
       let updatedDongco = await xulydongco.xulyupdale_lichsu(id, updatedLichsu);
-      
+      // Ghi lại lịch sử vào collection bảo trì sửa chữa
+      const re = /^\d{2}-\d{2}-\d{4}\s+([\p{L}\s]+?):/u;
+      const m = newHistoryEntry.match(re);
+      let baotri = {
+        ngay: moment().format('DD-MM-YYYY'),
+        idthietbi: id,
+        phong: 'KYTHUAT',
+        noidung: newHistoryEntry,
+        nguoithuchien: m[0] || '',
+      }
+      await baotrisuachua.create_suachua(baotri)
+      // Trả về phản hồi thành công
       res.status(200).json({
           message: 'Cập nhật lịch sử (nối chuỗi) thành công!',
           dongco: updatedDongco
