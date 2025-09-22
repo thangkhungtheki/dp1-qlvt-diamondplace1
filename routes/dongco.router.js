@@ -409,7 +409,7 @@ router.put('/update-lichsu-string', async (req, res) => {
       // Cập nhật trường lichsu
       let updatedDongco = await xulydongco.xulyupdale_lichsu(id, updatedLichsu);
       // Ghi lại lịch sử vào collection bảo trì sửa chữa
-      const re = /^\d{2}-\d{2}-\d{4}\s+([\p{L}\s]+?):/u;
+      const re = /^\d{2}-\d{2}-\d{4}\s+([\p{L}\s]+?):/;
       const m = newHistoryEntry.match(re);
       let baotri = {
         ngay: moment().format('DD-MM-YYYY'),
