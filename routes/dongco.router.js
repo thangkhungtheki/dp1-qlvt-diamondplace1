@@ -409,14 +409,14 @@ router.put('/update-lichsu-string', async (req, res) => {
       // Cập nhật trường lichsu
       let updatedDongco = await xulydongco.xulyupdale_lichsu(id, updatedLichsu);
       // Ghi lại lịch sử vào collection bảo trì sửa chữa
-      let re = /^\d{2}-\d{2}-\d{4}\s+([\p{L}\s]+?):/
+      let re = /^(\d{2}-\d{2}-\d{4})\s+(.+?):\s*(.*)$/
       let m = newHistoryEntry.match(re);
       let baotri = {
         ngay: moment().format('DD-MM-YYYY'),
         idthietbi: id,
         phong: 'KYTHUAT',
         noidung: newHistoryEntry,
-        nguoithuchien:  m[1] || '',
+        nguoithuchien:  m[2] || 'KHONGXACDINH',
       }
       console.log(m)
       let kq = await baotrisuachua.create_suachua(baotri)
