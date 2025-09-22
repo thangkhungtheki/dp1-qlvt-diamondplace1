@@ -417,6 +417,7 @@ router.put('/update-lichsu-string', async (req, res) => {
         phong: 'KYTHUAT',
         noidung: newHistoryEntry,
         nguoithuchien:  m[2] || 'KHONGXACDINH',
+        noidunglaychonhanh: dongcoToUpdate.tenthietbi + " " + dongcoToUpdate.vitri + ": " + newHistoryEntry
       }
       console.log(m)
       let kq = await baotrisuachua.create_suachua(baotri)
