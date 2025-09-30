@@ -416,7 +416,7 @@ router.put('/update-lichsu-string', async (req, res) => {
         idthietbi: id,
         phong: 'KYTHUAT',
         noidung: newHistoryEntry,
-        nguoithuchien:  m[2] || 'KHONGXACDINH',
+        nguoithuchien:  m?.[2] || 'KHONGXACDINH',
         noidunglaychonhanh: dongcoToUpdate.tenthietbi + " " + dongcoToUpdate.vitri + ": " + newHistoryEntry
       }
       console.log(m)
