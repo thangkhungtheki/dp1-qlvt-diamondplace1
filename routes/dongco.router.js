@@ -409,8 +409,12 @@ router.put('/update-lichsu-string', async (req, res) => {
       // Cập nhật trường lichsu
       let updatedDongco = await xulydongco.xulyupdale_lichsu(id, updatedLichsu);
       // Ghi lại lịch sử vào collection bảo trì sửa chữa
-      let re = /^(\d{2}-\d{2}-\d{4})\s+(.+?):\s*(.*)$/
+      let re = /^(\d{2}-\d{2}-\d{4})\s+([A-Za-zÀ-ỹ\s]+?):/m
       let m = newHistoryEntry.match(re);
+      if (m) {
+        const date = m[1]; // "30-09-2025"
+        const name = m[2]; // "Chung Nguyen Thanh Long"
+      }
       let baotri = {
         ngay: moment().format('DD-MM-YYYY'),
         idthietbi: id,
