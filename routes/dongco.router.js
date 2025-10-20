@@ -777,7 +777,7 @@ async function guimailsuachuathang() {
   return (result)
   
 }
-router.get('/guimailsuachuathang', async (req, res) => {
+router.put('/guimailsuachuathang', async (req, res) => {
   let result = await guimailsuachuathang()
   
   maildinhky.sendmail(result)
