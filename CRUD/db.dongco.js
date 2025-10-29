@@ -75,6 +75,7 @@ async function xulyupdale_lichsu(id, lichsu){
     }
 }
 
+
 module.exports = {
     doc_dongco,
     tao_dongco,
