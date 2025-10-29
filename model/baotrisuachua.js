@@ -1,4 +1,3 @@
-const { check } = require("express-validator")
 const mongooge = require("mongoose")
 const Schema = mongooge.Schema
 const schema = new Schema({
@@ -9,6 +8,10 @@ const schema = new Schema({
     nguoithuchien: {type: String, required: false},
     anh: {type: Array, required: false},
     noidunglaychonhanh: {type: String, required: false},
+    check: {type: String, required: false},
+},
+{
+    timestamps: true // <--- THÊM DÒNG NÀY
 })
 
 
