@@ -780,8 +780,8 @@ async function guimailsuachuathang() {
 router.put('/guimailsuachuathang', async (req, res) => {
   // let result = await guimailsuachuathang()
   let result = await guimailsuachuathangcocheckx()
-  // maildinhky.sendmail(result)
-  res.send(result)
+  maildinhky.sendmail(result)
+  res.send('ok')
 }) 
 async function guimailsuachuathangcocheckx() {
     // 1. Lấy chuỗi "Tháng-Năm" hiện tại và tháng trước
