@@ -1,0 +1,290 @@
+
+<div class="container-fluid">
+  <h1 class="h3 mb-3 text-gray-800">📅 Bảng Công Việc Định Kỳ</h1>
+
+  <div class="card shadow mb-4">
+    <div class="card-header py-3 bg-primary text-white d-flex justify-content-between align-items-center">
+      <h6 class="m-0 font-weight-bold">Danh sách công việc</h6>
+      <a href="/housetask/api/them" class="btn btn-light btn-sm">
+        <i class="fas fa-plus"></i> Thêm công việc
+      </a>
+    </div>
+
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover" id="dataTable" width="100%">
+          <thead class="thead-dark">
+            <tr class="text-center">
+              <th>Thao tác</th>
+              <th>Khu vực</th>
+              <th>Vị trí</th>
+              <th>Tên công việc</th>
+              <th>Ngày bắt đầu</th>
+              <th>Ngày kết thúc</th>
+              <th>Số lần làm</th>
+              <th>Thời gian</th>
+              <th>Số ngày nhắc</th>
+             
+              <th>Mô tả</th>
+          
+              <th>Lịch sử CV</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% if (data && data.length > 0) { %>
+              <% data.forEach((cv) => { %>
+                <tr>
+                  <td class="text-center">
+                    <div class="btn-group" role="group">
+                      <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#modalSua" onclick="sua('<%= cv._id %>')">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modalXoa" onclick="sua('<%= cv._id %>')">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                      <!-- <button class="btn btn-sm btn-secondary" onclick="xemchitiet('<%= cv._id %>')">
+                        <i class="fas fa-info-circle"></i>
+                      </button> -->
+                    </div>
+                  </td>
+                  <td><%= cv.khuvuc %></td>
+                  <td><%= cv.vitri %></td>
+                  <td><%= cv.tencv %></td>
+                  <td><%= cv.ngaybatdau %></td>
+                  <td><%= cv.ngayketthuc %></td>
+                  <td class="text-center"><%= cv.solanlam %></td>
+                  <td><%= cv.thoigian %></td>
+                  <td class="text-center"><%= cv.songaynhacthongbao %></td>
+                
+                  <td><%= cv.mota %></td>
+                
+                  <td><%= cv.lichsucv %></td>
+                </tr>
+              <% }) %>
+            <% } else { %>
+              <tr>
+                <td colspan="12" class="text-center text-muted">Chưa có công việc nào được thêm.</td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Xóa -->
+<div class="modal fade" id="modalXoa" tabindex="-1" role="dialog" aria-labelledby="modalXoaLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="modalXoaLabel">Xóa công việc</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">Bạn có chắc chắn muốn xóa công việc này?</div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+        <button class="btn btn-danger" id="btnXoaCv">Xóa</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Sửa -->
+<div class="modal fade" id="modalSua" tabindex="-1" role="dialog" aria-labelledby="modalSuaLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      
+      <div class="modal-header bg-warning text-white">
+        <h5 class="modal-title" id="modalSuaCVLabel"><i class="fas fa-edit"></i> Chỉnh sửa công việc định kỳ</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form id="form-sua-cv" method="POST" action="/api/congviec/update">
+
+           <!-- ✅ Ảnh minh họa -->
+          <div class="form-group text-center">
+            <img id="edit_preview_anh" src="" alt="Ảnh công việc" 
+                 style="display:none; max-width: 300px; border-radius: 10px; margin-bottom: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2);">
+          </div>
+
+          <input type="hidden" id="idcv" name="_id">
+
+          <!-- Khu vực -->
+          <div class="form-group">
+            <label for="edit_khuvuc"><strong>Khu vực</strong></label>
+            <select class="form-control" id="edit_khuvuc" name="khuvuc" required>
+              <option value="">-- Chọn khu vực --</option>
+              <option value="sanhtiec">Sảnh</option>
+              <option value="vanphong">Văn Phòng</option>
+              <option value="khungoai">Khu Ngoài</option>
+              <option value="khutiepthuc">Khu Tiếp Thực</option>
+              <option value="toiletkhach">Toilet Khách</option>
+              <option value="phongcodau">Phòng Cô Dâu</option>
+            </select>
+          </div>
+
+          <!-- Vị trí -->
+          <div class="form-group">
+            <label for="edit_vitri"><strong>Vị trí</strong></label>
+            <input type="text" class="form-control" id="edit_vitri" name="vitri" placeholder="Nhập vị trí">
+          </div>
+
+          <!-- Tên công việc -->
+          <div class="form-group">
+            <label for="edit_tencv"><strong>Tên công việc</strong></label>
+            <input type="text" class="form-control" id="edit_tencv" name="tencv" placeholder="Nhập tên công việc">
+          </div>
+
+          <!-- Ngày bắt đầu và kết thúc -->
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="edit_ngaybatdau"><strong>Ngày bắt đầu</strong></label>
+              <input type="date" class="form-control" id="edit_ngaybatdau" name="ngaybatdau">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="edit_ngayketthuc"><strong>Ngày kết thúc</strong></label>
+              <input type="date" class="form-control" id="edit_ngayketthuc" name="ngayketthuc">
+            </div>
+          </div>
+
+          <!-- Mô tả công việc -->
+          <div class="form-group">
+            <label for="edit_motacongviec"><strong>Mô tả công việc</strong></label>
+            <textarea class="form-control" id="edit_motacongviec" name="motacongviec" rows="3"></textarea>
+          </div>
+
+          <!-- Số lần làm -->
+          <div class="form-group">
+            <label for="edit_solanlam"><strong>Số lần làm</strong></label>
+            <input type="number" class="form-control" id="edit_solanlam" name="solanlam">
+          </div>
+
+          <!-- Lịch sử công việc -->
+          <div class="form-group">
+            <label for="edit_lichsucv"><strong>Lịch sử công việc</strong></label>
+            <textarea class="form-control" id="edit_lichsucv" name="lichsucv" rows="4"></textarea>
+          </div>
+
+          <!-- Thời gian -->
+          <div class="form-group">
+            <label for="edit_thoigian"><strong>Thời gian</strong></label>
+            <input type="text" class="form-control" id="edit_thoigian" name="thoigian" placeholder="VD: 08:00 - 10:00">
+          </div>
+
+          <!-- Số ngày nhắc thông báo -->
+          <div class="form-group">
+            <label for="edit_songaynhacthongbao"><strong>Số ngày nhắc thông báo</strong></label>
+            <input type="number" class="form-control" id="edit_songaynhacthongbao" name="songaynhacthongbao">
+          </div>
+
+          <div class="text-center">
+            <button type="submit" class="btn btn-warning text-white px-4">Cập nhật</button>
+            <button type="button" class="btn btn-secondary px-4 ml-2" data-dismiss="modal">Đóng</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- jQuery -->
+<script src="/vendor/jquery/jquery.min.js"></script>
+
+<!-- Bootstrap core JavaScript -->
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript -->
+<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- DataTables -->
+<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+<!-- Custom scripts -->
+<script src="/js/sb-admin-2.min.js"></script>
+
+<!-- Khởi tạo DataTable -->
+<script>
+
+  // Khởi tạo bảng DataTable
+  $(document).ready(function () {
+    $('#dataTable').DataTable({
+      pageLength: 25,
+      order: [[1, 'asc']],
+      language: {
+        search: "Tìm kiếm:",
+        lengthMenu: "Hiển thị _MENU_ dòng",
+        info: "Hiển thị _START_ - _END_ trong _TOTAL_ công việc",
+        paginate: { next: ">", previous: "<" },
+        zeroRecords: "Không có dữ liệu phù hợp"
+      }
+    });
+  });
+
+  // Gắn ID vào nút trong modal
+  function sua(id) {
+    // alert('Bạn đã chọn công việc với ID: ' + id);
+    openEditModal(id);
+    // $('#btnXoaCv').val(id);
+  }
+
+  // Xem chi tiết
+  function xemchitiet(id) {
+    window.location.href = '/congviec/chitiet?id=' + id;
+  }
+
+  // Xóa công việc
+  $('#btnXoaCv').click(function () {
+    const id = $(this).val();
+    $.post('/congviec/xoa', { id }, function () {
+      alert('✅ Đã xóa công việc!');
+      location.reload();
+    }).fail(() => alert('❌ Lỗi khi xóa công việc.'));
+  });
+  
+</script>
+<script>
+  // Mở modal sửa
+  function openEditModal(id) {
+    // Gọi API lấy dữ liệu công việc theo ID
+    $.get(`/housetask/api/congviec/${id}`, function (res) {
+      const cv = res.cv; // ✅ lấy object thực tế
+      $('#idcv').val(cv._id);
+      $('#edit_khuvuc').val(cv.khuvuc);
+      $('#edit_vitri').val(cv.vitri);
+      $('#edit_tencv').val(cv.tencv);
+      $('#edit_ngaybatdau').val(cv.ngaybatdau);
+      $('#edit_ngayketthuc').val(cv.ngayketthuc);
+      $('#edit_motacongviec').val(cv.motacongviec);
+      $('#edit_solanlam').val(cv.solanlam);
+      $('#edit_lichsucv').val(cv.lichsucv);
+      $('#edit_thoigian').val(cv.thoigian);
+      $('#edit_songaynhacthongbao').val(cv.songaynhacthongbao);
+      $('#edit_preview_anh').attr('src', cv.anhcv ? cv.anhcv : '/img/logochudp.png').show();
+      $('#modalSuaCV').modal('show');
+    });
+  }
+
+  // Submit form sửa
+  $('#form-sua-cv').on('submit', function (e) {
+    e.preventDefault();
+    const formData = $(this).serialize();
+
+    $.post('/api/congviec/update', formData)
+      .done(() => {
+        alert('✅ Cập nhật công việc thành công!');
+        $('#modalSuaCV').modal('hide');
+        window.location.reload();
+      })
+      .fail(() => {
+        alert('❌ Lỗi khi cập nhật công việc!');
+      });
+  });
+</script>

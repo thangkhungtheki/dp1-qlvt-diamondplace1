@@ -16,6 +16,8 @@ var qltkRouter = require('./routes/qlkt.router')
 var userktRouter = require('./routes/user.kt')
 // dùng router house
 var houseRouter = require('./routes/house.router')
+var houseTaskRouter = require('./routes/housetaskrou')
+
 var routerdongco = require('./routes/dongco.router')
 var firebaseRouter = require('./routes/firebase');
 
@@ -76,6 +78,7 @@ app.use('/user/' ,userktRouter )
 app.use('/house/', houseRouter)
 app.use('/dongco/', routerdongco)
 app.use('/app', firebaseRouter);
+app.use('/housetask/', houseTaskRouter);
 
 app.use((req, res, next) => {
   res.status(404).redirect("/signin");
