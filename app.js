@@ -19,6 +19,8 @@ var houseRouter = require('./routes/house.router')
 var routerdongco = require('./routes/dongco.router')
 var firebaseRouter = require('./routes/firebase');
 
+var deepseekroute = require('./routes/deepseek.route.js')
+
 const cors = require('cors');
 // path database
 mongoose.connect(process.env.DATABASE_URL,{useNewUrlParser:true, useUnifiedTopology: true });
@@ -76,6 +78,8 @@ app.use('/user/' ,userktRouter )
 app.use('/house/', houseRouter)
 app.use('/dongco/', routerdongco)
 app.use('/app', firebaseRouter);
+
+app.use('/api/', deepseekroute);
 
 app.use((req, res, next) => {
   res.status(404).redirect("/signin");
