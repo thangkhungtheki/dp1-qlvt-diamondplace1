@@ -1,5 +1,5 @@
 import express from "express";
-import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { Client} from "@modelcontextprotocol/sdk/client/index.js";
 import dotenv from "dotenv";
 
 dotenv.config();
