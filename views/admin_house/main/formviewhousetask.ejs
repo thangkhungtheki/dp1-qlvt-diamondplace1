@@ -12,7 +12,7 @@
 
     <div class="card-body">
       <div class="table-responsive">
-        <table class="table table-bordered table-striped table-hover" id="dataTable" width="100%">
+        <table class="table table-bordered table-striped" id="dataTable" width="100%">
           <thead class="thead-dark">
             <tr class="text-center">
               <th>Thao tác</th>
@@ -214,19 +214,13 @@
 <script>
 
   // Khởi tạo bảng DataTable
-  $(document).ready(function () {
-    $('#dataTable').DataTable({
-      pageLength: 25,
-      order: [[1, 'asc']],
-      language: {
-        search: "Tìm kiếm:",
-        lengthMenu: "Hiển thị _MENU_ dòng",
-        info: "Hiển thị _START_ - _END_ trong _TOTAL_ công việc",
-        paginate: { next: ">", previous: "<" },
-        zeroRecords: "Không có dữ liệu phù hợp"
-      }
-    });
-  });
+  // $(document).ready(function() {
+  //   $.noConflict();
+  //   var table = $('#dataTable').DataTable({
+  //     "pageLength": 50
+  //   });
+
+  // });
 
   // Gắn ID vào nút trong modal
   function sua(id) {
