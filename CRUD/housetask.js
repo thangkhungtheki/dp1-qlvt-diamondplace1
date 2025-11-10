@@ -29,8 +29,9 @@ async function update(id, doc){
 async function deletes (id){
     try {
         await modemhousetask.findByIdAndDelete(id)
+        return true
     } catch (e) {
-        
+        return false
     }
 }
 

@@ -3,7 +3,7 @@
     <h6 class="m-0 font-weight-bold">Thêm công việc định kỳ</h6>
   </div>
   <div class="card-body">
-    <form id="form-them-cv" method="POST" action="/api/congviec">
+    <form id="form-them-cv" method="POST">
 
       <!-- Khu vực -->
       <div class="form-group">
@@ -41,26 +41,11 @@
         </div>
       </div>
 
-      <!-- Mô tả công việc -->
-      <div class="form-group">
-        <label for="motacongviec"><strong>Mô tả công việc</strong></label>
-        <textarea class="form-control" id="motacongviec" name="motacongviec" rows="3" placeholder="Nhập mô tả công việc"></textarea>
-      </div>
 
       <!-- Số lần làm -->
       <div class="form-group">
         <label for="solanlam"><strong>Số lần làm</strong></label>
         <input type="number" class="form-control" id="solanlam" name="solanlam" placeholder="Nhập số lần thực hiện">
-      </div>
-
-
-      
-
-
-      <!-- Lịch sử công việc -->
-      <div class="form-group">
-        <label for="lichsucv"><strong>Lịch sử công việc</strong></label>
-        <textarea class="form-control" id="lichsucv" name="lichsucv" rows="5" placeholder="Ghi chú chi tiết lịch sử công việc"></textarea>
       </div>
 
       <!-- Thời gian -->
@@ -74,7 +59,21 @@
         <label for="songaynhacthongbao"><strong>Số ngày nhắc thông báo</strong></label>
         <input type="number" class="form-control" id="songaynhacthongbao" name="songaynhacthongbao" placeholder="Nhập số ngày nhắc">
       </div>
-
+      <!-- Mô tả công việc -->
+      <div class="form-group">
+        <label for="motacongviec"><strong>Mô tả công việc</strong></label>
+        <textarea class="form-control" id="motacongviec" name="motacongviec" rows="5" placeholder="Nhập mô tả công việc"></textarea>
+      </div>
+      <!-- Lịch sử công việc -->
+      <div class="form-group">
+        <label for="lichsucv"><strong>Lịch sử công việc</strong></label>
+        <textarea class="form-control" id="lichsucv" name="lichsucv" rows="5" placeholder="Ghi chú chi tiết lịch sử công việc"></textarea>
+      </div>
+      <!-- Lịch sử kiểm tra -->
+          <div class="form-group">
+            <label for="edit_lichsukiemtra"><strong>Lịch sử kiểm tra</strong></label>
+            <textarea class="form-control" id="edit_lichsukiemtra" name="lichsukiemtra" rows="4"></textarea>
+          </div>
       <hr>
       <div class="text-center">
         <button type="submit" class="btn btn-success px-4">Lưu công việc</button>
@@ -90,7 +89,7 @@
     e.preventDefault();
     const data = $(this).serialize();
 
-    $.post('/api/congviec', data, function (res) {
+    $.post('/housetask/api/congviec/them', data, function (res) {
       alert('✅ Đã thêm công việc định kỳ thành công!');
       $('#form-them-cv')[0].reset();
     }).fail(() => {

@@ -13,7 +13,8 @@ const schema = new Schema({
     thoigian: {type: String, required: false},
     songaynhacthongbao: {type: String, required: false},
     maqr: {type: String, require: false},
-    maqrcochu: {type: String, require: false}
+    maqrcochu: {type: String, require: false},
+    lichsukiemtra: {type: String, required: false}
 },
 {
     timestamps: true // <--- THÊM DÒNG NÀY

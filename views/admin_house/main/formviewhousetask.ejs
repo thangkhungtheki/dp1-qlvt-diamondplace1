@@ -25,9 +25,10 @@
               <th>Thời gian</th>
               <th>Số ngày nhắc</th>
              
-              <th>Mô tả</th>
+              <th>Mô tả CV</th>
           
               <th>Lịch sử CV</th>
+              <th>Lịch sử kiểm tra</th>
             </tr>
           </thead>
 
@@ -57,9 +58,10 @@
                   <td><%= cv.thoigian %></td>
                   <td class="text-center"><%= cv.songaynhacthongbao %></td>
                 
-                  <td><%= cv.mota %></td>
+                  <td><%= cv.motacongviec %></td>
                 
                   <td><%= cv.lichsucv %></td>
+                  <td><%= cv.lichsukiemtra %></td>
                 </tr>
               <% }) %>
             <% } else { %>
@@ -106,12 +108,12 @@
       </div>
 
       <div class="modal-body">
-        <form id="form-sua-cv" method="POST" action="/api/congviec/update">
+        <form id="form-sua-cv" method="POST">
 
            <!-- ✅ Ảnh minh họa -->
           <div class="form-group text-center">
             <img id="edit_preview_anh" src="" alt="Ảnh công việc" 
-                 style="display:none; max-width: 300px; border-radius: 10px; margin-bottom: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2);">
+                 style="display:none; max-width: 250px; border-radius: 5px; margin-bottom: 5px; box-shadow: 0 0 5px rgba(0,0,0,0.2);">
           </div>
 
           <input type="hidden" id="idcv" name="_id">
@@ -154,22 +156,10 @@
             </div>
           </div>
 
-          <!-- Mô tả công việc -->
-          <div class="form-group">
-            <label for="edit_motacongviec"><strong>Mô tả công việc</strong></label>
-            <textarea class="form-control" id="edit_motacongviec" name="motacongviec" rows="3"></textarea>
-          </div>
-
           <!-- Số lần làm -->
           <div class="form-group">
             <label for="edit_solanlam"><strong>Số lần làm</strong></label>
             <input type="number" class="form-control" id="edit_solanlam" name="solanlam">
-          </div>
-
-          <!-- Lịch sử công việc -->
-          <div class="form-group">
-            <label for="edit_lichsucv"><strong>Lịch sử công việc</strong></label>
-            <textarea class="form-control" id="edit_lichsucv" name="lichsucv" rows="4"></textarea>
           </div>
 
           <!-- Thời gian -->
@@ -183,7 +173,21 @@
             <label for="edit_songaynhacthongbao"><strong>Số ngày nhắc thông báo</strong></label>
             <input type="number" class="form-control" id="edit_songaynhacthongbao" name="songaynhacthongbao">
           </div>
-
+          <!-- Mô tả công việc -->
+          <div class="form-group">
+            <label for="edit_motacongviec"><strong>Mô tả công việc</strong></label>
+            <textarea class="form-control" id="edit_motacongviec" name="motacongviec" rows="6"></textarea>
+          </div>
+          <!-- Lịch sử công việc -->
+          <div class="form-group">
+            <label for="edit_lichsucv"><strong>Lịch sử công việc</strong></label>
+            <textarea class="form-control" id="edit_lichsucv" name="lichsucv" rows="5"></textarea>
+          </div>
+          <!-- Lịch sử kiểm tra -->
+          <div class="form-group">
+            <label for="edit_lichsukiemtra"><strong>Lịch sử kiểm tra</strong></label>
+            <textarea class="form-control" id="edit_lichsukiemtra" name="lichsukiemtra" rows="4"></textarea>
+          </div>
           <div class="text-center">
             <button type="submit" class="btn btn-warning text-white px-4">Cập nhật</button>
             <button type="button" class="btn btn-secondary px-4 ml-2" data-dismiss="modal">Đóng</button>
@@ -226,7 +230,7 @@
   function sua(id) {
     // alert('Bạn đã chọn công việc với ID: ' + id);
     openEditModal(id);
-    // $('#btnXoaCv').val(id);
+    $('#btnXoaCv').val(id);
   }
 
   // Xem chi tiết
@@ -237,10 +241,13 @@
   // Xóa công việc
   $('#btnXoaCv').click(function () {
     const id = $(this).val();
-    $.post('/congviec/xoa', { id }, function () {
-      alert('✅ Đã xóa công việc!');
-      location.reload();
-    }).fail(() => alert('❌ Lỗi khi xóa công việc.'));
+    console.log('Xóa công việc với ID:', id); 
+    $.post(`/housetask/api/congviec/delete/`, { _id: id })
+      .done(() => {
+        // alert('✅ Đã xóa công việc!');
+        location.reload();
+      })
+    .fail(() => alert('❌ Lỗi khi xóa công việc.'));
   });
   
 </script>
@@ -261,24 +268,24 @@
       $('#edit_lichsucv').val(cv.lichsucv);
       $('#edit_thoigian').val(cv.thoigian);
       $('#edit_songaynhacthongbao').val(cv.songaynhacthongbao);
-      $('#edit_preview_anh').attr('src', cv.anhcv ? cv.anhcv : '/img/logochudp.png').show();
+      $('#edit_preview_anh').attr('src', 'data:image/png;base64,' + (cv.maqrcochu ? cv.maqrcochu : '/img/logochudp.png')).show();
       $('#modalSuaCV').modal('show');
     });
   }
 
   // Submit form sửa
   $('#form-sua-cv').on('submit', function (e) {
-    e.preventDefault();
-    const formData = $(this).serialize();
-
-    $.post('/api/congviec/update', formData)
-      .done(() => {
-        alert('✅ Cập nhật công việc thành công!');
-        $('#modalSuaCV').modal('hide');
-        window.location.reload();
-      })
-      .fail(() => {
-        alert('❌ Lỗi khi cập nhật công việc!');
-      });
+      e.preventDefault();
+      const formData = $(this).serialize();
+      // console.log(formData);
+      $.post(`/housetask/api/congviec/update`, formData)
+        .done(() => {
+          alert('✅ Cập nhật công việc thành công!');
+          $('#modalSua').modal('hide');
+          window.location.reload();
+        })
+        .fail(() => {
+          alert('❌ Lỗi khi cập nhật công việc!');
+        });
   });
 </script>
