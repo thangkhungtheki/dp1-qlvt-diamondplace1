@@ -129,7 +129,7 @@ async function maqrcochu(docs) {
         }
 
         const docss = documents
-        const defaultImagePath = path.join(__dirname, 'img', 'default-background.png');
+        const defaultImagePath = path.join(__dirname, 'img', 'default-background-1.png');
 
         let backgroundImage;
         try {
