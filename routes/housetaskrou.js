@@ -56,6 +56,7 @@ router.post('/api/congviec/them', async (req, res) => {
             khuvuc: req.body.khuvuc,
             vitri: req.body.vitri,
             tencv: req.body.tencv,
+            congviectheothang: req.body.congviectheothang,
             ngaybatdau: req.body.ngaybatdau,
             ngayketthuc: req.body.ngayketthuc,     
             solanlam: req.body.solanlam,
