@@ -210,7 +210,7 @@ router.get('/api/capnhatmaqrcochu', async(req, res) => {
                 motacongviec: document.motacongviec,
                 solanlam: document.solanlam,
                 congviectheothang: document.congviectheothang,
-                mota: document.mota,
+                mota: document.mota, // không sử dụng
                 thoigian: document.thoigian,
                 songaynhacthongbao: document.songaynhacthongbao,
                 lichsucv: document.lichsucv,
