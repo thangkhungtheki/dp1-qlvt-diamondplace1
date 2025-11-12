@@ -43,7 +43,7 @@ router.post('/api/congviec/update', async (req, res) => {
             lichsukiemtra: req.body.lichsukiemtra
         }
         let result = await xuly.update(id, body)
-        await axios.get('http://localhost:8080/housetask/api/capnhatmaqrcochu')
+        await axios.get('https://files.diamondplace.org/housetask/api/capnhatmaqrcochu')
         if(result){
             res.redirect('/housetask/api/view')
         }else{
@@ -68,8 +68,8 @@ router.post('/api/congviec/them', async (req, res) => {
             lichsukiemtra: req.body.lichsukiemtra
         }
         let result = await xuly.create(body)
-        await axios.get('http://localhost:8080/housetask/api/capnhatmaqr') 
-        await axios.get('http://localhost:8080/housetask/api/capnhatmaqrcochu')
+        await axios.get('https://files.diamondplace.org/housetask/api/capnhatmaqr') 
+        await axios.get('https://files.diamondplace.org/housetask/api/capnhatmaqrcochu')
         if(result){
             res.redirect('/housetask/api/view')
         }else{
