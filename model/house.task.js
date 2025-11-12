@@ -11,8 +11,9 @@ const schema = new Schema({
     mota: {type: String, required: false},
     lichsucv: {type: String, required: false},
     thoigian: {type: String, required: false},
-    songaynhacthongbao: {type: String, required: false},
+    congviectheothang: {type: String, required: false},
     maqr: {type: String, require: false},
+    thoigian: {type: String, required: false},
     maqrcochu: {type: String, require: false},
     lichsukiemtra: {type: String, required: false}
 },

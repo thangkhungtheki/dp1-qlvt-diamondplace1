@@ -19,6 +19,7 @@
               <th>Khu vực</th>
               <th>Vị trí</th>
               <th>Tên công việc</th>
+              <th>Tháng</th>
               <th>Ngày bắt đầu</th>
               <th>Ngày kết thúc</th>
               <th>Số lần làm</th>
@@ -52,6 +53,7 @@
                   <td><%= cv.khuvuc %></td>
                   <td><%= cv.vitri %></td>
                   <td><%= cv.tencv %></td>
+                  <td><%= cv.congviectheothang %></td>
                   <td><%= cv.ngaybatdau %></td>
                   <td><%= cv.ngayketthuc %></td>
                   <td class="text-center"><%= cv.solanlam %></td>
@@ -143,7 +145,19 @@
             <label for="edit_tencv"><strong>Tên công việc</strong></label>
             <input type="text" class="form-control" id="edit_tencv" name="tencv" placeholder="Nhập tên công việc">
           </div>
-
+                <!-- Theo tháng -->
+          <div class="form-group">
+            <label for="edit_congviectheothang"><strong>Theo Tháng</strong></label>
+            <select class="form-control" id="edit_congviectheothang" name="edit_congviectheothang" required>
+              <option value="">-- Chọn tháng --</option>
+              <option value="0">Trong tháng</option>
+              <option value="2">2 tháng</option>
+              <option value="3">3 tháng</option>
+              <option value="4">4 tháng</option>
+              <option value="5">5 tháng</option>
+              <option value="6">6 tháng</option>
+            </select>
+          </div>
           <!-- Ngày bắt đầu và kết thúc -->
           <div class="form-row">
             <div class="form-group col-md-6">
@@ -261,6 +275,7 @@
       $('#edit_khuvuc').val(cv.khuvuc);
       $('#edit_vitri').val(cv.vitri);
       $('#edit_tencv').val(cv.tencv);
+      $('#edit_congviectheothang').val(cv.congviectheothang);
       $('#edit_ngaybatdau').val(cv.ngaybatdau);
       $('#edit_ngayketthuc').val(cv.ngayketthuc);
       $('#edit_motacongviec').val(cv.motacongviec);
