@@ -304,3 +304,36 @@
         });
   });
 </script>
+<style>
+/* 1. Đảm bảo bảng không bị tràn (quan trọng cho DataTables) */
+.table-responsive {
+    /* Đặt kích thước cố định nếu cần hoặc để DataTables quản lý */
+    /* width: 100%; */ 
+    overflow-x: auto; /* Kích hoạt thanh cuộn ngang nếu bảng quá rộng */
+}
+
+/* 2. Quy tắc quan trọng: ép nội dung hiển thị trên một dòng */
+.table-bordered th, 
+.table-bordered td {
+    white-space: nowrap; /* Bắt buộc nội dung không xuống dòng */
+    overflow: hidden;     /* Ẩn nội dung bị tràn ra ngoài */
+    text-overflow: ellipsis; /* Hiển thị dấu ba chấm cho nội dung bị ẩn */
+    max-width: 150px; /* Đặt chiều rộng tối đa cho các cột (điều chỉnh theo ý anh) */
+}
+
+/* 3. Tối ưu hóa chiều rộng cho các cột không cần nhiều chỗ */
+/* Ví dụ: Cột Thao tác và Số lần làm có thể nhỏ hơn */
+.table-bordered th:nth-child(1), /* Thao tác */
+.table-bordered td:nth-child(1) {
+    max-width: 100px; 
+    width: 100px;
+}
+
+.table-bordered th:nth-child(8), /* Số lần làm */
+.table-bordered td:nth-child(8),
+.table-bordered th:nth-child(10), /* Số ngày nhắc */
+.table-bordered td:nth-child(10) {
+    max-width: 70px; 
+    width: 70px;
+}
+</style>
