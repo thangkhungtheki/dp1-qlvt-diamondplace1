@@ -28,7 +28,7 @@ router.get('/api/congviec/:id', async (req, res) => {
     res.send({cv: docs[0]})
 })
 router.get('/app/house/congviec', async (req, res) => {
-    let body = req.body.id
+    let body = req.query.id
     let docs = await xuly.docs({_id: body})
     // console.log(docs)
     res.json(docs[0])
