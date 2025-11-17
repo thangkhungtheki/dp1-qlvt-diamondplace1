@@ -239,63 +239,91 @@ router.get('/api/capnhatmaqrcochu', async(req, res) => {
     res.send('make by thang khung the ki maqrcochu')
 })
 // 📤 Upload ảnh thực hiện công việc
-router.put(
-  '/api/upload-thuchien',
-  filemulter.upload.array('image', 5),
-  filemulter.handleError,
-  async (req, res) => {
-    try {
+// router.put(
+//   '/api/upload-thuchien',
+//   filemulter.upload.array('image', 5),
+//   filemulter.handleError,
+//   async (req, res) => {
+//     try {
       
-      const { idcongviec, phong, noidung, nguoithuchien } = req.body;
+//       const { idcongviec, phong, noidung, nguoithuchien } = req.body;
 
-      if (!req.files || req.files.length === 0) {
-        req.flash('error', 'Không có ảnh được tải lên');
-        return res.redirect('/qlhouse');
-      }
+//       if (!req.files || req.files.length === 0) {
+//         req.flash('error', 'Không có ảnh được tải lên');
+//         return res.redirect('/qlhouse');
+//       }
 
-      // Chuyển từng ảnh sang base64 (chỉ mã hóa phần data, không có prefix)
-      const base64Images = await Promise.all(
-        req.files.map(async (file) => {
-          const filePath = file.path;
+//       // Chuyển từng ảnh sang base64 (chỉ mã hóa phần data, không có prefix)
+//       const base64Images = await Promise.all(
+//         req.files.map(async (file) => {
+//           const filePath = file.path;
 
-          // Resize tối thiểu 500x500, format PNG
-          const resizedBuffer = await sharp(filePath)
-            .resize({
-              width: 500,
-              height: 500,
-              fit: sharp.fit.cover,
-            })
-            .png()
-            .toBuffer();
+//           // Resize tối thiểu 500x500, format PNG
+//           const resizedBuffer = await sharp(filePath)
+//             .resize({
+//               width: 500,
+//               height: 500,
+//               fit: sharp.fit.cover,
+//             })
+//             .png()
+//             .toBuffer();
 
-          // Encode Base64 — chỉ lấy chuỗi encode
-          const base64String = resizedBuffer.toString('base64');
+//           // Encode Base64 — chỉ lấy chuỗi encode
+//           const base64String = resizedBuffer.toString('base64');
 
-          // Xóa file gốc
-          fs.unlinkSync(filePath);
+//           // Xóa file gốc
+//           fs.unlinkSync(filePath);
 
-          return base64String;
-        })
-      );
+//           return base64String;
+//         })
+//       );
 
-      // Lưu vào MongoDB
-      const newRecord = {
-        ngay: new Date().toISOString().split('T')[0],
-        idcongviec,
-        phong,
-        noidung,
-        nguoithuchien,
-        imgthuchien: base64Images,
-        nguoikiemtra: 'chưa kiểm tra',
-      };
+//       // Lưu vào MongoDB
+//       const newRecord = {
+//         ngay: new Date().toISOString().split('T')[0],
+//         idcongviec,
+//         phong,
+//         noidung,
+//         nguoithuchien,
+//         imgthuchien: base64Images,
+//         nguoikiemtra: 'chưa kiểm tra',
+//       };
 
-      await taskkiemtradinhky.creates(newRecord);
+//       await taskkiemtradinhky.creates(newRecord);
 
-      req.flash('success', 'Tải ảnh và lưu dữ liệu thành công!');
-      res.redirect('/qlhouse');
+//       req.flash('success', 'Tải ảnh và lưu dữ liệu thành công!');
+//       res.redirect('/qlhouse');
+//     } catch (error) {
+//       console.error('❌ Lỗi upload ảnh:', error);
+//       res.status(500).send('Lỗi khi xử lý ảnh');
+//     }
+//   }
+// );
+router.put(
+  '/api/upload-thuchien',async (req, res) => {
+    try {
+        const { idcongviec, phong, noidung, nguoithuchien } = req.body;
+        const imgthuchien = req.body.imgthuchien; // Mảng base64 từ client
+        if (!imgthuchien || imgthuchien.length === 0) {
+            console.log('error', 'Không có ảnh được tải lên');
+            return res.redirect('/qlhouse');
+        }
+        // Lưu vào MongoDB
+        const newRecord = {
+            ngay: new Date().toISOString().split('T')[0],     
+            idcongviec,
+            phong,
+            noidung,
+            nguoithuchien,
+            imgthuchien: imgthuchien, // Mảng base64 từ client
+            nguoikiemtra: 'chưa kiểm tra',
+        };
+        await taskkiemtradinhky.creates(newRecord);
+        console.log('Success');
+        res.send('Tải ảnh và lưu dữ liệu thành công!');
     } catch (error) {
-      console.error('❌ Lỗi upload ảnh:', error);
-      res.status(500).send('Lỗi khi xử lý ảnh');
+        console.error('❌ Lỗi upload ảnh:', error);
+        res.status(500).send('Lỗi khi xử lý ảnh');
     }
   }
 );
