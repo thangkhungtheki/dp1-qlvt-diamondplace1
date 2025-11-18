@@ -321,10 +321,11 @@ router.put(
         await taskkiemtradinhky.creates(newRecord);
         let docs = await xuly.docs({_id: idcongviec})
         let dongMoi = `${newRecord.ngay} ${newRecordnoidung}`;
+        var lichsucv;
         if (docs.lichsucv) {
-            let lichsucv = docs.lichsucv + `\n${dongMoi}`;
+            lichsucv = docs.lichsucv + `\n${dongMoi}`;
         } else {
-            let lichsucv = dongMoi;
+            lichsucv = dongMoi;
         }
         await xuly.xulyupdate_lichsucv(idcongviec, lichsucv);
         console.log('Success');
