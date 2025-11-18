@@ -47,11 +47,23 @@ async function update_many(query, update) {
         throw e; // Ném lỗi để hàm gọi nó (guimailsuachuathang) có thể bắt
     }
 }
-
+async function xulyupdate_lichsucv(id, lichsucv){
+    try{
+        const updated = await modemhousetask.findByIdAndUpdate(
+            id,
+            { lichsucv: lichsucv }, // Ghi đè lichsu cũ bằng chuỗi mới đã nối
+            { new: true } // Trả về document đã được cập nhật
+        );
+        return updated
+    }catch(e){
+        return false
+    }
+}
 module.exports = {
     docs,
     create,
     update,
     deletes,
+    xulyupdate_lichsucv,
     update_many // Bổ sung hàm mới vào danh sách export
 }

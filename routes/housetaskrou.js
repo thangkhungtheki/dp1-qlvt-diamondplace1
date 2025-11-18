@@ -322,11 +322,11 @@ router.put(
         let docs = await xuly.docs({_id: idcongviec})
         let dongMoi = `${newRecord.ngay} ${newRecordnoidung}`;
         if (docs.lichsucv) {
-            docs.lichsucv += `\n${dongMoi}`;
+            let lichsucv = docs.lichsucv + `\n${dongMoi}`;
         } else {
-            docs.lichsucv = dongMoi;
+            let lichsucv = dongMoi;
         }
-        await xuly.update(idcongviec, { lichsucv: docs.lichsucv });
+        await xuly.xulyupdate_lichsucv(idcongviec, lichsucv);
         console.log('Success');
         res.send('Tải ảnh và lưu dữ liệu thành công!');
     } catch (error) {
