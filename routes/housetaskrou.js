@@ -319,6 +319,13 @@ router.put(
             nguoikiemtra: 'chưa kiểm tra',
         };
         await taskkiemtradinhky.creates(newRecord);
+        let docs = await xuly.docs({_id: idcongviec})
+        let dongMoi = `${newRecord.ngay} ${newRecordnoidung}`;
+        if (docs.lichsucv) {
+            docs.lichsucv += `\n${dongMoi}`;
+        } else {
+            docs.lichsucv = dongMoi;
+        }
         console.log('Success');
         res.send('Tải ảnh và lưu dữ liệu thành công!');
     } catch (error) {
