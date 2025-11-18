@@ -302,39 +302,44 @@ router.get('/api/capnhatmaqrcochu', async(req, res) => {
 router.put(
   '/api/upload-thuchien',async (req, res) => {
     try {
-        const { idcongviec, phong, noidung, nguoithuchien } = req.body;
+        const idcongviec = req.body.idcongviec;
+        const phong = req.body.phong;
+        const noidung = req.body.noidung;
+        const nguoithuchien = req.body.nguoithuchien;
         const imgthuchien = req.body.imgthuchien; // Mảng base64 từ client
-        if (!imgthuchien || imgthuchien.length === 0) {
-            console.log('error', 'Không có ảnh được tải lên');
-            return res.redirect('/qlhouse');
-        }
+        // if (!imgthuchien || imgthuchien.length === 0) {
+        //     console.log('error', 'Không có ảnh được tải lên');
+        //     return res.redirect('/qlhouse');
+        // }
         // Lưu vào MongoDB
         const newRecord = {
             ngay: new Date().toISOString().split('T')[0],     
-            idcongviec,
-            phong,
-            noidung,
-            nguoithuchien,
+            idcongviec: idcongviec,
+            phong: phong,
+            noidung: noidung,
+            nguoithuchien: nguoithuchien,
             imgthuchien: imgthuchien, // Mảng base64 từ client
             nguoikiemtra: 'chưa kiểm tra',
         };
-        await taskkiemtradinhky.creates(newRecord);
-        let docs = await xuly.docs({_id: idcongviec})
-        let dongMoi = `${newRecord.ngay} ${newRecordnoidung}`;
+        
+        let docss = await xuly.docs({_id: idcongviec});
+        
+        let dongMoi = `${newRecord.ngay} ${newRecord.noidung}`;
         var lichsucv;
-        if (docs[0].lichsucv) {
-            lichsucv = docs[0].lichsucv + `\n${dongMoi}`;
+        if (docss[0].lichsucv) {
+            lichsucv = docss[0].lichsucv + `\n${dongMoi}`;
         } else {
             lichsucv = dongMoi;
         }
-        console.log('>>>ID cong viec: ', idcongviec);
-        console.log('>>>docs[0]: ', docs[0]);
-        console.log(">>>Lich sucv: ", lichsucv)
-        await xuly.xulyupdate_lichsucv(idcongviec, lichsucv);
-        console.log('Success');
-        res.send('Tải ảnh và lưu dữ liệu thành công!');
+        
+        // console.log('>>>docs[0]: ', docs[0]);
+        // console.log(">>>Lich sucv: ", lichsucv)
+        let result = await xuly.xulyupdate_lichsucv(idcongviec, lichsucv);
+        let resultCreate = await taskkiemtradinhky.creates(newRecord);
+        
+        res.send("Tải ảnh và lưu dữ liệu thành công!");
     } catch (error) {
-        console.error('❌ Lỗi upload ảnh:', error);
+        console.log('❌ Lỗi upload ảnh:', error);
         res.status(500).send('Lỗi khi xử lý ảnh');
     }
   }
