@@ -326,6 +326,7 @@ router.put(
         } else {
             docs.lichsucv = dongMoi;
         }
+        await xuly.update(idcongviec, { lichsucv: docs.lichsucv });
         console.log('Success');
         res.send('Tải ảnh và lưu dữ liệu thành công!');
     } catch (error) {
