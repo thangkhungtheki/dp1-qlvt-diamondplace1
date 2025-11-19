@@ -307,13 +307,30 @@ router.put(
         const noidung = req.body.noidung;
         const nguoithuchien = req.body.nguoithuchien;
         const imgthuchien = req.body.imgthuchien; // Mảng base64 từ client
-        // if (!imgthuchien || imgthuchien.length === 0) {
-        //     console.log('error', 'Không có ảnh được tải lên');
-        //     return res.redirect('/qlhouse');
-        // }
-        // Lưu vào MongoDB
+        // 1. Lấy thời gian hiện tại
+        const now = new Date();
+        
+        // 2. Tính toán Offset (UTC+7) và áp dụng
+        // 7 giờ * 60 phút * 60 giây * 1000 miligiây
+        const utc7Offset = 7 * 60 * 60 * 1000;
+        const formatDateTime = (date) => {
+        const yyyy = date.getUTCFullYear();
+        const mm = String(date.getUTCMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+        const dd = String(date.getUTCDate()).padStart(2, '0');
+        const hhgmt7 = String(date.getUTCHours() + 7 ).padStart(2, '0');
+        const hh = String(date.getUTCHours()).padStart(2, '0');
+        const mi = String(date.getUTCMinutes()).padStart(2, '0');
+        const ss = String(date.getUTCSeconds()).padStart(2, '0');
+
+            return `${dd}-${mm}-${yyyy} ${hhgmt7}:${mi}:${ss}`;
+        };
+
+        // 3. Định dạng chuỗi ngày giờ (Đã là UTC+7)
+        const ngayGioUTC7 = formatDateTime(now);  
+        // Lấy thời gian UTC của server và cộng thêm 7 tiếng (đơn giản hóa)
+        // Hoặc sử dụng getTime() và cộng offset.
         const newRecord = {
-            ngay: new Date().toISOString().split('T')[0],     
+            ngay: ngayGioUTC7,     
             idcongviec: idcongviec,
             phong: phong,
             noidung: noidung,
@@ -323,8 +340,8 @@ router.put(
         };
         
         let docss = await xuly.docs({_id: idcongviec});
-        
-        let dongMoi = `${newRecord.ngay} ${newRecord.noidung}`;
+        // console.log('>>>docss: ', docss);
+        let dongMoi = `${ngayGioUTC7} ${newRecord.noidung}`;
         var lichsucv;
         if (docss[0].lichsucv) {
             lichsucv = docss[0].lichsucv + `\n${dongMoi}`;
