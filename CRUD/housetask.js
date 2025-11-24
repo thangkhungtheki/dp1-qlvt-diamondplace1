@@ -15,7 +15,7 @@ async function create(doc){
     }
 }
 
-async function update(id, doc){
+async function updates(id, doc){
     
     try{
         await modemhousetask.findByIdAndUpdate(id, doc)
@@ -62,7 +62,7 @@ async function xulyupdate_lichsucv(id, lichsucv){
 module.exports = {
     docs,
     create,
-    update,
+    updates,
     deletes,
     xulyupdate_lichsucv,
     update_many // Bổ sung hàm mới vào danh sách export

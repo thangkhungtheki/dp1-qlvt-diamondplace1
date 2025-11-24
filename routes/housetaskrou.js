@@ -76,8 +76,8 @@ router.post('/api/congviec/them', async (req, res) => {
             lichsukiemtra: req.body.lichsukiemtra
         }
         let result = await xuly.create(body)
-        await axios.get('https://files.diamondplace.org/housetask/api/capnhatmaqr') 
-        await axios.get('https://files.diamondplace.org/housetask/api/capnhatmaqrcochu')
+        let r1 = await axios.get('https://files.diamondplace.org/housetask/api/capnhatmaqr') 
+        let r2 = await axios.get('https://files.diamondplace.org/housetask/api/capnhatmaqrcochu')
         if(result){
             res.redirect('/housetask/api/view')
         }else{
@@ -211,6 +211,7 @@ router.get('/api/capnhatmaqrcochu', async(req, res) => {
     documents.forEach(async(document) => {
     //console.log(document)
         let resultmaqrcochu = await maqrcochu(document)
+        console.log('resultmaqrcochu: ', resultmaqrcochu);
         try {
             const docss = {
                 khuvuc: document.khuvuc,
@@ -230,7 +231,7 @@ router.get('/api/capnhatmaqrcochu', async(req, res) => {
                 maqrcochu: resultmaqrcochu
                 
             }
-            let result = await xuly.update(document.id ,docss)
+            let result = await xuly.updates(document.id ,docss)
             console.log('Success')
         }catch(e){
             console.log("Loi: ", document.id)
