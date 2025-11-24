@@ -50,7 +50,7 @@ router.post('/api/congviec/update', async (req, res) => {
             songaynhacthongbao: req.body.songaynhacthongbao,
             lichsukiemtra: req.body.lichsukiemtra
         }
-        let result = await xuly.update(id, body)
+        let result = await xuly.updates(id, body)
         await axios.get('https://files.diamondplace.org/housetask/api/capnhatmaqrcochu')
         if(result){
             res.redirect('/housetask/api/view')
@@ -126,7 +126,7 @@ router.get('/api/capnhatmaqr', async(req, res) => {
                 lichsukiemtra: document.lichsukiemtra,
                 maqr: base64Image
             }
-            let result = await xuly.update(document.id ,docss)
+            let result = await xuly.updates(document.id ,docss)
             console.log(base64Image)
         }catch(e){
             console.log("Loi: ", document.id)
