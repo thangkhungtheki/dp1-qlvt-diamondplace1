@@ -9,7 +9,7 @@ const axios = require('axios');
 const path = require('path')
 const sharp = require('sharp');
 const { createCanvas, loadImage, registerFont } = require('canvas');
-const { console } = require("inspector");
+
 const filemulter = require('../multer-upload/multer');
 
 router.get('/api/them', async function(req, res){
@@ -362,4 +362,15 @@ router.put(
     }
   }
 );
+router.get('/app/house/kiemtra', async (req, res) => {
+    let idcongviec = req.query.idcongviec
+    
+    // let today = '19-11-2025';
+    let today = moment().format('DD-MM-YYYY');
+    console.log('idcongviec: ', idcongviec);
+    console.log('today: ', today);
+    let docs = await taskkiemtradinhky.docs({idcongviec: idcongviec, ngay: { $regex: `^${today}` }})
+    console.log('docs: ', docs);
+    res.send('test housetask route ok')
+})
 module.exports = router
