@@ -24,7 +24,18 @@ async function updates(id, doc){
         return false
     }
 }
-
+async function updateoneset(id, nguoiKiemTraMoi) {
+    try {
+        await taskkiemtradinhky.findByIdAndUpdate(
+            id,
+            { $set: { nguoikiemtra: nguoiKiemTraMoi } }
+        );
+        return true;
+    } catch (e) {
+        console.error(e);
+        return false;
+    }
+}
 
 async function deletes (id){
     try {
@@ -52,5 +63,6 @@ module.exports = {
     creates,
     updates,
     deletes,
-    update_many // Bổ sung hàm mới vào danh sách export
+    update_many, // Bổ sung hàm mới vào danh sách export
+    updateoneset
 }

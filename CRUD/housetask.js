@@ -59,11 +59,25 @@ async function xulyupdate_lichsucv(id, lichsucv){
         return false
     }
 }
+
+async function xulyupdate_lichsukiemtra(id, lichsukiemtra){
+    try{
+        const updated = await modemhousetask.findByIdAndUpdate(
+            id,
+            { lichsukiemtra: lichsukiemtra }, // Ghi đè lichsu cũ bằng chuỗi mới đã nối
+            { new: true } // Trả về document đã được cập nhật
+        );
+        return updated
+    }catch(e){
+        return false
+    }
+}
 module.exports = {
     docs,
     create,
     updates,
     deletes,
     xulyupdate_lichsucv,
-    update_many // Bổ sung hàm mới vào danh sách export
+    update_many, // Bổ sung hàm mới vào danh sách export
+    xulyupdate_lichsukiemtra
 }

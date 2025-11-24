@@ -373,4 +373,26 @@ router.get('/app/house/kiemtra', async (req, res) => {
     // console.log('docs: ', docs);
     res.send(docs)
 })
+router.put('/api/kiemtra/update', async (req, res) => {
+
+        let id = req.body._id 
+        let body = {    
+            nguoikiemtra: req.body.nguoikiemtra,
+            idcongviec: req.body.idcongviec,
+        }
+        let result = await taskkiemtradinhky.updateoneset(id, body.nguoikiemtra)
+        let result2 = await xuly.docs({_id: body.idcongviec})
+        // console.log('result2: ', result2);
+
+        let lichsukiemtra;  
+        if (result2[0].lichsukiemtra) {
+            lichsukiemtra = result2[0].lichsukiemtra + `\n${moment().format('DD-MM-YYYY HH:mm:ss')} Đã kiểm tra bởi: ${body.nguoikiemtra}`;
+        } else {
+            lichsukiemtra = `${moment().format('DD-MM-YYYY HH:mm:ss')} Đã kiểm tra bởi: ${body.nguoikiemtra}`;
+        }
+        let result3 = await xuly.xulyupdate_lichsukiemtra(body.idcongviec, lichsukiemtra);
+        // console.log('Lịch sử kiểm tra cập nhật:', lichsukiemtra);
+        // console.log('Kết quả cập nhật lịch sử kiểm tra:', result3);
+        res.status(200).send('Cập nhật kiểm tra thành công');
+});
 module.exports = router
