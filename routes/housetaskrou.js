@@ -390,7 +390,7 @@ router.put('/api/kiemtra/update', async (req, res) => {
         } else {
             lichsukiemtra = `${moment().format('DD-MM-YYYY HH:mm:ss')} Đã kiểm tra bởi: ${body.nguoikiemtra}`;
         }
-        let result3 = await xuly.xulyupdate_lichsukiemtra(body.idcongviec, lichsukiemtra);
+        let result3 = await xuly.xulyupdate_lichsukiemtra(id, lichsukiemtra);
         // console.log('Lịch sử kiểm tra cập nhật:', lichsukiemtra);
         // console.log('Kết quả cập nhật lịch sử kiểm tra:', result3);
         res.status(200).send('Cập nhật kiểm tra thành công');
