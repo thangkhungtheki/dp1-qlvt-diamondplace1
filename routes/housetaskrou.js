@@ -367,10 +367,10 @@ router.get('/app/house/kiemtra', async (req, res) => {
     
     // let today = '19-11-2025';
     let today = moment().format('DD-MM-YYYY');
-    console.log('idcongviec: ', idcongviec);
-    console.log('today: ', today);
+    // console.log('idcongviec: ', idcongviec);
+    // console.log('today: ', today);
     let docs = await taskkiemtradinhky.docs({idcongviec: idcongviec, ngay: { $regex: `^${today}` }})
-    console.log('docs: ', docs);
-    res.send('test housetask route ok')
+    // console.log('docs: ', docs);
+    res.send(docs)
 })
 module.exports = router
