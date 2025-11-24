@@ -380,8 +380,8 @@ router.put('/api/kiemtra/update', async (req, res) => {
             nguoikiemtra: req.body.nguoikiemtra,
             idcongviec: req.body.idcongviec,
         }
-        let result = await taskkiemtradinhky.updateoneset(id, body.nguoikiemtra)
-        let result2 = await xuly.docs({_id: body.idcongviec})
+        let result = await taskkiemtradinhky.updateoneset(body.idcongviec, body.nguoikiemtra)
+        let result2 = await xuly.docs({_id: id})
         // console.log('result2: ', result2);
 
         let lichsukiemtra;  
