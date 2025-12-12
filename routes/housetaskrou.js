@@ -11,7 +11,110 @@ const sharp = require('sharp');
 const { createCanvas, loadImage, registerFont } = require('canvas');
 
 const filemulter = require('../multer-upload/multer');
-
+router.get('/api/xuatexcel', async function(req, res){
+    try {
+            let documents = await xuly.docs();
+        
+            if (!Array.isArray(documents)) {
+              documents = Object.values(documents);
+            }
+        
+            const workbook = new exceljs.Workbook();
+            const worksheet = workbook.addWorksheet('DongcoMayLanh');
+        
+            // Định nghĩa các cột và thuộc tính border
+            const columns = [
+              { header: 'khuvuc', key: 'khuvuc', width: 15 },
+              { header: 'vitri', key: 'vitri', width: 30 },
+              { header: 'tencv', key: 'tencv', width: 20 },
+              { header: 'ngaybatdau', key: 'ngaybatdau', width: 15 },
+              { header: 'ngayketthuc', key: 'ngayketthuc', width: 15 },
+              { header: 'motacongviec', key: 'motacongviec', width: 25 },
+              { header: 'solanlam', key: 'solanlam', width: 15 },
+              { header: 'lichsucv', key: 'lichsucv', width: 20 },
+              { header: 'thoigian', key: 'thoigian', width: 15 },
+              { header: 'lichsukiemtra', key: 'lichsukiemtra', width: 30 },
+              { header: 'QR Code', key: 'maqrcochu', width: 20, style: { alignment: { vertical: 'middle', horizontal: 'center' } } },
+            ];
+            worksheet.columns = columns;
+        
+            const qrCodeColumnIndex = 10; // Index cột 'QR Code' (0-based)
+            const desiredImageWidth = 80; // Kích thước mong muốn của ảnh trong Excel (pixels)
+            const desiredImageHeight = 80;
+        
+            for (const [index, document] of documents.entries()) {
+              const rowNumber = index + 2;
+        
+              worksheet.addRow({
+                khuvuc: document.khuvuc,
+                vitri: document.vitri,
+                tencv: document.tencv,
+                ngaybatdau: document.ngaybatdau,
+                ngayketthuc: document.ngayketthuc,
+                motacongviec: document.motacongviec,
+                solanlam: document.solanlam,
+                lichsucv: document.lichsucv,
+                thoigian: document.thoigian,
+                lichsukiemtra: document.lichsukiemtra,
+                maqrcochu: '',
+              });
+        
+              if (document.maqrcochu) {
+                try {
+                  const base64Data = document.maqrcochu.replace(/^data:image\/\w+;base64,/, '');
+                  const imageBuffer = Buffer.from(base64Data, 'base64');
+        
+                  const imageId = workbook.addImage({
+                    buffer: imageBuffer,
+                    extension: 'png',
+                  });
+        
+                  const qrCodeCell = worksheet.getCell(rowNumber, qrCodeColumnIndex + 1);
+        
+                  const topLeft = { col: qrCodeCell.col - 1, row: qrCodeCell.row - 1 };
+        
+                  worksheet.addImage(imageId, {
+                    tl: topLeft,
+                    ext: { width: desiredImageWidth, height: desiredImageHeight },
+                    editAs: 'oneCell',
+                  });
+        
+                  worksheet.getRow(rowNumber).height = desiredImageHeight * 0.75;
+                } catch (error) {
+                  console.error(`Lỗi xử lý QR code cho ${document.tenthietbi}:`, error);
+                }
+              } else {
+                worksheet.getRow(rowNumber).height = 20;
+              }
+            }
+        
+            // Đóng khung toàn bộ bảng
+            const lastRow = documents.length + 1; // Cộng thêm 1 cho hàng header
+            const lastColumn = columns.length;
+        
+            const range = `A1:${String.fromCharCode(64 + lastColumn)}${lastRow}`;
+            const borderStyles = {
+              top: { style: 'thin' },
+              left: { style: 'thin' },
+              bottom: { style: 'thin' },
+              right: { style: 'thin' }
+            };
+        
+            worksheet.eachRow({ includeEmpty: false }, (row, rowNumber) => {
+              row.eachCell((cell, colNumber) => {
+                cell.border = borderStyles;
+              });
+            });
+        
+            res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            res.setHeader('Content-Disposition', 'attachment; filename=dp1.house.congviec.xlsx');
+            await workbook.xlsx.write(res);
+            res.end();
+          } catch (error) {
+            console.error('Lỗi tổng:', error);
+            res.status(500).send('Internal Server Error');
+          }
+})
 router.get('/api/them', async function(req, res){
     let docs = await xuly.docs({})
     res.render('admin_house/main/view_them_housetask', {docs, moment})
@@ -375,13 +478,13 @@ router.get('/app/house/kiemtra', async (req, res) => {
 })
 router.put('/api/kiemtra/update', async (req, res) => {
 
-        let id = req.body._id 
+        let id = req.body._id // id thực hiện quét mã
         let body = {    
             nguoikiemtra: req.body.nguoikiemtra,
-            idcongviec: req.body.idcongviec,
+            idcongviec: req.body.idcongviec, // id cong viec nhỏ nhiều
         }
-        let result = await taskkiemtradinhky.updateoneset(body.idcongviec, body.nguoikiemtra)
-        let result2 = await xuly.docs({_id: id})
+        let result = await taskkiemtradinhky.updateoneset(id, body.nguoikiemtra)
+        let result2 = await xuly.docs({_id: body.idcongviec})
         // console.log('result2: ', result2);
 
         let lichsukiemtra;  
@@ -390,9 +493,9 @@ router.put('/api/kiemtra/update', async (req, res) => {
         } else {
             lichsukiemtra = `${moment().format('DD-MM-YYYY HH:mm:ss')} Đã kiểm tra bởi: ${body.nguoikiemtra}`;
         }
-        let result3 = await xuly.xulyupdate_lichsukiemtra(id, lichsukiemtra);
+        let result3 = await xuly.xulyupdate_lichsukiemtra(body.idcongviec, lichsukiemtra);
         // console.log('Lịch sử kiểm tra cập nhật:', lichsukiemtra);
         // console.log('Kết quả cập nhật lịch sử kiểm tra:', result3);
-        res.status(200).send('Cập nhật kiểm tra thành công');
+        res.status(200, 'Cập nhật kiểm tra thành công');
 });
 module.exports = router
