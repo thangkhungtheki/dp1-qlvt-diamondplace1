@@ -185,64 +185,107 @@
   </a>
 
 
-<!-- Bootstrap core JavaScript-->
-  <script src="/vendor/jquery/jquery.min.js"></script>
-  <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+<script src="/js/sb-admin-2.min.js"></script>
+<script src="/xulylogoutdp2.js"></script>
 
-  <!-- Core plugin JavaScript-->
-  <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-  <!-- Custom scripts for all pages-->
-  <script src="/js/sb-admin-2.min.js"></script>
-
-  <!-- Page level plugins -->
-  <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
-  <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-  <!-- Page level custom scripts -->
-
-
-  <!-- Xu ly Click button Logout -->
-
-  
-  
-  <!-- Logout Modal-->
-  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel1">Bạn chắc chắn muốn thoát?</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">Lựa chọn "Logout" chúng tôi sẽ xóa session.</div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <button class="btn btn-primary" type="button" id="btnlogout">Logout</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</body>
-
-</html>
 <script>
- function toggleSidebar() {
-  const $body = $('body');
-  const $sidebar = $('.sidebar');
+  // 1. Khởi tạo DataTable (Chỉ chạy khi document ready)
+  $(document).ready(function() {
+    $('#dataTable').DataTable({
+       "pageLength": 50,
+       "language": {
+            "search": "Tìm kiếm:",
+            "lengthMenu": "Hiển thị _MENU_ dòng",
+            "info": "Đang hiển thị _START_ đến _END_ của _TOTAL_ dòng",
+            "paginate": { "first": "Đầu", "last": "Cuối", "next": "Tiếp", "previous": "Trước" }
+        }
+    });
+  });
 
-  if ($sidebar.hasClass('toggled')) {
-    $sidebar.removeClass('toggled');
-    $body.removeClass('sidebar-toggled');
-  } else {
-    $sidebar.addClass('toggled');
-    $body.addClass('sidebar-toggled');
+  // 2. Hàm mở Modal Sửa (Được gọi từ nút bấm)
+  function sua(id) {
+    console.log("Đang sửa ID:", id); // Log để debug
+    
+    // Gọi API lấy chi tiết công việc
+    $.get(`/housetask/api/congviec/${id}`)
+      .done(function (res) {
+          if(!res || !res.cv) {
+              alert("Không tìm thấy dữ liệu công việc!");
+              return;
+          }
+          
+          const cv = res.cv;
+          
+          // Đổ dữ liệu vào Form Modal
+          $('#idcv').val(cv._id);
+          $('#edit_khuvuc').val(cv.khuvuc);
+          $('#edit_vitri').val(cv.vitri);
+          $('#edit_tencv').val(cv.tencv);
+          $('#edit_congviectheothang').val(cv.congviectheothang);
+          $('#edit_ngaybatdau').val(cv.ngaybatdau);
+          $('#edit_ngayketthuc').val(cv.ngayketthuc);
+          $('#edit_motacongviec').val(cv.motacongviec);
+          $('#edit_solanlam').val(cv.solanlam);
+          $('#edit_thoigian').val(cv.thoigian);
+          $('#edit_songaynhacthongbao').val(cv.songaynhacthongbao);
+          
+          // Xử lý hiển thị Textarea (thay dấu chấm bằng xuống dòng để dễ sửa)
+          $('#edit_lichsucv').val(cv.lichsucv || '');
+          $('#edit_lichsukiemtra').val(cv.lichsukiemtra || '');
+
+          // Xử lý hiển thị ảnh QR Preview
+          if (cv.maqrcochu) {
+              let imgSrc = cv.maqrcochu.startsWith('data:image') 
+                           ? cv.maqrcochu 
+                           : 'data:image/png;base64,' + cv.maqrcochu;
+              $('#edit_preview_anh').attr('src', imgSrc).show();
+          } else {
+              $('#edit_preview_anh').hide();
+          }
+
+          // Mở Modal
+          $('#modalSua').modal('show');
+      })
+      .fail(function() {
+          alert("Lỗi kết nối đến server! Không lấy được dữ liệu.");
+      });
   }
-}
 
-$('#sidebarToggle').on('click', toggleSidebar);
-$('#sidebarToggleTop').on('click', toggleSidebar);
+  // 3. Hàm xác nhận Xóa
+  function xacNhanXoa(id) {
+     $('#btnXoaCv').val(id);
+     $('#modalXoa').modal('show');
+  }
 
+  // 4. Xử lý nút Xóa trong Modal
+  $('#btnXoaCv').click(function () {
+    const id = $(this).val();
+    $.post(`/housetask/api/congviec/delete/`, { _id: id })
+      .done(() => {
+        alert('✅ Đã xóa công việc!');
+        location.reload();
+      })
+      .fail(() => alert('❌ Lỗi khi xóa công việc.'));
+  });
 
+  // 5. Xử lý Submit Form Sửa
+  $('#form-sua-cv').on('submit', function (e) {
+      e.preventDefault();
+      const formData = $(this).serialize();
+      
+      $.post(`/housetask/api/congviec/update`, formData)
+        .done(() => {
+          alert('✅ Cập nhật công việc thành công!');
+          $('#modalSua').modal('hide');
+          window.location.reload();
+        })
+        .fail((xhr) => {
+          alert('❌ Lỗi khi cập nhật! ' + (xhr.responseText || ''));
+        });
+  });
 </script>

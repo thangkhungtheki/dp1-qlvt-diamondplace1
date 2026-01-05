@@ -217,7 +217,7 @@
 
   <script>
     $(document).ready(function() {
-      // Khởi tạo DataTables cho lịch sử
+      // Khởi tạo DataTables
       $('#dataTableHistory').DataTable({
         "pageLength": 25,
         "order": [[ 0, "desc" ]],
@@ -231,45 +231,45 @@
       });
     });
   
-    // Hàm hiển thị ảnh trong Modal
-    function xemAnhChiTiet(images) {
-        const container = $('#carousel-inner-container');
-        container.empty(); // Xóa ảnh cũ
+    // Hàm hiển thị ảnh trong Modal (ĐÃ FIX LỖI forEach)
+    function xemAnhChiTiet(dataImages) {
+      const container = $('#carousel-inner-container');
+      container.empty(); // Xóa ảnh cũ
+  
+      let imagesArray = [];
 
-        // 1. Kiểm tra dữ liệu null/undefined
-        if (!images) {
-            alert("Không có dữ liệu ảnh");
-            return;
-        }
+      // Logic xử lý đa dạng kiểu dữ liệu đầu vào
+      if (!dataImages) {
+          alert("Không có dữ liệu ảnh");
+          return;
+      } else if (Array.isArray(dataImages)) {
+          // Nếu đã là mảng thì dùng luôn
+          imagesArray = dataImages;
+      } else if (typeof dataImages === 'string') {
+          // Nếu là chuỗi (trường hợp của anh hiện tại), ép thành mảng 1 phần tử
+          imagesArray = [dataImages];
+      } else {
+          console.error("Dữ liệu ảnh không hợp lệ:", dataImages);
+          alert("Lỗi định dạng ảnh!");
+          return;
+      }
 
-        // 2. FIX QUAN TRỌNG: Nếu dữ liệu là String (do lưu 1 ảnh), ép nó thành Array
-        if (typeof images === 'string') {
-            images = [images];
-        }
-
-        // 3. Kiểm tra nếu vẫn không phải là Array sau khi xử lý
-        if (!Array.isArray(images) || images.length === 0) {
-            alert("Lỗi: Dữ liệu ảnh không hợp lệ");
-            console.error("Dữ liệu nhận được:", images);
-            return;
-        }
-
-        // 4. Giờ thì chắc chắn là Array rồi, chạy forEach thoải mái
-        images.forEach((imgBase64, index) => {
-            // Kiểm tra prefix base64
-            let imgSrc = imgBase64.startsWith('data:image') ? imgBase64 : `data:image/png;base64,${imgBase64}`;
-            
-            let activeClass = index === 0 ? 'active' : '';
-            
-            let html = `
-                <div class="carousel-item ${activeClass}">
-                    <img src="${imgSrc}" class="d-block w-100" style="max-height: 500px; object-fit: contain;" alt="Ảnh thực hiện">
-                </div>
-            `;
-            container.append(html);
-        });
-
-        $('#modalXemAnh').modal('show');
+      // Render ảnh ra Carousel
+      imagesArray.forEach((imgBase64, index) => {
+          // Kiểm tra và thêm prefix nếu thiếu
+          let imgSrc = imgBase64.startsWith('data:image') ? imgBase64 : `data:image/jpeg;base64,${imgBase64}`;
+          
+          let activeClass = index === 0 ? 'active' : '';
+          
+          let html = `
+              <div class="carousel-item ${activeClass}">
+                  <img src="${imgSrc}" class="d-block w-100" style="max-height: 500px; object-fit: contain;" alt="Ảnh thực hiện">
+              </div>
+          `;
+          container.append(html);
+      });
+  
+      $('#modalXemAnh').modal('show');
     }
   </script>
 
