@@ -73,6 +73,22 @@ var moment = require('moment')
 }
 // Hàm 2: Gửi mail NGAY KHI hoàn thành công việc (Mới thêm)
 function sendMailComplete(taskData) {
+    
+    var transporter =  nodemailer.createTransport({ // config mail server
+        host: process.env.HouseHostMail,
+        port: process.env.HousePort,
+        type: 'login',
+        secure: true,
+        auth: {
+            user: process.env.HouseFrom, //Tài khoản gmail vừa tạo
+            pass: process.env.HousePass, //Mật khẩu tài khoản gmail vừa tạo
+        },
+        tls: {
+            // do not fail on invalid certs
+            rejectUnauthorized: false
+        },
+        
+    });
     try {
         const timeNow = moment().format('HH:mm DD-MM-YYYY');
         
