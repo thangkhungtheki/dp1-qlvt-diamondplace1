@@ -401,11 +401,22 @@ router.put('/api/upload-thuchien', async (req, res) => {
         } else {
             lichsucv = dongMoi;
         }
-
+        // Chuẩn bị dữ liệu để gửi mail (Lấy tên công việc từ docss đã query ở trên)
+        const mailData = {
+            tencv: docss[0] ? docss[0].tencv : 'Công việc không tên', // Lấy tên CV
+            nguoithuchien: nguoithuchien,
+            phong: phong, // Hoặc docss[0].vitri nếu phong null
+            noidung: noidung,
+            imgthuchien: imgthuchien
+        };
         // Thực hiện lưu song song để tối ưu thời gian
         await Promise.all([
             xuly.xulyupdate_lichsucv(idcongviec, lichsucv),
-            taskkiemtradinhky.creates(newRecord)
+            taskkiemtradinhky.creates(newRecord),
+            // --------------------------------------------------
+            // chỗ này có thể thao tác send email hoặc thông báo nếu cần
+            mailer.sendMailComplete(mailData) 
+            // --------------------------------------------------
         ]);
 
         res.send("Tải ảnh và lưu dữ liệu thành công!");
