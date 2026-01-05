@@ -232,44 +232,78 @@
     });
   
     // Hàm hiển thị ảnh trong Modal (ĐÃ FIX LỖI forEach)
-    function xemAnhChiTiet(dataImages) {
-      const container = $('#carousel-inner-container');
-      container.empty(); // Xóa ảnh cũ
-  
-      let imagesArray = [];
+    // Hàm hiển thị ảnh trong Modal (ĐÃ FIX LỖI data:image/jpeg;base64,[ )
+  function xemAnhChiTiet(dataImages) {
+        const container = $('#carousel-inner-container');
+        container.empty(); // Xóa ảnh cũ
 
-      // Logic xử lý đa dạng kiểu dữ liệu đầu vào
-      if (!dataImages) {
-          alert("Không có dữ liệu ảnh");
-          return;
-      } else if (Array.isArray(dataImages)) {
-          // Nếu đã là mảng thì dùng luôn
-          imagesArray = dataImages;
-      } else if (typeof dataImages === 'string') {
-          // Nếu là chuỗi (trường hợp của anh hiện tại), ép thành mảng 1 phần tử
-          imagesArray = [dataImages];
-      } else {
-          console.error("Dữ liệu ảnh không hợp lệ:", dataImages);
-          alert("Lỗi định dạng ảnh!");
-          return;
-      }
+        let imagesArray = [];
 
-      // Render ảnh ra Carousel
-      imagesArray.forEach((imgBase64, index) => {
-          // Kiểm tra và thêm prefix nếu thiếu
-          let imgSrc = imgBase64.startsWith('data:image') ? imgBase64 : `data:image/jpeg;base64,${imgBase64}`;
-          
-          let activeClass = index === 0 ? 'active' : '';
-          
-          let html = `
-              <div class="carousel-item ${activeClass}">
-                  <img src="${imgSrc}" class="d-block w-100" style="max-height: 500px; object-fit: contain;" alt="Ảnh thực hiện">
-              </div>
-          `;
-          container.append(html);
-      });
-  
-      $('#modalXemAnh').modal('show');
+        // 1. Nếu dữ liệu là NULL hoặc UNDEFINED
+        if (!dataImages) {
+            alert("Không có dữ liệu ảnh");
+            return;
+        } 
+
+        // 2. Nếu nó ĐÃ LÀ MẢNG (Array) thì dùng luôn
+        if (Array.isArray(dataImages)) {
+            imagesArray = dataImages;
+        } 
+        // 3. Nếu nó là CHUỖI (String) -> Cần xử lý kỹ
+        else if (typeof dataImages === 'string') {
+            // Xóa khoảng trắng thừa 2 đầu
+            let cleanStr = dataImages.trim();
+
+            // Kiểm tra xem có phải là mảng bị biến thành chuỗi không (Bắt đầu bằng [ và kết thúc bằng ])
+            if (cleanStr.startsWith('[') && cleanStr.endsWith(']')) {
+                try {
+                    // Thử Parse JSON chuẩn (dấu ngoặc kép)
+                    imagesArray = JSON.parse(cleanStr);
+                } catch (e) {
+                    try {
+                        // Nếu lỗi do dùng dấu nháy đơn ('), thay thành nháy kép (") rồi parse lại
+                        let validJson = cleanStr.replace(/'/g, '"');
+                        imagesArray = JSON.parse(validJson);
+                    } catch (e2) {
+                        // Nếu vẫn lỗi, dùng cách thủ công: Bỏ 2 dấu ngoặc đi rồi cắt dấu phẩy
+                        let content = cleanStr.slice(1, -1); // Bỏ [ và ]
+                        if (content.trim() !== "") {
+                            imagesArray = content.split(',').map(s => s.trim().replace(/^['"]|['"]$/g, ''));
+                        }
+                    }
+                }
+            } else {
+                // Nếu không có dấu [], thì nó là 1 ảnh duy nhất dạng chuỗi
+                imagesArray = [cleanStr];
+            }
+        }
+
+        // 4. Kiểm tra lại lần cuối
+        if (!Array.isArray(imagesArray) || imagesArray.length === 0) {
+            console.error("Dữ liệu không xử lý được:", dataImages);
+            alert("Lỗi định dạng ảnh!");
+            return;
+        }
+
+        // 5. Render ảnh
+        imagesArray.forEach((imgBase64, index) => {
+            // Bỏ qua nếu chuỗi rỗng
+            if (!imgBase64 || imgBase64.length < 10) return;
+
+            // Kiểm tra và thêm prefix nếu thiếu
+            let imgSrc = imgBase64.startsWith('data:image') ? imgBase64 : `data:image/jpeg;base64,${imgBase64}`;
+            
+            let activeClass = index === 0 ? 'active' : '';
+            
+            let html = `
+                <div class="carousel-item ${activeClass}">
+                    <img src="${imgSrc}" class="d-block w-100" style="max-height: 500px; object-fit: contain;" alt="Ảnh thực hiện">
+                </div>
+            `;
+            container.append(html);
+        });
+
+        $('#modalXemAnh').modal('show');
     }
   </script>
 
