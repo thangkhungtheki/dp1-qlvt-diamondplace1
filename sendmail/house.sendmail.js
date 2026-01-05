@@ -109,7 +109,7 @@ function sendMailComplete(taskData) {
             
             taskData.imgthuchien.forEach(img => {
                 // Kiểm tra xem ảnh có prefix base64 chưa, nếu chưa thì thêm vào
-                let src = img.startsWith('data:image') ? img : 'data:image/jpeg;base64,' + img;
+                let src = img
                 
                 // Thêm thẻ img vào HTML (giới hạn chiều rộng để không vỡ mail)
                 htmlContent += `<img src="${src}" style="max-width: 300px; height: auto; margin: 5px; border: 1px solid #ddd;" />`;
