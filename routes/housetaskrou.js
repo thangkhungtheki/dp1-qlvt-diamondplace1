@@ -9,6 +9,7 @@ const axios = require('axios');
 const path = require('path');
 const sharp = require('sharp');
 const { createCanvas, loadImage } = require('canvas');
+const mailer = require("../sendmail/house.sendmail");
 
 // --- CÁC HÀM HỖ TRỢ XỬ LÝ (HELPER FUNCTIONS) ---
 
