@@ -457,5 +457,30 @@ router.put('/api/kiemtra/update', async (req, res) => {
         res.status(500).send("Lỗi server");
     }
 });
+// Route xem lịch sử chi tiết của một công việc
+router.get('/api/history/:id', async (req, res) => {
+    try {
+        let idcongviec = req.params.id;
 
+        // 1. Lấy thông tin công việc gốc (để hiện tên công việc trên tiêu đề)
+        let congviec = await xuly.docs({_id: idcongviec});
+        
+        // 2. Lấy danh sách lịch sử từ model 'house_cv_dinhky'
+        let history = await taskkiemtradinhky.docs({idcongviec: idcongviec});
+
+        // 3. Sắp xếp lịch sử: Mới nhất lên đầu (dựa vào createdAt do anh đã bật timestamps: true)
+        history.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        // 4. Render view
+        res.render('admin_house/main/view_history_housetask', { 
+            task: congviec[0] || { tencv: 'Không xác định' }, // Phòng hờ nếu xóa công việc gốc
+            data: history, 
+            moment: moment 
+        });
+
+    } catch (error) {
+        console.error("Lỗi xem lịch sử:", error);
+        res.status(500).send("Lỗi tải lịch sử công việc");
+    }
+});
 module.exports = router;

@@ -41,44 +41,54 @@
           </thead>
 
           <tbody>
-            <% if (data && data.length > 0) { %>
-              <% data.forEach((cv) => { %>
-                <tr>
-                  <td class="text-center">
-                    <div class="btn-group" role="group">
-                      <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#modalSua" onclick="sua('<%= cv._id %>')">
-                        <i class="fas fa-edit"></i>
-                      </button>
-                      <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modalXoa" onclick="sua('<%= cv._id %>')">
-                        <i class="fas fa-trash"></i>
-                      </button>
-                      <!-- <button class="btn btn-sm btn-secondary" onclick="xemchitiet('<%= cv._id %>')">
-                        <i class="fas fa-info-circle"></i>
-                      </button> -->
-                    </div>
-                  </td>
-                  <td><%= cv.khuvuc %></td>
-                  <td><%= cv.vitri %></td>
-                  <td><%= cv.tencv %></td>
-                  <td><%= cv.congviectheothang %></td>
-                  <td><%= cv.ngaybatdau %></td>
-                  <td><%= cv.ngayketthuc %></td>
-                  <td class="text-center"><%= cv.solanlam %></td>
-                  <td><%= cv.thoigian %></td>
-                  <td class="text-center"><%= cv.songaynhacthongbao %></td>
-                
-                  <td><%= cv.motacongviec %></td>
-                
-                  <td><%= cv.lichsucv %></td>
-                  <td><%= cv.lichsukiemtra %></td>
-                </tr>
-              <% }) %>
-            <% } else { %>
+          <% if (data && data.length > 0) { %>
+            <% data.forEach((cv) => { %>
               <tr>
-                <td colspan="12" class="text-center text-muted">Chưa có công việc nào được thêm.</td>
+                <td class="text-center">
+                  <div class="btn-group" role="group">
+                    <a href="/housetask/api/history/<%= cv._id %>" class="btn btn-sm btn-secondary" title="Xem lịch sử">
+                        <i class="fas fa-history"></i>
+                    </a>
+
+                    <button class="btn btn-sm btn-info" onclick="sua('<%= cv._id %>')" title="Sửa">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    
+                    <button class="btn btn-sm btn-danger" onclick="xacNhanXoa('<%= cv._id %>')" title="Xóa">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+                
+                <td><%= cv.khuvuc %></td>
+                <td><%= cv.vitri %></td>
+                <td><%= cv.tencv %></td>
+                <td><%= cv.congviectheothang %></td>
+                <td><%= cv.ngaybatdau %></td>
+                <td><%= cv.ngayketthuc %></td>
+                <td class="text-center"><%= cv.solanlam %></td>
+                <td><%= cv.thoigian %></td>
+                <td class="text-center"><%= cv.songaynhacthongbao %></td>
+                
+                <td title="<%= cv.motacongviec %>" style="cursor: help;">
+                  <%= cv.motacongviec %>
+                </td>
+              
+                <td title="<%= cv.lichsucv %>" style="cursor: help;">
+                  <%= cv.lichsucv ? cv.lichsucv.replace(/\n/g, '. ') : '' %>
+                </td>
+
+                <td title="<%= cv.lichsukiemtra %>" style="cursor: help;">
+                  <%= cv.lichsukiemtra ? cv.lichsukiemtra.replace(/\n/g, '. ') : '' %>
+                </td>
               </tr>
-            <% } %>
-          </tbody>
+            <% }) %>
+          <% } else { %>
+            <tr>
+              <td colspan="13" class="text-center text-muted">Chưa có công việc nào được thêm.</td>
+            </tr>
+          <% } %>
+        </tbody>
         </table>
       </div>
     </div>
@@ -330,10 +340,10 @@
 
 /* 3. Tối ưu hóa chiều rộng cho các cột không cần nhiều chỗ */
 /* Ví dụ: Cột Thao tác và Số lần làm có thể nhỏ hơn */
-.table-bordered th:nth-child(1), /* Thao tác */
+.table-bordered th:nth-child(1),
 .table-bordered td:nth-child(1) {
-    max-width: 100px; 
-    width: 100px;
+    max-width: 150px; /* Tăng lên 150px để vừa 3 nút */
+    width: 150px;
 }
 
 .table-bordered th:nth-child(8), /* Số lần làm */
