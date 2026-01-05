@@ -438,35 +438,49 @@ router.get('/app/house/kiemtra', async (req, res) => {
 
 router.put('/api/kiemtra/update', async (req, res) => {
     try {
-        let id = req.body._id; // id bản ghi thực hiện
-        let body = {
-            nguoikiemtra: req.body.nguoikiemtra,
-            idcongviec: req.body.idcongviec, // id cong viec cha
+        // Lấy dữ liệu từ App gửi lên
+        const { _id, nguoikiemtra, idcongviec } = req.body;
+
+        if (!_id || !nguoikiemtra) {
+            return res.status(400).send("Thiếu ID hoặc tên người kiểm tra");
+        }
+        
+        // Lấy giờ hiện tại chuẩn UTC+7
+        const timeCheck = moment().utcOffset(7).format('DD-MM-YYYY HH:mm:ss');
+
+        // 1. CẬP NHẬT BẢN GHI THỰC HIỆN (HOUSE_CV_DINHKY)
+        // Quan trọng: Phải update thêm 'check': 'x' thì App mới đổi màu xanh
+        const updateBody = {
+            nguoikiemtra: nguoikiemtra,
+            check: 'x' 
         };
         
-        let timeCheck = moment().format('DD-MM-YYYY HH:mm:ss');
-
-        // Cập nhật trạng thái người kiểm tra
-        await taskkiemtradinhky.updateoneset(id, body.nguoikiemtra);
+        // Sử dụng hàm updates (thay vì updateoneset) để update được nhiều trường cùng lúc
+        await taskkiemtradinhky.updates(_id, updateBody);
         
-        // Lấy thông tin công việc cha
-        let result2 = await xuly.docs({ _id: body.idcongviec });
-        
-        if (result2 && result2.length > 0) {
-            let lichsukiemtra;
-            if (result2[0].lichsukiemtra) {
-                lichsukiemtra = result2[0].lichsukiemtra + `\n${timeCheck} Đã kiểm tra bởi: ${body.nguoikiemtra}`;
-            } else {
-                lichsukiemtra = `${timeCheck} Đã kiểm tra bởi: ${body.nguoikiemtra}`;
-            }
+        // 2. CẬP NHẬT LỊCH SỬ VÀO CÔNG VIỆC GỐC (HOUSETASK)
+        if (idcongviec) {
+            // Tìm công việc gốc
+            let parentTask = await xuly.docs({ _id: idcongviec });
             
-            await xuly.xulyupdate_lichsukiemtra(body.idcongviec, lichsukiemtra);
+            if (parentTask && parentTask.length > 0) {
+                let currentHistory = parentTask[0].lichsukiemtra || '';
+                // Thêm dòng lịch sử mới vào
+                let newHistoryLine = `${timeCheck} Đã kiểm tra bởi: ${nguoikiemtra}`;
+                
+                // Nối chuỗi (xử lý xuống dòng nếu đã có lịch sử cũ)
+                let finalHistory = currentHistory ? (currentHistory + '\n' + newHistoryLine) : newHistoryLine;
+                
+                // Update vào DB
+                await xuly.xulyupdate_lichsukiemtra(idcongviec, finalHistory);
+            }
         }
 
         res.status(200).send('Cập nhật kiểm tra thành công');
+
     } catch (error) {
         console.error("Lỗi update kiểm tra:", error);
-        res.status(500).send("Lỗi server");
+        res.status(500).send("Lỗi server: " + error.message);
     }
 });
 // Route xem lịch sử chi tiết của một công việc
