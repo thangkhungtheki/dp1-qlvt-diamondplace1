@@ -403,10 +403,15 @@ router.put('/api/upload-thuchien', async (req, res) => {
             lichsucv = dongMoi;
         }
         // Chuẩn bị dữ liệu để gửi mail (Lấy tên công việc từ docss đã query ở trên)
-        const mailData = {
-            tencv: docss[0] ? docss[0].tencv : 'Công việc không tên', // Lấy tên CV
+       const mailData = {
+            // Lấy thông tin từ Công việc gốc (docss[0])
+            tencv: docss[0] ? docss[0].tencv : 'Công việc không tên',
+            khuvuc: docss[0] ? docss[0].khuvuc : 'Chưa xác định', // ✅ Thêm Khu vực
+            vitri: docss[0] ? docss[0].vitri : 'Chưa xác định',   // ✅ Thêm Vị trí gốc
+            
+            // Thông tin người thực hiện gửi lên
             nguoithuchien: nguoithuchien,
-            phong: phong, // Hoặc docss[0].vitri nếu phong null
+            phong: phong, // (Có thể là vị trí chi tiết lúc làm, nếu có thì mình hiển thị kèm)
             noidung: noidung,
             imgthuchien: imgthuchien
         };
