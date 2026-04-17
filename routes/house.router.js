@@ -5,6 +5,16 @@ var moment = require('moment')
 var sendmail = require('../sendmail/house.sendmail')
 moment.updateLocale('en', null);
 
+function detectLoai(vitricv = '') {
+  vitricv = vitricv.toLowerCase()
+
+  if (vitricv.includes('thứ')) return 'tuan'
+  if (vitricv.includes('tháng')) return 'thang'
+  if (vitricv.includes('2 tháng') || vitricv.includes('3 tháng')) return 'quy'
+
+  return 'khac'
+}
+
 router.get('/cvdinhky', authenticated, (req, res) => {
     res.render('admin_house/main/view_cvdinhky')
 })
@@ -14,10 +24,24 @@ router.get('/themcvdinhky', (req, res) => {
     res.render('admin_house/main/themcongviecdinhky')
 })
 
+// router.get('/xemcongviecdinhky', async (req, res) => {
+//   const docs = await xulyhouse.tim()
+//   res.render('admin_house/main/view_cvdinhky',{data: docs})
+  
+// })
 router.get('/xemcongviecdinhky', async (req, res) => {
   const docs = await xulyhouse.tim()
-  res.render('admin_house/main/view_cvdinhky',{data: docs})
+
+  const newData = docs.map(x => {
+    x.loai_dinh_ky = detectLoai(x.vitricv)
+    return x
+  })
+
+  res.render('admin_house/main/view_cvdinhky', {
+    data: newData
+  })
 })
+
 
 router
 .get('/suacongviecdinhky', async (req, res)=> {

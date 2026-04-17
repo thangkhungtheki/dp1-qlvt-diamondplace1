@@ -16,7 +16,7 @@ var qltkRouter = require('./routes/qlkt.router')
 var userktRouter = require('./routes/user.kt')
 // dùng router house
 var houseRouter = require('./routes/house.router')
-var houseTaskRouter = require('./routes/housetaskrou')
+var houseTaskRouter = require('./routes/cv')
 
 var routerdongco = require('./routes/dongco.router')
 var firebaseRouter = require('./routes/firebase');

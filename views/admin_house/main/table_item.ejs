@@ -1,0 +1,40 @@
+<table class="table table-bordered table-hover">
+  <thead class="bg-<%= color %> text-white">
+    <tr>
+      <th>Tên CV</th>
+      <th>Khu vực</th>
+      <th>Vị trí</th>
+      <th>Số ngày</th>
+      <th>Nhắc trước</th>
+      <th>Trạng thái</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% data.forEach(x => { %>
+      <tr>
+        <td><b><%= x.tencv %></b></td>
+        <td><%= x.khuvuc || '-' %></td>
+        <td><%= x.vitri %></td>
+        <td><%= x.so_ngay_thuc_hien %> ngày</td>
+        <td><%= x.so_ngay_nhac_truoc %> ngày</td>
+
+        <td>
+          <% if (x.hoanthanh) { %>
+            <span class="badge badge-success">Hoàn thành</span>
+          <% } else { %>
+            <span class="badge badge-danger">Chưa xong</span>
+          <% } %>
+        </td>
+
+        <td>
+          <a href="/cv/edit/<%= x._id %>" class="btn btn-sm btn-warning">Sửa</a>
+          <form action="/cv/delete/<%= x._id %>" method="POST" style="display:inline;">
+            <button class="btn btn-sm btn-danger">Xoá</button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>

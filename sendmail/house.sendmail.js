@@ -1,164 +1,188 @@
 const nodemailer = require('nodemailer')
 var moment = require('moment')
 
+// 🔥 group theo tuần/tháng/quý
+function groupData(list) {
+  return {
+    tuan: list.filter(x => x.loai_dinh_ky === 'tuan'),
+    thang: list.filter(x => x.loai_dinh_ky === 'thang'),
+    quy: list.filter(x => x.loai_dinh_ky === 'quy')
+  }
+}
 
- function sendmail(data){
-    var sortData = data.sort((a, b) => a.songayhethan - b.songayhethan);
-    var transporter =  nodemailer.createTransport({ // config mail server
+// 🔥 render từng block
+function render(title, arr, color) {
+  if (!arr.length) return ''
+
+  let html = `
+    <h3 style="color:${color}; border-bottom:1px solid ${color}; padding-bottom:5px;">
+      ${title} (${arr.length})
+    </h3>
+  `
+
+  arr.forEach(x => {
+
+    let danger = x.songayhethan <= 1
+      ? `<span style="color:red;font-weight:bold;">⚠ ${x.songayhethan} ngày</span>`
+      : `<span style="color:#e67e22;">${x.songayhethan} ngày</span>`
+
+    html += `
+      <div style="margin-bottom:10px;">
+        <b style="color:#2c3e50">${x.tencv}</b><br>
+        📍 <span style="color:green">${x.vitricv || x.vitri}</span><br>
+        ⏱ ${danger}
+      </div>
+    `
+  })
+
+  return html
+}
+
+// ======================= SEND MAIL NHẮC VIỆC =======================
+
+function sendmail(data){
+
+    var transporter = nodemailer.createTransport({
         host: process.env.HouseHostMail,
         port: process.env.HousePort,
-        type: 'login',
         secure: true,
         auth: {
-            user: process.env.HouseFrom, //Tài khoản gmail vừa tạo
-            pass: process.env.HousePass, //Mật khẩu tài khoản gmail vừa tạo
+            user: process.env.HouseFrom,
+            pass: process.env.HousePass,
         },
         tls: {
-            // do not fail on invalid certs
             rejectUnauthorized: false
         },
-        
     });
-    
-    var text = ''
-    for (let i = 0; i < sortData.length; i++) {
-        
-        if( (sortData[i].songayhethan * 1) >= 0 && (sortData[i].hoanthanh != 'yes') && sortData[i].flagguimail == "yes"){
-           
-            var string = '<b>.TênCV: ' + `</b><span style='color: blue'>` + sortData[i].tencv + ` </span>` + 
-                            `Vị trí/Ngày thực hiện: ` + `<span style='color: green'>` + sortData[i].vitricv + `</span>` +
-                            `<span>` + ` ngày đến hạn: </span>
-                            <span style="color: red">` + sortData[i].songayhethan + `</span> ngày <br>
-                            `
-            // var string = data[i].tencv
-            text = text + string
-           
-        }
-        
-         
-    }
-    // console.log(text)
+
+    // 🔥 filter + sort
+    let validData = data
+      .filter(x => (x.songayhethan * 1) >= 0 && x.hoanthanh != 'yes')
+      .sort((a, b) => a.songayhethan - b.songayhethan)
+
+    // 🔥 group
+    let grouped = groupData(validData)
+
+    // 🔥 build html
+    let html = ''
+
+    html += render('📅 Công việc TUẦN', grouped.tuan, '#2980b9')
+    html += render('📆 Công việc THÁNG', grouped.thang, '#27ae60')
+    html += render('📊 Công việc QUÝ', grouped.quy, '#8e44ad')
+
     const daynow = moment().format('DD-MM-YYYY')
-    if(text != ''){
-        text = `Hôm nay ngày: `+ daynow + ` <br>` + text
+
+    if(html !== ''){
+
+        html = `
+        <h2 style="color:#2c3e50;">📢 Nhắc việc sắp đến hạn</h2>
+        <p>Ngày: <b>${daynow}</b></p>
+        <hr>
+        ${html}
+        `
 
         var mainOptions = { 
             from: process.env.HouseFrom,
             to: process.env.HouseEmailTo,
-            
-            subject: process.env.HouseSubject,
-            
-            html: text ,
-            
+            subject: `[Nhắc việc] ${daynow}`,
+            html: html
         }
+
         transporter.sendMail(mainOptions, function(err, info){
             if (err) {
                 console.log(err);
-                return err
             } else {
-                console.log('>>>house: Message sent: ' + daynow +  'send mail Success');
-                return null
+                console.log('✅ Send mail thành công: ' + daynow);
             }
         });
 
-        // console.log('>>>sendmail: ', text)
     }else{
-        
-        
-        console.log('Date: ' + daynow +'Ko có hết hạn')
-        return null
+        console.log('Date: ' + daynow +' - Không có công việc')
     }
-
-    
 }
-// Hàm 2: Gửi mail NGAY KHI hoàn thành công việc (Mới thêm)
+
+
+// ======================= SEND MAIL HOÀN THÀNH =======================
+
 function sendMailComplete(taskData) {
-    
-    var transporter =  nodemailer.createTransport({ // config mail server
+
+    var transporter = nodemailer.createTransport({
         host: process.env.HouseHostMail,
         port: process.env.HousePort,
-        type: 'login',
         secure: true,
         auth: {
-            user: process.env.HouseFrom, //Tài khoản gmail vừa tạo
-            pass: process.env.HousePass, //Mật khẩu tài khoản gmail vừa tạo
+            user: process.env.HouseFrom,
+            pass: process.env.HousePass,
         },
         tls: {
-            // do not fail on invalid certs
             rejectUnauthorized: false
         },
-        
     });
-    sendMailComplete(taskData);
-    // Hàm 2: Gửi mail NGAY KHI hoàn thành công việc (ĐÃ CẬP NHẬT GIAO DIỆN)
-function sendMailComplete(taskData) {
+
     try {
         const timeNow = moment().format('HH:mm DD-MM-YYYY');
         
-        // 1. Tạo nội dung HTML (Thêm Khu vực và Vị trí rõ ràng hơn)
         let htmlContent = `
-            <h3 style="color: #2c3e50;">Báo cáo hoàn thành công việc</h3>
+            <h3 style="color: #2c3e50;">✅ Báo cáo hoàn thành công việc</h3>
             <p><b>Thời gian:</b> ${timeNow}</p>
             <p><b>Người thực hiện:</b> ${taskData.nguoithuchien}</p>
             <hr>
             
-            <p><b>📌 Tên công việc:</b> <span style="color: blue; font-size: 16px;">${taskData.tencv}</span></p>
-            <p><b>🏢 Khu vực:</b> <span style="color: #d35400;">${taskData.khuvuc}</span></p>
-            <p><b>📍 Vị trí:</b> <b>${taskData.vitri}</b> ${taskData.phong ? `<i>(Chi tiết: ${taskData.phong})</i>` : ''}</p>
+            <p><b>📌 Tên công việc:</b> 
+            <span style="color: blue; font-size: 16px;">${taskData.tencv}</span></p>
+
+            <p><b>🏢 Khu vực:</b> 
+            <span style="color: #d35400;">${taskData.khuvuc}</span></p>
+
+            <p><b>📍 Vị trí:</b> 
+            <b>${taskData.vitri}</b> 
+            ${taskData.phong ? `<i>(Chi tiết: ${taskData.phong})</i>` : ''}</p>
             
-            <p><b>📝 Nội dung/Ghi chú:</b> ${taskData.noidung || 'Không có ghi chú'}</p>
+            <p><b>📝 Ghi chú:</b> ${taskData.noidung || 'Không có'}</p>
             <hr>
         `;
 
-        // Mảng chứa các file đính kèm
         let attachments = [];
 
-        // 2. Xử lý hình ảnh (CID Attachment - giữ nguyên logic tối ưu cho PC/Mobile)
-        if (taskData.imgthuchien && Array.isArray(taskData.imgthuchien) && taskData.imgthuchien.length > 0) {
-            htmlContent += `<p><b>📷 Hình ảnh thực tế:</b></p> <div style="display: flex; flex-wrap: wrap;">`;
-            
-            taskData.imgthuchien.forEach((img, index) => {
-                let uniqueCid = `image_${index}_${Date.now()}@diamondplace.vn`;
-                htmlContent += `<img src="cid:${uniqueCid}" style="max-width: 300px; height: auto; margin: 5px; border: 1px solid #ddd;" />`;
+        if (taskData.imgthuchien && Array.isArray(taskData.imgthuchien)) {
+            htmlContent += `<p><b>📷 Hình ảnh:</b></p><div style="display:flex;flex-wrap:wrap;">`;
 
-                let fullDataStr = img.startsWith('data:image') ? img : 'data:image/jpeg;base64,' + img;
+            taskData.imgthuchien.forEach((img, index) => {
+                let cid = `img_${index}_${Date.now()}@house`;
+
+                htmlContent += `<img src="cid:${cid}" style="max-width:250px;margin:5px;">`;
 
                 attachments.push({
-                    filename: `image_${index}.jpg`,
-                    path: fullDataStr,
-                    cid: uniqueCid
+                    filename: `img_${index}.jpg`,
+                    path: img.startsWith('data:image') ? img : 'data:image/jpeg;base64,' + img,
+                    cid: cid
                 });
             });
-            
+
             htmlContent += `</div>`;
-        } else {
-            htmlContent += `<p><i>(Công việc này không có hình ảnh đính kèm)</i></p>`;
         }
 
-        // 3. Cấu hình gửi mail
         var mailOptions = {
             from: process.env.HouseFrom,
-            to: process.env.HouseEmailTo, 
-            // Tiêu đề mail: Thêm cả khu vực vào tiêu đề cho dễ theo dõi
-            subject: `[Đã xong] ${taskData.nguoithuchien} - ${taskData.khuvuc}: ${taskData.tencv}`,
+            to: process.env.HouseEmailTo,
+            subject: `[Đã xong] ${taskData.nguoithuchien} - ${taskData.tencv}`,
             html: htmlContent,
             attachments: attachments
         }
 
-        // 4. Thực hiện gửi
         transporter.sendMail(mailOptions, function(err, info) {
             if (err) {
-                console.log('❌ Lỗi gửi mail hoàn thành:', err);
+                console.log('❌ Lỗi mail hoàn thành:', err);
             } else {
-                console.log('✅ Đã gửi mail: ' + taskData.tencv);
+                console.log('✅ Đã gửi mail:', taskData.tencv);
             }
         });
 
     } catch (e) {
-        console.log("Lỗi logic sendMailComplete:", e);
+        console.log("❌ Lỗi sendMailComplete:", e);
     }
 }
-}
+
 module.exports = {
     sendmail,
     sendMailComplete
