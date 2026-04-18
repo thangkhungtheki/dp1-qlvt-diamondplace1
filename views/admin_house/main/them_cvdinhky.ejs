@@ -1,17 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<% var activeuser = '' %>
-<% var activetb = '' %>
-<% var activetbdp2 = '' %>
-<% var activethem = '' %>
 <% var _username = _username || 'Admin' %>
 
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Hệ thống công việc định kỳ</title>
+  <title>Thêm công việc định kỳ</title>
 
   <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,800,900" rel="stylesheet">
@@ -20,11 +16,10 @@
 </head>
 
 <body id="page-top">
-
   <div id="wrapper">
-
+    
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled" id="accordionSidebar">
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/house/cv">
         <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-laugh-wink"></i></div>
         <div class="sidebar-brand-text mx-3 text-uppercase"><%= _username %></div>
       </a>
@@ -57,18 +52,13 @@
         </nav>
 
         <div class="container-fluid">
-          <%- include('./table_cvdk.ejs') %>
+          <%- include('./formthemcvdinhky.ejs') %>
         </div>
 
       </div>
       <%- include('./footer.ejs') %>
-
     </div>
   </div>
-
-  <a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-  </a>
 
   <script src="/vendor/jquery/jquery.min.js"></script>
   <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
