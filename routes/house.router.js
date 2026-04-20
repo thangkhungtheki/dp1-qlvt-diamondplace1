@@ -81,31 +81,51 @@ router.post('/cv/update/:id', async (req, res) => {
     try {
         const body = req.body;
 
-        // Xử lý chuyển đổi chuỗi "2,4,6" thành [2,4,6]
-        const toArray = (val) => val ? val.split(',').map(n => parseInt(n.trim())).filter(n => !isNaN(n)) : [];
+        // 🧠 Hàm bóc tách chuỗi thành mảng số (VD: "1,2,3" -> [1,2,3])
+        const toArray = (val) => {
+            if (!val) return [];
+            // Nếu là chuỗi thì split, nếu đã là mảng (do form gửi) thì map luôn
+            const arr = Array.isArray(val) ? val : val.split(',');
+            return arr.map(n => parseInt(n.trim())).filter(n => !isNaN(n));
+        };
 
+        // 🛠 Tổ chức lại dữ liệu để khớp hoàn toàn với Schema
         const updateData = {
             tencv: body.tencv,
             vitri: body.vitri,
-            mo_ta: body.mo_ta,
-            loai_dinh_ky: body.loai_dinh_ky,
-            thu_trong_tuan: toArray(body.thu_trong_tuan),
-            ngay_trong_thang: toArray(body.ngay_trong_thang),
-            lap_lai_moi: parseInt(body.lap_lai_moi || 0),
-            so_ngay_thuc_hien: parseInt(body.so_ngay_thuc_hien || 0),
-            so_ngay_nhac_truoc: parseInt(body.so_ngay_nhac_truoc || 0),
+            mo_ta: body.mo_ta, // Lưu vào field mo_ta mới
             phong_ban: body.phong_ban,
             nguoi_phu_trach: body.nguoi_phu_trach,
             muc_do: body.muc_do,
+            
+            // Cấu hình lịch trình
+            loai_dinh_ky: body.loai_dinh_ky,
+            thu_trong_tuan: toArray(body.thu_trong_tuan),
+            ngay_trong_thang: toArray(body.ngay_trong_thang),
+            thang_trong_quy: toArray(body.thang_trong_quy), // Đã bổ sung trường này
+            
+            // Thời gian
+            lap_lai_moi: parseInt(body.lap_lai_moi) || 1,
+            so_ngay_thuc_hien: parseInt(body.so_ngay_thuc_hien) || 1,
+            so_ngay_nhac_truoc: parseInt(body.so_ngay_nhac_truoc) || 0,
+
+            // Trạng thái (Checkbox xử lý kỹ để tránh lỗi undefined)
             laplai: body.laplai === 'true',
-            hoanthanh: body.hoanthanh === 'true'
+            hoanthanh: body.hoanthanh === 'true',
+            
+            // Reset flag gửi mail nếu có thay đổi (tùy chọn)
+            flagguimail: false 
         };
 
+        // Thực hiện cập nhật
         await Model.findByIdAndUpdate(req.params.id, updateData);
+
+        console.log(`✅ Đã cập nhật CV: ${body.tencv}`);
         res.redirect('/house/cv');
+
     } catch (err) {
-        console.error(err);
-        res.status(500).send("Lỗi cập nhật dữ liệu");
+        console.error("❌ Lỗi Update:", err);
+        res.status(500).send("Lỗi cập nhật dữ liệu. Vui lòng kiểm tra lại các trường số.");
     }
 });
 
