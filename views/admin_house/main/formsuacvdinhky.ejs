@@ -1,67 +1,99 @@
 <div class="container-fluid">
-    <div class="card shadow mb-4">
-        <div class="card-header py-3 d-flex justify-content-between">
+    <div class="card shadow mb-4 border-left-primary">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
             <h6 class="m-0 font-weight-bold text-primary">✏️ Hiệu chỉnh công việc: <%= data.tencv %></h6>
-            <a href="/house/cv" class="btn btn-sm btn-secondary">Quay lại</a>
+            <a href="/house/cv" class="btn btn-sm btn-secondary shadow-sm">
+                <i class="fas fa-arrow-left fa-sm"></i> Quay lại
+            </a>
         </div>
         <div class="card-body">
             <form action="/house/cv/update/<%= data._id %>" method="POST">
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label>Tên công việc</label>
+                        <label class="font-weight-bold text-dark">Tên công việc</label>
                         <input type="text" name="tencv" class="form-control" value="<%= data.tencv %>" required>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label>Vị trí cụ thể</label>
+                        <label class="font-weight-bold text-dark">Vị trí cụ thể</label>
                         <input type="text" name="vitri" class="form-control" value="<%= data.vitri %>">
                     </div>
+
                     <div class="col-md-4 mb-3">
-                        <label>Loại định kỳ</label>
-                        <select name="loai_dinh_ky" id="selectLoai" class="form-control">
+                        <label class="font-weight-bold text-dark">Loại định kỳ</label>
+                        <select name="loai_dinh_ky" id="selectLoai" class="form-control bg-light">
                             <option value="tuan" <%= data.loai_dinh_ky === 'tuan' ? 'selected' : '' %>>Hàng tuần</option>
                             <option value="thang" <%= data.loai_dinh_ky === 'thang' ? 'selected' : '' %>>Hàng tháng</option>
-                            <option value="quy" <%= data.loai_dinh_ky === 'quy' ? 'selected' : '' %>>Hàng quý</option>
+                            <option value="quy" <%= data.loai_dinh_ky === 'quy' ? 'selected' : '' %>>Hàng quý (2-3 tháng)</option>
                             <option value="custom" <%= data.loai_dinh_ky === 'custom' ? 'selected' : '' %>>Tùy chỉnh</option>
                         </select>
                     </div>
 
                     <div id="groupThu" class="col-md-4 mb-3">
-                        <label>Thứ (VD: 2,4,6)</label>
-                        <input type="text" name="thu_trong_tuan" class="form-control" value="<%= (data.thu_trong_tuan || []).join(',') %>">
+                        <label class="font-weight-bold text-dark">Thứ trong tuần (VD: 2,4,6)</label>
+                        <input type="text" name="thu_trong_tuan" class="form-control border-primary" value="<%= (data.thu_trong_tuan || []).join(',') %>" placeholder="Nhập 2,4,6 hoặc 8">
                     </div>
 
                     <div id="groupNgay" class="col-md-4 mb-3">
-                        <label>Ngày trong tháng (VD: 1,15)</label>
-                        <input type="text" name="ngay_trong_thang" class="form-control" value="<%= (data.ngay_trong_thang || []).join(',') %>">
+                        <label class="font-weight-bold text-dark">Ngày trong tháng (VD: 1,15)</label>
+                        <input type="text" name="ngay_trong_thang" class="form-control border-success" value="<%= (data.ngay_trong_thang || []).join(',') %>" placeholder="Nhập 1,15,30">
+                    </div>
+
+                    <div id="groupThangQuy" class="col-md-4 mb-3">
+                        <label class="font-weight-bold text-dark">Tháng trong quý (VD: 1,2,3)</label>
+                        <input type="text" name="thang_trong_quy" class="form-control border-warning" value="<%= (data.thang_trong_quy || []).join(',') %>" placeholder="Tháng thứ mấy của kỳ">
                     </div>
 
                     <div class="col-md-4 mb-3">
-                        <label>Mức độ ưu tiên</label>
+                        <label class="font-weight-bold text-dark">Phòng ban</label>
+                        <input type="text" name="phong_ban" class="form-control" value="<%= data.phong_ban %>" placeholder="VD: Housekeeping / Kỹ thuật">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="font-weight-bold text-dark">Người phụ trách</label>
+                        <input type="text" name="nguoi_phu_trach" class="form-control" value="<%= data.nguoi_phu_trach %>" placeholder="Tên nhân viên">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="font-weight-bold text-dark">Mức độ ưu tiên</label>
                         <select name="muc_do" class="form-control">
-                            <option value="thap" <%= data.muc_do === 'thap' ? 'selected' : '' %>>Thấp</option>
-                            <option value="trung_binh" <%= data.muc_do === 'trung_binh' ? 'selected' : '' %>>Trung bình</option>
-                            <option value="cao" <%= data.muc_do === 'cao' ? 'selected' : '' %>>Cao</option>
+                            <option value="thap" <%= data.muc_do === 'thap' ? 'selected' : '' %>>🟢 Thấp</option>
+                            <option value="trung_binh" <%= data.muc_do === 'trung_binh' ? 'selected' : '' %>>🟡 Trung bình</option>
+                            <option value="cao" <%= data.muc_do === 'cao' ? 'selected' : '' %>>🔴 Cao</option>
                         </select>
                     </div>
-                    
+
                     <div class="col-md-4 mb-3">
-                        <label>Người phụ trách</label>
-                        <input type="text" name="nguoi_phu_trach" class="form-control" value="<%= data.nguoi_phu_trach %>">
+                        <label class="font-weight-bold text-dark">Số ngày thực hiện (Thời hạn)</label>
+                        <input type="number" name="so_ngay_thuc_hien" class="form-control" value="<%= data.so_ngay_thuc_hien || 1 %>">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="font-weight-bold text-dark">Nhắc trước (Số ngày gửi mail)</label>
+                        <input type="number" name="so_ngay_nhac_truoc" class="form-control" value="<%= data.so_ngay_nhac_truoc || 3 %>">
                     </div>
 
                     <div class="col-md-4 mb-3">
-                        <label>Tùy chọn trạng thái</label>
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="chkLap" name="laplai" value="true" <%= data.laplai ? 'checked' : '' %>>
-                            <label class="custom-control-label" for="chkLap">Duy trì lặp lại</label>
-                        </div>
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="chkDone" name="hoanthanh" value="true" <%= data.hoanthanh ? 'checked' : '' %>>
-                            <label class="custom-control-label" for="chkDone">Đã hoàn thành</label>
+                        <label class="font-weight-bold text-dark">Tùy chọn trạng thái</label>
+                        <div class="card p-2 bg-light">
+                            <div class="custom-control custom-checkbox mr-3">
+                                <input type="checkbox" class="custom-control-input" id="chkLap" name="laplai" value="true" <%= data.laplai ? 'checked' : '' %>>
+                                <label class="custom-control-label" for="chkLap">Duy trì lặp lại</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="chkDone" name="hoanthanh" value="true" <%= data.hoanthanh ? 'checked' : '' %>>
+                                <label class="custom-control-label" for="chkDone">Đã hoàn thành</label>
+                            </div>
                         </div>
                     </div>
+
+                    <div class="col-md-12 mb-4">
+                        <label class="font-weight-bold text-dark">Mô tả chi tiết / Ghi chú</label>
+                        <textarea name="mo_ta" class="form-control" rows="3"><%= data.mo_ta || data.ghichu %></textarea>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block shadow-sm">💾 Lưu thay đổi</button>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-lg px-5 shadow">
+                        <i class="fas fa-save mr-2"></i>Cập nhật dữ liệu
+                    </button>
+                </div>
             </form>
         </div>
     </div>
@@ -71,11 +103,27 @@
     const sel = document.getElementById('selectLoai');
     const gThu = document.getElementById('groupThu');
     const gNgay = document.getElementById('groupNgay');
+    const gQuy = document.getElementById('groupThangQuy');
 
     function updateUI() {
-        gThu.style.display = sel.value === 'tuan' ? 'block' : 'none';
-        gNgay.style.display = sel.value === 'tuan' ? 'none' : 'block';
+        const val = sel.value;
+        // Ẩn tất cả trước
+        gThu.style.display = 'none';
+        gNgay.style.display = 'none';
+        gQuy.style.display = 'none';
+
+        // Hiện theo điều kiện
+        if (val === 'tuan') {
+            gThu.style.display = 'block';
+        } else if (val === 'thang') {
+            gNgay.style.display = 'block';
+        } else if (val === 'quy') {
+            gNgay.style.display = 'block';
+            gQuy.style.display = 'block';
+        } else if (val === 'custom') {
+            gNgay.style.display = 'block';
+        }
     }
     sel.addEventListener('change', updateUI);
-    updateUI();
+    updateUI(); // Chạy ngay khi load trang
 </script>
