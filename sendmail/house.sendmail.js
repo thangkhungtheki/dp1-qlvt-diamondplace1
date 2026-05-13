@@ -150,7 +150,7 @@ function sendMailComplete(taskData) {
 
         var mailOptions = {
             from: process.env.HouseFrom,
-            to: process.env.HouseEmailTo,
+            to: process.env.HouseEmailToComplete,
             subject: `[Đã xong] ${taskData.nguoithuchien} - ${taskData.tencv}`,
             html: htmlContent,
             attachments: attachments
